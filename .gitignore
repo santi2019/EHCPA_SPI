@@ -1,0 +1,12 @@
+# Archivos y carpetas generados por el entorno virtual de Python
+venv*/
+.venv*/
+
+# Archivos de caché y registros de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Carpeta de entorno virtual específica (env1)
+venv/
