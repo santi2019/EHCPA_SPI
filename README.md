@@ -5,7 +5,7 @@
 #### Institución: Universidad Católica de Córdoba
 #### Año: 2024
 
-  El siguiente repositorio... 
+#### Descripción: El siguiente repositorio... 
 
 *Tecnologias:*
 + Python
