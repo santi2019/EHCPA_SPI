@@ -1,7 +1,6 @@
 #Ocultamos la direccion de las credenciales
+
 .dodsrc
-./subset.txt
-
-./ARG_Late
-
-./IMERG_late_month
+subset.txt
+ARG_Late/
+IMERG_late_month/
