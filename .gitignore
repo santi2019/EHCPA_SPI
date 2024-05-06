@@ -1,12 +1,7 @@
-# Archivos y carpetas generados por el entorno virtual de Python
-venv*/
-.venv*/
+#Ocultamos la direccion de las credenciales
+.dodsrc
+./subset.txt
 
-# Archivos de caché y registros de Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+./ARG_Late
 
-# Carpeta de entorno virtual específica (env1)
-venv/
+./IMERG_late_month
