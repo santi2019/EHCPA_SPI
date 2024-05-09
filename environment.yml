@@ -1,7 +1,16 @@
-name: venv1
+name: venv
 channels: 
  - conda-forge
 dependencies:
   - python=3.12.2
   - pip
-#prefix: ./EHCPA_SPI/venv1
+  - pandas
+  - numpy
+  - nco
+  - pynco 
+  - dask
+  - netCDF4=1.6.2
+  - requests
+  - xarray
+  - h5py
+#prefix: ./EHCPA_SPI/venv1P
