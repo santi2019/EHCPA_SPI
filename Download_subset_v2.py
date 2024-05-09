@@ -18,10 +18,10 @@ if not os.path.exists(subset_file):
 # Carpeta de destino donde se guardaran los archivos descargados
 destination_folder = 'D:/Santiago/Documentos/EHCPA_SPI/ARG_Late'
 
-# Si la carpeta de destino existe y posee datos, la borramos y volvemos a crear en cada ocacion
-if os.path.exists(destination_folder):
-    shutil.rmtree(destination_folder)
-os.makedirs(destination_folder)
+
+# Si la carpeta de destino no existe, la creamos
+if not os.path.exists(destination_folder):
+    os.makedirs(destination_folder)
 
  # Vemos la cantidad de archivos dentro del subset
 df = pd.read_csv(subset_file, header=None)[0]

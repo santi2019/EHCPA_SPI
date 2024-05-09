@@ -9,11 +9,9 @@ input_dir = 'D:/Santiago/Documentos/EHCPA_SPI/ARG_Late'
 # Directorio donde se guardarán los archivos de acumulado mensual
 output_dir = 'D:/Santiago/Documentos/EHCPA_SPI/IMERG_late_month'
 
-# Si la carpeta de destino existe y posee datos, la borramos y volvemos a crear en cada ocacion
-if os.path.exists(output_dir):
-    shutil.rmtree(output_dir)
-os.makedirs(output_dir)
-
+# Si la carpeta de destino no existe, la creamos
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
 
 # Lista de archivos de IMERG en el directorio de entrada
 files = os.listdir(input_dir)

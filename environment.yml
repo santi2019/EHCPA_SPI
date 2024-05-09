@@ -9,7 +9,8 @@ dependencies:
   - nco
   - pynco 
   - dask
-  - netCDF4
+  - netCDF4=1.6.2
   - requests
   - xarray
+  - h5py
 #prefix: ./EHCPA_SPI/venv1P
