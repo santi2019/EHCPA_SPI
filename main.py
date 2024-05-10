@@ -10,7 +10,6 @@ import platform
 import time
 
 
-
 class SPICalculationProcess:
 
     def credentials_generator(self):
@@ -52,8 +51,9 @@ class SPICalculationProcess:
             print("Error: No se encontró el archivo subset.txt en la ruta especificada")
             return
 
-        if not os.path.exists(destination_folder):
-            os.makedirs(destination_folder)
+        if os.path.exists(destination_folder):
+            shutil.rmtree(destination_folder)
+        os.makedirs(destination_folder)
 
         df = pd.read_csv(subset_file, header=None)[0]
         total_files = len(df)
@@ -95,9 +95,9 @@ class SPICalculationProcess:
         except KeyboardInterrupt:
             print('La descarga ha sido cancelada')
         
-        wait_time = 60
+        wait_time = 30
         for i in range(wait_time):
-            print(f"Esperando {wait_time - i} segundos antes de calcular los valores de presipitacion acumulada.", end='\r')
+            print(f"Esperando {wait_time - i} segundos antes de calcular los valores de presipitacion acumulada", end='\r')
             time.sleep(1) 
         
         print()
@@ -137,7 +137,7 @@ class SPICalculationProcess:
 
                 # Concatenar los archivos diarios correspondientes al mes
                 daily_files = [f for f in files if year+month in f]
-                ds_month = xr.open_mfdataset([os.path.join(input_dir, f) for f in daily_files], combine='by_coords', engine='netcdf4')
+                ds_month = xr.open_mfdataset([os.path.join(input_dir, f) for f in daily_files], combine='by_coords')
 
                 # Calcular el acumulado mensual de precipitación
                 monthly_precip = ds_month['precipitationCal'].sum(dim='time')
@@ -164,6 +164,7 @@ class SPICalculationProcess:
 
         except KeyboardInterrupt:
             print('El procesamiento fue cancelado')
+
 
 
 

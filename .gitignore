@@ -1,4 +1,8 @@
 .dodsrc
 subset.txt
+subsetjun.txt
+subsetjul.txt
+subsetago.txt
+subsetsep.txt
 ARG_Late*/
 IMERG_late_month*/

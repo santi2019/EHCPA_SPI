@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import xarray as xr
-import shutil
+
 
 # Directorio donde se encuentran los archivos de IMERG
 input_dir = 'D:/Santiago/Documentos/EHCPA_SPI/ARG_Late'
@@ -34,7 +34,7 @@ try:
 
         # Concatenar los archivos diarios correspondientes al mes
         daily_files = [f for f in files if year+month in f]
-        ds_month = xr.open_mfdataset([os.path.join(input_dir, f) for f in daily_files], combine='by_coords', engine='netcdf4')
+        ds_month = xr.open_mfdataset([os.path.join(input_dir, f) for f in daily_files], combine='by_coords')
 
         # Calcular el acumulado mensual de precipitación
         monthly_precip = ds_month['precipitationCal'].sum(dim='time')
@@ -61,3 +61,6 @@ try:
 
 except KeyboardInterrupt:
     print('El procesamiento fue cancelado')
+
+
+
