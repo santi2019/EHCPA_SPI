@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-import numpy as pn
+import numpy as np
 import requests
 import xarray as xr
 import shutil
@@ -44,8 +44,8 @@ class SPICalculationProcess:
 
 
     def download_subset(self):
-        subset_file = 'D:/Santiago/Documentos/EHCPA_SPI/subset.txt'
-        destination_folder = 'D:/Santiago/Documentos/EHCPA_SPI/ARG_Late'
+        subset_file = 'C:/Users/Santiago/EHCPA_SPI/subset.txt'
+        destination_folder = 'C:/Users/Santiago/EHCPA_SPI/ARG_Late'
 
         if not os.path.exists(subset_file):
             print("Error: No se encontró el archivo subset.txt en la ruta especificada")
@@ -107,10 +107,10 @@ class SPICalculationProcess:
 
     def process_IMERGE(self):
         # Directorio donde se encuentran los archivos de IMERG
-        input_dir = 'D:/Santiago/Documentos/EHCPA_SPI/ARG_Late'
+        input_dir = 'C:/Users/Santiago/EHCPA_SPI/ARG_Late'
 
         # Directorio donde se guardarán los archivos de acumulado mensual
-        output_dir = 'D:/Santiago/Documentos/EHCPA_SPI/IMERG_late_month'
+        output_dir = 'C:/Users/Santiago/EHCPA_SPI/IMERG_late_month'
 
         # Si la carpeta de destino no existe, la creamos
         if not os.path.exists(output_dir):
@@ -173,15 +173,3 @@ if __name__ == "__main__":
     spi_instance.credentials_generator()
 
 
-
-
-'''
- def __init__(self, subset_file, input_folder, destination_folder):
-        self.subset_file = subset_file
-        self.input_folder = input_folder
-        self.destination_folder = destination_folder
-
-    def credentials_generator(self):
-        pass
-
-'''
