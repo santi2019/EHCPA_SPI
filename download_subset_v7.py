@@ -35,8 +35,8 @@ def get_http_data(request):
 
 # Definimos los parametros del data subset
 product = 'GPM_3IMERGDL_07'
-begTime = '2000-07-01'
-endTime = '2000-07-31'
+begTime = '2000-08-01'
+endTime = '2000-10-31'
 minlon = -73.5
 maxlon = -55.0
 minlat = -53.0
