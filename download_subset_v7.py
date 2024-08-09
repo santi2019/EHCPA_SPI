@@ -35,8 +35,8 @@ def get_http_data(request):
 
 # Definimos los parametros del data subset
 product = 'GPM_3IMERGDL_07'
-begTime = '2000-06-01'
-endTime = '2000-06-30'
+begTime = '2000-07-01'
+endTime = '2000-07-31'
 minlon = -73.5
 maxlon = -55.0
 minlat = -53.0
@@ -191,7 +191,12 @@ else:
 
 # Creamos la carpeta 'ARG_late' si no existe
 download_dir = os.path.join(os.getcwd(), 'ARG_late')
-if not os.path.exists(download_dir):
+if os.path.exists(download_dir):
+    # Borramos todo el contenido de la carpeta
+    shutil.rmtree(download_dir)
+    # Creamos de nuevo la carpeta vacía
+    os.makedirs(download_dir)
+else:
     os.makedirs(download_dir)
 
 
