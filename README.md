@@ -9,4 +9,3 @@
 
 *Tecnologias:*
 + Python
-+ Flet
