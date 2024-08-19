@@ -1,5 +1,11 @@
 
-credentials*/
-
 ARG_late*/
+
+credentials/.dodsrc
+
+IMERG_late_month*/
+
+input*/
+
+output*/
 

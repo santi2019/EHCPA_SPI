@@ -9,9 +9,10 @@ from getpass import getpass
 import platform
 import os
 import shutil
+from dotenv import load_dotenv
 
 
-## Proceso de obtencion del subset de datos IMERG
+## PASO 1: Proceso de obtencion del subset de datos IMERG
 
 # Creamos una instancia de urllib PoolManager para realizar solicitudes:
 http = urllib3.PoolManager(cert_reqs='CERT_REQUIRED',ca_certs=certifi.where())
@@ -34,13 +35,15 @@ def get_http_data(request):
 
 
 # Definimos los parametros del data subset
+#product = 'GPM_3IMERGM_07' FINAL MONTHLY
+#product = 'GPM_3IMERGDL_07' LATE DAY
 product = 'GPM_3IMERGDL_07'
-begTime = '2000-09-01'
-endTime = '2000-12-31'
-minlon = -73.5
-maxlon = -53.0
-minlat = -55.0
-maxlat = -21.0
+begTime = '2005-08-01'
+endTime = '2005-12-31'
+west = -73.5
+south = -55
+east = -53
+north = -21
 varName = 'precipitation'
 
 # Construimos la solicitud JSON WSP para el metodo API: subset
@@ -52,7 +55,7 @@ subset_request = {
         'role'  : 'subset',
         'start' : begTime,
         'end'   : endTime,
-        'box'   : [minlon, minlat, maxlon, maxlat],
+        'box'   : [west, south, east, north],
         'crop'  : True,
         'data'  : [{'datasetId': product,
                     'variable' : varName
@@ -148,18 +151,21 @@ print('\nDocumentation:')
 for item in docs : print(item['label']+': '+item['link'])
 
 
+####################################################################################################################
 
 
-## Proceso de generacion de credenciales
+## PASO 2: Proceso de generacion de credenciales
 
 urs = 'urs.earthdata.nasa.gov'    # Earthdata URL to call for authentication
-prompts = ['Enter NASA Earthdata Login Username \n(or create an account at urs.earthdata.nasa.gov): ',
-           'Enter NASA Earthdata Login Password: ']
+dotenv_path = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'credentials', '.env'))
+load_dotenv(dotenv_path)
+username = os.getenv('NASA_USERNAME')
+password = os.getenv('NASA_PASSWORD')
 
 homeDir = os.path.expanduser("~") + os.sep
 
 with open(homeDir + '.netrc', 'w') as file:
-    file.write('machine {} login {} password {}'.format(urs, getpass(prompt=prompts[0]), getpass(prompt=prompts[1])))
+    file.write(f'machine {urs} login {username} password {password}')
     file.close()
 with open(homeDir + '.urs_cookies', 'w') as file:
     file.write('')
@@ -177,21 +183,20 @@ if platform.system() != "Windows":
 else:
     # Copy dodsrc to working directory in Windows
 
-    # Creamos la carpeta 'credentials' si no existe
-    auth_dir = os.path.join(os.getcwd(), 'credentials')
-    if not os.path.exists(auth_dir):
-        os.makedirs(auth_dir)
+    #auth_dir = os.path.join(os.getcwd(), 'credentials')
+    auth_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'credentials'))
 
     shutil.copy2(os.path.join(homeDir, '.dodsrc'), auth_dir)
-    print('Copied .dodsrc to:', os.getcwd())
+    print('Copied .dodsrc to:', auth_dir)
 
 
+####################################################################################################################
 
 
-## Proceso de descarga de las imagenes IMERG
+## PASO 3: Proceso de descarga de las imagenes IMERG
 
 # Creamos la carpeta 'ARG_late' si no existe
-download_dir = os.path.join(os.getcwd(), 'ARG_late')
+download_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'ARG_late'))
 if os.path.exists(download_dir):
     # Borramos todo el contenido de la carpeta
     shutil.rmtree(download_dir)

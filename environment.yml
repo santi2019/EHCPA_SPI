@@ -2,15 +2,18 @@ name: venv
 channels: 
  - conda-forge
 dependencies:
-  - python=3.12.2
+  - python=3.11
   - pip
   - pandas
   - numpy
   - nco
   - pynco 
   - dask
-  - netCDF4=1.6.2
   - requests
   - xarray
+  - netcdf4
   - h5py
-#prefix: ./EHCPA_SPI/venv1P
+  - python-dotenv
+  - scipy
+  - pip:
+    - climate-indices

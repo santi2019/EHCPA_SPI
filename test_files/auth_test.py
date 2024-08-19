@@ -1,40 +1,41 @@
-#Generador de credenciales (si se ven en la terminal)
-
 from subprocess import Popen
+from getpass import getpass
 import platform
 import os
 import shutil
+from dotenv import load_dotenv
+
+
+## Proceso de generacion de credenciales
 
 urs = 'urs.earthdata.nasa.gov'    # Earthdata URL to call for authentication
-print('Autenticacion en NASA Earthdata')
-prompts = ['Username: ', 'Password: ']
+dotenv_path = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'credentials', '.env'))
+load_dotenv(dotenv_path)
+username = os.getenv('NASA_USERNAME')
+password = os.getenv('NASA_PASSWORD')
 
 homeDir = os.path.expanduser("~") + os.sep
 
 with open(homeDir + '.netrc', 'w') as file:
-    username = input(prompts[0])
-    password = input(prompts[1])
-    file.write('machine {} login {} password {}\n'.format(urs, username, password))
-    
+    file.write(f'machine {urs} login {username} password {password}')
+    file.close()
 with open(homeDir + '.urs_cookies', 'w') as file:
     file.write('')
-    
+    file.close()
 with open(homeDir + '.dodsrc', 'w') as file:
     file.write('HTTP.COOKIEJAR={}.urs_cookies\n'.format(homeDir))
     file.write('HTTP.NETRC={}.netrc'.format(homeDir))
+    file.close()
 
 print('Saved .netrc, .urs_cookies, and .dodsrc to:', homeDir)
 
+# Set appropriate permissions for Linux/macOS
 if platform.system() != "Windows":
     Popen('chmod og-rw ~/.netrc', shell=True)
 else:
+    # Copy dodsrc to working directory in Windows
 
-    auth_dir = os.path.join(os.getcwd(), 'auth')
+    auth_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'credentials'))
 
-    # Crear la carpeta 'auth' si no existe
-    if not os.path.exists(auth_dir):
-        os.makedirs(auth_dir)
-
-    # Copiar el archivo .dodsrc a la subcarpeta 'auth'
     shutil.copy2(os.path.join(homeDir, '.dodsrc'), auth_dir)
-    print('Copied .dodsrc to:', os.getcwd())
+    print('Copied .dodsrc to:', auth_dir)
