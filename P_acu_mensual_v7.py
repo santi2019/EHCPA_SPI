@@ -3,29 +3,31 @@ import pandas as pd
 import xarray as xr
 
 
-# Directorio donde se encuentran los archivos de IMERG
-# input_dir = os.path.join(os.getcwd(), 'ARG_late')
-input_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'ARG_late'))
+def p_acu_mensual():
 
-# Directorio donde se guardarán los archivos de acumulado mensual
-# output_dir = os.path.join(os.getcwd(), 'IMERG_late_month')
-output_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'IMERG_late_month'))
+    # Directorio donde se encuentran los archivos de IMERG
+    # input_dir = os.path.join(os.getcwd(), 'ARG_late')
+    input_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'ARG_late'))
 
-# Si la carpeta de destino no existe, la creamos
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
+    # Directorio donde se guardarán los archivos de acumulado mensual
+    # output_dir = os.path.join(os.getcwd(), 'IMERG_late_month')
+    output_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'IMERG_late_month'))
 
-# Lista de archivos de IMERG en el directorio de entrada
-files = os.listdir(input_dir)
+    # Si la carpeta de destino no existe, la creamos
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
-# Calcular la cantidad de archivos en el directorio ARG_Late
-num_files = len(files)
-print("Cantidad de archivos en el directorio ARG_late:", num_files)
+    # Lista de archivos de IMERG en el directorio de entrada
+    files = os.listdir(input_dir)
 
-# Filtrar archivos de IMERG que contienen la cadena "IMERG"
-files = [f for f in files if 'IMERG' in f]
+    # Calcular la cantidad de archivos en el directorio ARG_Late
+    num_files = len(files)
+    print("Cantidad de archivos en el directorio ARG_late:", num_files)
 
-try:
+    # Filtrar archivos de IMERG que contienen la cadena "IMERG"
+    files = [f for f in files if 'IMERG' in f]
+
+    # Iterar sobre los archivos de IMERG en el directorio de entrada
     for file in files:
         # Abrir el archivo de IMERG
         ds = xr.open_dataset(os.path.join(input_dir, file))
@@ -61,6 +63,7 @@ try:
 
     print("El procesamiento se completó con exito")
 
-except KeyboardInterrupt:
-    print('El procesamiento fue cancelado')
 
+
+if __name__ == '__main__':
+    p_acu_mensual()
