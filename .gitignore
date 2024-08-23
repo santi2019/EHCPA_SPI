@@ -1,9 +1,9 @@
 
 ARG_late*/
 
-credentials/.env
+!credentials/.env
 
-credentials/.dodsrc
+!credentials/.dodsrc
 
 IMERG_late_month*/
 
