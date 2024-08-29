@@ -178,7 +178,7 @@ def download_subset():
     ## PASO 2: Proceso de generacion de credenciales
 
     urs = 'urs.earthdata.nasa.gov'    # Earthdata URL to call for authentication
-    dotenv_path = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'credentials', '.env'))
+    dotenv_path = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'credentials', '.env'))
     load_dotenv(dotenv_path)
     username = os.getenv('NASA_USERNAME')
     password = os.getenv('NASA_PASSWORD')
@@ -205,7 +205,7 @@ def download_subset():
         # Copy dodsrc to working directory in Windows
 
         #auth_dir = os.path.join(os.getcwd(), 'credentials')
-        auth_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'credentials'))
+        auth_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'credentials'))
 
         shutil.copy2(os.path.join(homeDir, '.dodsrc'), auth_dir)
         print('Copied .dodsrc to:', auth_dir)
@@ -216,7 +216,7 @@ def download_subset():
 
     ## PASO 3: Proceso de descarga de las imagenes IMERG
 
-    download_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'ARG_late'))
+    download_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'ARG_late'))
 
     # Si la carpeta 'ARG_late' existe
     #if os.path.exists(download_dir):

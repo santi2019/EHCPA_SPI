@@ -7,11 +7,11 @@ def p_acu_mensual():
 
     # Directorio donde se encuentran los archivos de IMERG
     # input_dir = os.path.join(os.getcwd(), 'ARG_late')
-    input_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'ARG_late'))
+    input_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'ARG_late'))
 
     # Directorio donde se guardarán los archivos de acumulado mensual
     # output_dir = os.path.join(os.getcwd(), 'IMERG_late_month')
-    output_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'IMERG_late_month'))
+    output_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'IMERG_late_month'))
 
     # Si la carpeta de destino no existe, la creamos
     if not os.path.exists(output_dir):

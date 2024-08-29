@@ -8,10 +8,10 @@ from dateutil.relativedelta import relativedelta
 def spi_process():
 
     # Carpeta donde se encuentra el archivo IMERG_reord
-    EHCPA_SPI_input_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'input'))
+    EHCPA_SPI_input_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'input'))
 
     # Carpeta donde se van a guardar todos los archivos
-    EHCPA_SPI_output_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'output'))
+    EHCPA_SPI_output_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output'))
 
     # Carpeta donde se van a guardar los SPI crudos:
     output_spi_gp_dir = os.path.join(EHCPA_SPI_output_dir, 'SPI_gamma_pearson')

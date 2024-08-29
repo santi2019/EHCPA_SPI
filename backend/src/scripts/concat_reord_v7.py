@@ -9,10 +9,10 @@ from dateutil.relativedelta import relativedelta
 def concat_reord():
 
     # Carpeta donde se encuentran los acumulados mensuales
-    EHCPA_SPI_IMERG_late_month_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'IMERG_late_month'))
+    EHCPA_SPI_IMERG_late_month_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'IMERG_late_month'))
 
     # Carpeta donde se van a guardar los archivos procesados concat, concat_reord y reord
-    EHCPA_SPI_input_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'input'))
+    EHCPA_SPI_input_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'input'))
 
     # Si la carpeta existe:
     if os.path.exists(EHCPA_SPI_input_dir):
@@ -24,7 +24,7 @@ def concat_reord():
         os.makedirs(EHCPA_SPI_input_dir)
 
     # Carpeta donde se van a guardar el archivo de precipitacion
-    EHCPA_SPI_output_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'output', 'precip_max_mensual'))
+    EHCPA_SPI_output_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'precip_max_mensual'))
 
     # Si la carpeta existe:
     if os.path.exists(EHCPA_SPI_output_dir):
