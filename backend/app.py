@@ -24,7 +24,7 @@ def download_file():
     try:
         return send_file(zip_file, as_attachment=True)
     except FileNotFoundError:
-         return jsonify(message= 'El archivo a descargar no existe'), 404
+         return jsonify(message= 'Lo sentimos, los datos de EHCPA no se encuentran disponibles para su descarga en este momento.'), 404
     except Exception as e:
         return jsonify(message= str(e)), 401
     

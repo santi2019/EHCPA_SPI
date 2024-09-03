@@ -1,0 +1,27 @@
+.homeFooter{
+    height: 40px;
+    width: 235px;
+    bottom: 0;
+    right: 0;
+    position: fixed;
+    display: flex;
+    place-items: center;
+    justify-content: center;
+    align-items: center;
+    background-color: #D2D5DA;
+    border-radius: 5px;
+    margin: 15px 15px;
+    opacity: .80;
+}
+
+.footerItem{
+    text-align: center;
+}
+
+
+.footerText{
+    font-size: 13px;
+    font-family: "Inter", system-ui;
+    color: #6D7280;
+    font-weight: bold;
+}

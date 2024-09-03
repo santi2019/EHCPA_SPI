@@ -44,23 +44,23 @@ def download_subset():
 
     # Calculamos la fecha de dos dias atras de la actual, restando 2 dias a la fecha 
     # actual para reemplazar en las variables begTime y endTime
-    last_two_days = today_date - relativedelta(days=2)
-    print(f"Fecha a descargar: {last_two_days.strftime('%Y-%m-%d')}")
+    download_date = today_date - relativedelta(days=2)
+    print(f"Fecha a descargar: {download_date.strftime('%Y-%m-%d')}")
 
     # Extraemos el año, mes y dia
-    last_two_days_year = last_two_days.year
-    last_two_days_month = last_two_days.month
-    last_two_days_day = last_two_days.day
+    download_date_year = download_date.year
+    download_date_month = download_date.month
+    download_date_day = download_date.day
 
     # Definimos los parametros del data subset
     #product = 'GPM_3IMERGM_07' FINAL MONTHLY
     #product = 'GPM_3IMERGDL_07' LATE DAY
     # Formateamos y asignamos los datos a la variable begTime y endTime
     product = 'GPM_3IMERGDL_07'
-    #begTime = '2024-08-01'
-    begTime = f'{last_two_days_year:04d}-{last_two_days_month:02d}-{last_two_days_day:02d}'
-    #endTime = '2024-08-19'
-    endTime = f'{last_two_days_year:04d}-{last_two_days_month:02d}-{last_two_days_day:02d}'
+    #begTime = '2024-08-29'
+    #endTime = '2024-08-31'
+    begTime = f'{download_date_year:04d}-{download_date_month:02d}-{download_date_day:02d}'
+    endTime = f'{download_date_year:04d}-{download_date_month:02d}-{download_date_day:02d}'
     west = -73.5
     south = -55
     east = -53
@@ -226,7 +226,7 @@ def download_subset():
       #  os.makedirs(download_dir)
     #else:
      #   os.makedirs(download_dir)
-
+    '''
     # Calculamos el tercer dia del proximo mes
     next_month_third_day = (today_date + relativedelta(months=1)).replace(day=3)
 
@@ -242,7 +242,7 @@ def download_subset():
             os.makedirs(download_dir)
     else:
         print(f"Hoy no es la fecha ajustada de comparacion, la carpeta ARG_late no sera formateada")
-
+    '''
     # Utilizamos la biblioteca de solicitudes para enviar las URL de HTTP_Services y escribir los resultados
     print('\nHTTP_services output:')
     for item in urls :
