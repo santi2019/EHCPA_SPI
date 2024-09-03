@@ -1,0 +1,11 @@
+.homeMap{
+    min-width: 320px;
+    height: 100vh;
+}
+
+
+.leaflet-container{
+    height: 100%;
+    z-index: 2;
+}
+
