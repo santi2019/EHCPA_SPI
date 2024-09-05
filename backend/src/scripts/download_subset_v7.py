@@ -226,14 +226,14 @@ def download_subset():
       #  os.makedirs(download_dir)
     #else:
      #   os.makedirs(download_dir)
-    '''
+    
     # Calculamos el tercer dia del proximo mes
     next_month_third_day = (today_date + relativedelta(months=1)).replace(day=3)
 
     # Restamos 1 al mes del proximo mes para la comparacion
     comparison_date = next_month_third_day - relativedelta(months=1)
 
-    # Comprobamos si hoy es igual a la fecha de comparacion ajustada
+    # Comprobamos si hoy es igual a la fecha de comparacion
     if today_date.date() == comparison_date.date():
         if os.path.exists(download_dir) and os.path.isdir(download_dir):
             shutil.rmtree(download_dir)
@@ -241,8 +241,8 @@ def download_subset():
         else:
             os.makedirs(download_dir)
     else:
-        print(f"Hoy no es la fecha ajustada de comparacion, la carpeta ARG_late no sera formateada")
-    '''
+        print(f"Hoy no es la fecha de comparacion, la carpeta ARG_late no sera formateada")
+    
     # Utilizamos la biblioteca de solicitudes para enviar las URL de HTTP_Services y escribir los resultados
     print('\nHTTP_services output:')
     for item in urls :
