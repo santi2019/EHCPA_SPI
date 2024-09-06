@@ -90,13 +90,34 @@
 .resultsSearchMap ul{ 
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
-.resultsSearchMap li{ 
+.liResults{ 
     list-style-type: none;
-    color: #6D7280;
+    color: #000000;
     padding: 8px 12px;
-    font-size: 13px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.liResults:hover{ 
+    background: #e2e2e2;
+    transition: all .25s;
+}
+
+.liNotFound{
+    list-style-type: none;
+    color: #000000;
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+.liError{
+    list-style-type: none;
+    color: #000000;
+    padding: 8px 12px;
+    font-size: 14px;
 }
 
 .searchMapForm {
@@ -110,10 +131,14 @@
     border: none;
     outline: none;
     background: #ffffff;
-    font-size: 13px;
+    font-size: 14px;
     font-family: "Inter", system-ui;
     color: #6D7280;
     letter-spacing: .00937em;
+}
+
+.inputSearchMap:hover {
+    color: #000000;
 }
 
 .inputLabel{
@@ -159,6 +184,10 @@
 .searchMapForm .inputSearchMap:valid + .inputLabel::after{
     transform: translateX(0%);
 }
+
+
+
+
 
 .inputItems {
     display: flex;
