@@ -57,7 +57,7 @@ def download_subset():
     #product = 'GPM_3IMERGDL_07' LATE DAY
     # Formateamos y asignamos los datos a la variable begTime y endTime
     product = 'GPM_3IMERGDL_07'
-    #begTime = '2024-08-29'
+    #begTime = '2024-08-01'
     #endTime = '2024-08-31'
     begTime = f'{download_date_year:04d}-{download_date_month:02d}-{download_date_day:02d}'
     endTime = f'{download_date_year:04d}-{download_date_month:02d}-{download_date_day:02d}'
