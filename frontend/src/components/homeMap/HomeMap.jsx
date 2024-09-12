@@ -5,6 +5,8 @@ import "leaflet-geosearch/dist/geosearch.css";
 import "./homemap.css";
 import MapMouseCoordinates from './mapMouseCoordinates/MapMouseCoordinates';
 import MapSearchBar from './mapSearchBar/MapSearchBar';
+import MapShapeFiles from './mapGeoserver/MapShapeFiles';
+import 'leaflet-geoserver-request';
 
 const HomeMap = () => { 
 
@@ -126,7 +128,6 @@ const HomeMap = () => {
 
 
 
-
     return(
         <div className='homeMap'>            
             <MapContainer className="leaflet-container" 
@@ -134,6 +135,7 @@ const HomeMap = () => {
                 zoom={zoom} minZoom={minZoom} maxZoom={maxZoom}
                 attributionControl={attributionControlValue}
                 doubleClickZoom={false}>
+                <MapShapeFiles />
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png"/>
@@ -150,77 +152,3 @@ const HomeMap = () => {
 
 export default HomeMap
 
-
-
-
-/*TRASH
-
-    const [showSearch, setShowSearch] = useState(true);
-
-    const SearchField = () => {
-
-        const searchControl= new GeoSearchControl({
-          provider: new OpenStreetMapProvider(),
-          style: 'bar',
-          showMarker: false,
-        });
-
-        const map = useMap();
-        useEffect(() => {
-          map.addControl(searchControl);
-          return () => map.removeControl(searchControl);
-        }, []);
-      
-        return null;
-    };
-
-    
-    const handleSearchChange = async (e) => {
-        const value = e.target.value;
-        setSearchValue(value);
-
-        if (value) {
-            try {
-                const results = await provider.search({ query: value });
-                setSearchResults(results);
-                //console.log('Resultados de búsqueda:', results);
-            } catch (error) {
-                console.error('Error en la busqueda:', error);
-            }
-        }else{
-            setSearchResults([]);
-        }
-    };
-    
-    
-
-
-    useEffect(() => {
-        const delayDebounceFn = setTimeout(async () => {
-            if (searchValue) {
-                try {
-                    const results = await provider.search({ query: searchValue });
-                    setSearchResults(results);
-                    setError(null); 
-                } catch (error) {
-                    setError("Falla en el servidor de OSM");
-                    console.error('Error:', error);
-                    setSearchResults(error);
-                }
-            } else {
-                setSearchResults([]);
-            }
-        }, 1200); 
-
-        return () => clearTimeout(delayDebounceFn);
-    }, [searchValue]);
-
-
-
-
-    {showSearch && <SearchField className="leaflet-search-bar"/>}
-
-    <label className="inputLabel">
-        <span className="labelSpan">Buscar</span>
-    </label>
-*/

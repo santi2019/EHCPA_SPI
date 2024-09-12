@@ -14,6 +14,10 @@
     NASA_USERNAME=""
     
     NASA_PASSWORD=""
+
+    GEOSERVER_USERNAME=""
+
+    GEOSERVER_PASSWORD=""
     
 + Para crear el entorno virtual de Conda, nos posicionamos en backend ejecutamos:
     

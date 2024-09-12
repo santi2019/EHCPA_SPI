@@ -19,5 +19,7 @@ dependencies:
   - flask
   - flask-cors
   - apscheduler
+  - rioxarray
+  - fiona
   - pip:
     - climate-indices
