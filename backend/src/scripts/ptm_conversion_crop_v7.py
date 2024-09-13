@@ -32,7 +32,7 @@ def ptm_convertion_and_crop():
     input_PTM_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'input', 'PTM'))
     PTM_nc4_file = os.path.join(input_PTM_dir, 'PTM.nc4')
 
-    ARG_ShapeFiles_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'ARG_ShapeFiles'))
+    ARG_ShapeFiles_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'ShapeFiles', 'Argentina'))
     shp_file = os.path.join(ARG_ShapeFiles_dir, 'Argentina.shp')
 
     output_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output'))
@@ -53,7 +53,20 @@ def ptm_convertion_and_crop():
     else:
         os.makedirs(downloable_data_PTM_dir)
 
+    geoserver_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'geoserver'))
 
+    if not os.path.exists(geoserver_dir):
+        os.makedirs(geoserver_dir)
+    
+    geoserver_PTM_dir = os.path.join(geoserver_dir, 'PTM')
+
+    if os.path.exists(geoserver_PTM_dir):
+        shutil.rmtree(geoserver_PTM_dir)
+        os.makedirs(geoserver_PTM_dir)
+    else:
+        os.makedirs(geoserver_PTM_dir)
+
+    '''
     if platform.system() != "Windows":
         geoserver_EHCPA_dir = os.path.join('/usr', 'local', 'GeoServer', 'data', 'EHCPA')
 
@@ -80,7 +93,7 @@ def ptm_convertion_and_crop():
             os.makedirs(geoserver_PTM_dir)
         else:
             os.makedirs(geoserver_PTM_dir)
-
+    '''
     ####################################################################################################################
 
     ## PASO 1: Proceso de conversion de archivo "PTM" en formato netCDF a GeoTiff, generando dos archivos, uno que incluya 

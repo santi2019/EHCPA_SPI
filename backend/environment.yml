@@ -21,5 +21,6 @@ dependencies:
   - apscheduler
   - rioxarray
   - fiona
+  - geoserver-rest
   - pip:
     - climate-indices

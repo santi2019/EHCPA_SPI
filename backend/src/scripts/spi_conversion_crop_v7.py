@@ -31,7 +31,7 @@ def spi_convertion_and_crop():
 
     SPI_gamma_reord_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'input', 'SPI', 'SPI_gamma_reord'))
 
-    ARG_ShapeFiles_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'ARG_ShapeFiles'))
+    ARG_ShapeFiles_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'ShapeFiles', 'Argentina'))
     shp_file = os.path.join(ARG_ShapeFiles_dir, 'Argentina.shp')
 
     output_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output'))
@@ -52,33 +52,18 @@ def spi_convertion_and_crop():
     else:
         os.makedirs(downloable_data_SPI_dir)
 
+    geoserver_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'geoserver'))
 
-    if platform.system() != "Windows":
-        geoserver_EHCPA_dir = os.path.join('/usr', 'local', 'GeoServer', 'data', 'EHCPA')
+    if not os.path.exists(geoserver_dir):
+        os.makedirs(geoserver_dir)
+    
+    geoserver_SPI_dir = os.path.join(geoserver_dir, 'SPI')
 
-        if not os.path.exists(geoserver_EHCPA_dir):
-            os.makedirs(geoserver_EHCPA_dir)
-
-        geoserver_SPI_dir = os.path.join(geoserver_EHCPA_dir, 'SPI')
-
-        if os.path.exists(geoserver_SPI_dir):
-            shutil.rmtree(geoserver_SPI_dir)
-            os.makedirs(geoserver_SPI_dir)
-        else:
-            os.makedirs(geoserver_SPI_dir)
+    if os.path.exists(geoserver_SPI_dir):
+        shutil.rmtree(geoserver_SPI_dir)
+        os.makedirs(geoserver_SPI_dir)
     else:
-        geoserver_EHCPA_dir = os.path.join('C:\\', 'ProgramData', 'GeoServer', 'data', 'EHCPA')
-
-        if not os.path.exists(geoserver_EHCPA_dir):
-            os.makedirs(geoserver_EHCPA_dir)
-
-        geoserver_SPI_dir =   os.path.join(geoserver_EHCPA_dir, 'SPI')
-
-        if os.path.exists(geoserver_SPI_dir):
-            shutil.rmtree(geoserver_SPI_dir)
-            os.makedirs(geoserver_SPI_dir)
-        else:
-            os.makedirs(geoserver_SPI_dir)
+        os.makedirs(geoserver_SPI_dir)
 
     ####################################################################################################################
 

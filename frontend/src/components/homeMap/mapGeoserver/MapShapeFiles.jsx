@@ -2,27 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { useMap } from 'react-leaflet';
 import 'leaflet-geoserver-request';
 
-const MapShapeFile = () => {
+const MapShapeFiles = () => {
     const map = useMap();
-    const [wmsShpLayer, setWmsShpLayer] = useState(null);
-    const [wmsPTMLayer, setWmsPTMLayer] = useState(null); 
+    const [wmsCuencasLayers, setWmsCuencasLayers] = useState(null);
     
     useEffect(() => {
 
-        const wmsPTMLayer = L.Geoserver.wms("http://localhost:8080/geoserver/EHCPA_SPI/wms", {
-            layers: "EHCPA_SPI:PTM_jun_2000_sep_2024_last_band_ARG_cropped",
+        const wmsARGLayer = L.Geoserver.wms("http://localhost:8080/geoserver/EHCPA/wms", {
+            layers:"EHCPA:Provincias",
             format: 'image/png',
         });
 
-        setWmsPTMLayer(wmsPTMLayer);
-        map.addLayer(wmsPTMLayer);
+        map.addLayer(wmsARGLayer);
 
-        const wmsShpLayer = L.Geoserver.wms("http://localhost:8080/geoserver/EHCPA_SPI/wms", {
-            layers: "EHCPA_SPI_GROUP_ShapeFiles",
+        const wmsShpLayer = L.Geoserver.wms("http://localhost:8080/geoserver/EHCPA/wms", {
+            layers: "EHCPA:Cca_Embalse",
             format: 'image/png',
         });
 
-        setWmsShpLayer(wmsShpLayer);
+        setWmsCuencasLayers(wmsShpLayer);
 
         const handleZoom = () => {
             const currentZoom = map.getZoom();
@@ -50,4 +48,4 @@ const MapShapeFile = () => {
     return null;
 };
 
-export default MapShapeFile;
+export default MapShapeFiles;

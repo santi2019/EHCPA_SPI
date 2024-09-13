@@ -6,6 +6,7 @@ import "./homemap.css";
 import MapMouseCoordinates from './mapMouseCoordinates/MapMouseCoordinates';
 import MapSearchBar from './mapSearchBar/MapSearchBar';
 import MapShapeFiles from './mapGeoserver/MapShapeFiles';
+import MapRasterFiles from './mapGeoserver/MapRasterFiles';
 import 'leaflet-geoserver-request';
 
 const HomeMap = () => { 
@@ -135,10 +136,11 @@ const HomeMap = () => {
                 zoom={zoom} minZoom={minZoom} maxZoom={maxZoom}
                 attributionControl={attributionControlValue}
                 doubleClickZoom={false}>
-                <MapShapeFiles />
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png"/>
+                <MapRasterFiles />
+                <MapShapeFiles />
                 <ScaleControl imperial={false} />
                 <MapMouseCoordinates isMouseOverSearch={isMouseOverSearch}/>
                 <CenterMap center={temporaryCoordinates} zoom={temporaryZoom} />

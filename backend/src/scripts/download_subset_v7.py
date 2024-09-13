@@ -206,6 +206,9 @@ def download_subset():
 
         #auth_dir = os.path.join(os.getcwd(), 'credentials')
         auth_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'credentials'))
+        
+        if not os.path.exists(auth_dir):
+            os.makedirs(auth_dir)
 
         shutil.copy2(os.path.join(homeDir, '.dodsrc'), auth_dir)
         print('Copied .dodsrc to:', auth_dir)
