@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: row;
     position: fixed;
-    margin: 105px 100px;
+    margin: 105px 70px;
     top: 0;
     right: 0;
     padding: 0 12px;
@@ -29,10 +29,10 @@
     display: flex;
     flex-direction: column;
     position: fixed;
-    margin: 145px 100px;
+    margin: 145px 70px;
     top: 0;
     right: 0;
-    z-index: 999;
+    z-index: 10000;
     border-radius: 0px 0px 4px 4px;
     background: #ffffff;
     border-bottom: 2px solid #babdc5;

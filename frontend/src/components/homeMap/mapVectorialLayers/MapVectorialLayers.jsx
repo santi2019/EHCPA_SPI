@@ -4,10 +4,10 @@ import 'leaflet-geoserver-request';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLayerGroup, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {Switch} from "antd";
-import "./mapstaticlayers.css";
+import "./mapvectoriallayers.css";
 
 
-const MapStaticLayers = ({setIsMouseOverSearch}) => {
+const MapVectorialLayers = ({setIsMouseOverSearch}) => {
     const elementRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
     const [isNavbarSwitchChecked, setIsNavbarSwitchChecked] = useState(true);
@@ -21,7 +21,6 @@ const MapStaticLayers = ({setIsMouseOverSearch}) => {
         provincias: true
     });
     const map = useMap();
-    const [wmsProvinciasLayer, setWmsProvinciasLayer] = useState(null);
     const [layerOpacity, setLayerOpacity] = useState({
         salsipuedes: 1,
         sanAntonio: 1,
@@ -33,12 +32,15 @@ const MapStaticLayers = ({setIsMouseOverSearch}) => {
     });
     const layers = useRef({});
 
+
+
     const handleCuencasLayers = (layerName, geoserverLayer) => {
         useEffect(() => {
             if (!layers.current[layerName]) {
                 const layer = L.Geoserver.wms('http://localhost:8080/geoserver/EHCPA/wms', {
                     layers: geoserverLayer,
                     opacity: layerOpacity[layerName], 
+                    zIndex: 2000,
                     format: 'image/png',
                 });
                 layers.current[layerName] = layer;
@@ -82,6 +84,8 @@ const MapStaticLayers = ({setIsMouseOverSearch}) => {
     handleCuencasLayers('losMolinos', 'EHCPA:Cca_Los_Molinos');
     handleCuencasLayers('embalse', 'EHCPA:Cca_Embalse');
 
+
+
     const handleOpacityChange = (layer, value) => {
         setLayerOpacity((prevState) => ({
             ...prevState,
@@ -89,6 +93,7 @@ const MapStaticLayers = ({setIsMouseOverSearch}) => {
         }));
     };
 
+    
     useEffect(() => {
         const element = elementRef.current;
         
@@ -125,6 +130,7 @@ const MapStaticLayers = ({setIsMouseOverSearch}) => {
                     layers: geoserverLayer,
                     opacity: layerOpacity[layerName], 
                     format: 'image/png',
+                    zIndex: 2000,
                 });
                 layers.current[layerName] = layer;
             }
@@ -218,12 +224,15 @@ const MapStaticLayers = ({setIsMouseOverSearch}) => {
                                     <span>Cuenca Salsipuedes</span>
                                 </div>
                                 <div className="liRange">
+                                    <div className="minValue"><span>0</span></div>
                                     <input type="range"
+                                    className="inputRange"
                                     min="0"  
                                     max="1"
                                     step="0.1"
                                     value={layerOpacity.salsipuedes}
                                     onChange={(e) => handleOpacityChange('salsipuedes', parseFloat(e.target.value))}/>
+                                    <div className="maxValue"><span>1</span></div>
                                 </div>
                             </li>
                             <li>
@@ -232,12 +241,15 @@ const MapStaticLayers = ({setIsMouseOverSearch}) => {
                                     <span>Cuenca San Antonio</span>
                                 </div>
                                 <div className="liRange">
-                                    <input type="range" 
+                                    <div className="minValue"><span>0</span></div>
+                                    <input type="range"
+                                    className="inputRange" 
                                     min="0"  
                                     max="1"
                                     step="0.1"
                                     value={layerOpacity.sanAntonio}
                                     onChange={(e) => handleOpacityChange('sanAntonio', parseFloat(e.target.value))}/>
+                                    <div className="maxValue"><span>1</span></div>
                                 </div>
                             </li>
                             <li>
@@ -246,12 +258,15 @@ const MapStaticLayers = ({setIsMouseOverSearch}) => {
                                     <span>Cuenca Cosquín</span>
                                 </div>
                                 <div className="liRange">
+                                    <div className="minValue"><span>0</span></div>
                                     <input type="range"
+                                    className="inputRange"
                                     min="0"  
                                     max="1"
                                     step="0.1"
                                     value={layerOpacity.cosquin}
                                     onChange={(e) => handleOpacityChange('cosquin', parseFloat(e.target.value))}/>
+                                    <div className="maxValue"><span>1</span></div>
                                 </div>
                             </li>
                             <li>
@@ -260,12 +275,15 @@ const MapStaticLayers = ({setIsMouseOverSearch}) => {
                                     <span>Cuenca San Roque</span>
                                 </div>
                                 <div className="liRange">
-                                    <input type="range" 
-                                        min="0"  
-                                        max="1"
-                                        step="0.1"
-                                        value={layerOpacity.sanRoque}
-                                        onChange={(e) => handleOpacityChange('sanRoque', parseFloat(e.target.value))}/>
+                                    <div className="minValue"><span>0</span></div>
+                                    <input type="range"
+                                    className="inputRange"
+                                    min="0"  
+                                    max="1"
+                                    step="0.1"
+                                    value={layerOpacity.sanRoque}
+                                    onChange={(e) => handleOpacityChange('sanRoque', parseFloat(e.target.value))}/>
+                                    <div className="maxValue"><span>1</span></div>
                                 </div>
                             </li>
                             <li>
@@ -274,12 +292,15 @@ const MapStaticLayers = ({setIsMouseOverSearch}) => {
                                     <span>Cuenca Los Molinos</span>
                                 </div>
                                 <div className="liRange">
+                                    <div className="minValue"><span>0</span></div>
                                     <input type="range"
-                                        min="0"  
-                                        max="1"
-                                        step="0.1"
-                                        value={layerOpacity.losMolinos}
-                                        onChange={(e) => handleOpacityChange('losMolinos', parseFloat(e.target.value))}/>
+                                    className="inputRange"
+                                    min="0"  
+                                    max="1"
+                                    step="0.1"
+                                    value={layerOpacity.losMolinos}
+                                    onChange={(e) => handleOpacityChange('losMolinos', parseFloat(e.target.value))}/>
+                                    <div className="maxValue"><span>1</span></div>
                                 </div>
                             </li>
                             <li>
@@ -288,12 +309,15 @@ const MapStaticLayers = ({setIsMouseOverSearch}) => {
                                     <span>Cuenca Embalse</span>
                                 </div>
                                 <div className="liRange">
-                                    <input type="range" 
-                                        min="0"
-                                        max="1"
-                                        step="0.1"
-                                        value={layerOpacity.embalse}
-                                        onChange={(e) => handleOpacityChange('embalse', parseFloat(e.target.value))}/>
+                                    <div className="minValue"><span>0</span></div>
+                                    <input type="range"
+                                    className="inputRange" 
+                                    min="0"
+                                    max="1"
+                                    step="0.1"
+                                    value={layerOpacity.embalse}
+                                    onChange={(e) => handleOpacityChange('embalse', parseFloat(e.target.value))}/>
+                                    <div className="maxValue"><span>1</span></div>
                                 </div>
                             </li>
                             <li>
@@ -302,12 +326,15 @@ const MapStaticLayers = ({setIsMouseOverSearch}) => {
                                     <span>Limites Provinciales</span>
                                 </div>
                                 <div className="liRange">
-                                    <input type="range" 
+                                    <div className="minValue"><span>0</span></div>
+                                    <input type="range"
+                                    className="inputRange" 
                                     min="0"
-                                        max="1"
-                                        step="0.1"
-                                        value={layerOpacity.provincias}
-                                        onChange={(e) => handleOpacityChange('provincias', parseFloat(e.target.value))}/>
+                                    max="1"
+                                    step="0.1"
+                                    value={layerOpacity.provincias}
+                                    onChange={(e) => handleOpacityChange('provincias', parseFloat(e.target.value))}/>
+                                    <div className="maxValue"><span>1</span></div>
                                 </div>
                             </li>
                         </ul>
@@ -318,6 +345,6 @@ const MapStaticLayers = ({setIsMouseOverSearch}) => {
     );
 };
 
-export default MapStaticLayers;
+export default MapVectorialLayers;
 
 
