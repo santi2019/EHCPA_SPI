@@ -7,7 +7,7 @@ dependencies:
   - pandas
   - numpy
   - nco
-  - pynco 
+  - udunits2
   - dask
   - requests
   - xarray

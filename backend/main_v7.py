@@ -7,7 +7,7 @@ from src.scripts.ptm_conversion_crop_v7 import ptm_convertion_and_crop
 from src.scripts.spi_conversion_crop_v7 import spi_convertion_and_crop
 from src.scripts.spi_process_v7 import spi_process
 from src.scripts.geoserver_upload_v7 import geoserver_upload
-#from src.scripts.zip_output_folder_v7 import zip_folder
+from src.scripts.zip_output_data_v7 import zip_output_data
 
 
 ## Funcion de delay para evitar colisiones entre funciones del proceso
@@ -34,7 +34,10 @@ def ehcpa_process():
     sleep_for_a_bit(30)
     geoserver_upload()
     sleep_for_a_bit(30)
-    #zip_folder()
+    zip_output_data()
+    sleep_for_a_bit(30)
+    print("El proceso finalizo sin errores")
+
 
 
 def main():
