@@ -2,14 +2,49 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useMap } from 'react-leaflet';
 import 'leaflet-geoserver-request';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars, faCircleInfo, faDownload, faXmark} from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCheck, faCircleInfo, faDownload, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faCopy} from "@fortawesome/free-regular-svg-icons";
 import {Switch} from "antd";
 import "./maprasterlayers.css";
 import 'leaflet-geoserver-request';
+import axios from 'axios';
+import {useDrag} from 'react-use-gesture';
 
-const MapRasterLayers = ({setIsMouseOverSearch}) => {
+
+const MapRasterLayers = ({setIsMouseOverComponent, isMouseOverComponent}) => {
     const elementRef = useRef(null);
     const map = useMap();
+    const [PTMResult, setPTMResult] = useState(null);
+    const [notFoundPTMResults, setNotFoundPTMResults] = useState("");
+    const [SPIResults, setSPIResults] = useState({
+        SPI_1: null,
+        SPI_2: null,
+        SPI_3: null,
+        SPI_6: null,
+        SPI_9: null,
+        SPI_12: null,
+        SPI_24: null,
+        SPI_36: null,
+        SPI_48: null,
+        SPI_60: null,
+        SPI_72: null,
+    });
+    const [notFoundSPIResults, setNotFoundSPIResults] = useState({
+        SPI_1: "",
+        SPI_2: "",
+        SPI_3: "",
+        SPI_6: "",
+        SPI_9: "",
+        SPI_12: "",
+        SPI_24: "",
+        SPI_36: "",
+        SPI_48: "",
+        SPI_60: "",
+        SPI_72: "",
+    });
+    const [coordinatesResult, setCoordinatesResult] = useState([]);
+    const isMouseOverRef = useRef(isMouseOverComponent);
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const [wmsCuencasLayers, setWmsCuencasLayers] = useState(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isPTMOpen, setIsPTMOpen] = useState(false);
@@ -47,6 +82,15 @@ const MapRasterLayers = ({setIsMouseOverSearch}) => {
         SPI_72: 1,
     });
     const layers = useRef({});
+    const modalInitialPosition = { x: 54, y: 105 };
+    const modalPositionRef = useRef(modalInitialPosition);
+    const [modalPosition, setModalPosition] = useState(modalPositionRef.current);
+    const modalRef = useRef(null); 
+
+
+    useEffect(() => {
+        isMouseOverRef.current = isMouseOverComponent; 
+    }, [isMouseOverComponent]);
 
 
     useEffect(() => {
@@ -78,6 +122,23 @@ const MapRasterLayers = ({setIsMouseOverSearch}) => {
     }, [map]);
 
 
+    useEffect(() => {
+        const handleMapClick = (e) => {
+            if (!isMouseOverRef.current) {
+                const { lat, lng } = e.latlng;
+                setCoordinatesResult({ lat, lng });
+                setIsModalVisible(true);
+            }
+        };
+    
+        map.on('click', handleMapClick);
+    
+        return () => {
+            map.off('click', handleMapClick);
+        };
+    }, [map]);
+
+
     const handlePTMLayer = (layerName, geoserverLayer) => {
         useEffect(() => {
             if (!layers.current[layerName]) {
@@ -104,15 +165,58 @@ const MapRasterLayers = ({setIsMouseOverSearch}) => {
                 }
             };
     
+            const handleMapClick = async (e) => {
+            
+                if (isMouseOverRef.current) {
+                    return;  
+                }
+
+                if (!PTMlayerSwitch[layerName]) {
+                    return; 
+                }
+
+                const { lat, lng } = e.latlng;
+                setCoordinatesResult({ lat, lng });
+
+                try {
+                    
+                    const url = `http://localhost:8080/geoserver/EHCPA/wms?service=WMS&version=1.1.0&request=GetFeatureInfo&layers=EHCPA:PTM_Raster&query_layers=EHCPA:PTM_Raster&info_format=application/json&bbox=${map.getBounds().toBBoxString()}&width=${map.getSize().x}&height=${map.getSize().y}&srs=EPSG:4326&x=${Math.floor(e.containerPoint.x)}&y=${Math.floor(e.containerPoint.y)}`;
+    
+                    const response = await axios.get(url);
+    
+                    if (response.data.features && response.data.features.length > 0) {
+                        const value = response.data.features[0].properties.GRAY_INDEX; 
+                        if(value ==  -9999.900390625){
+                            setPTMResult(null);
+                            setNotFoundPTMResults("No se encontraron datos para la ubicación seleccionada.");
+                        }else{
+                            setPTMResult(value);
+                            setNotFoundPTMResults("");
+                        }
+                    } else {
+                        setPTMResult(null);
+                        setNotFoundPTMResults("No se encontraron datos para la ubicación seleccionada.");
+                    }
+                } catch (error) {
+                    setPTMResult(null);
+                    setNotFoundPTMResults(error);
+                }
+            };
+    
+            map.on('click', handleMapClick);
+    
             updateLayer();
     
             return () => {
                 if (map.hasLayer(layer)) {
                     map.removeLayer(layer);
                 }
+            
+                map.off('click', handleMapClick);
             };
         }, [map, PTMlayerSwitch[layerName]]);
     
+        
         useEffect(() => {
             const layer = layers.current[layerName];
             if (map.hasLayer(layer)) {
@@ -150,12 +254,77 @@ const MapRasterLayers = ({setIsMouseOverSearch}) => {
                 }
             };
     
+            const handleMapClick = async (e) => {
+
+                if (isMouseOverRef.current) {
+                    return;  
+                }
+
+                if (!SPIlayersSwitches[layerName]) {
+                    return; 
+                }
+                
+                const { lat, lng } = e.latlng;
+                setCoordinatesResult({ lat, lng });
+
+                try {
+                    const url = `http://localhost:8080/geoserver/EHCPA/wms?service=WMS&version=1.1.0&request=GetFeatureInfo&layers=${geoserverLayer}&query_layers=${geoserverLayer}&info_format=application/json&bbox=${map.getBounds().toBBoxString()}&width=${map.getSize().x}&height=${map.getSize().y}&srs=EPSG:4326&x=${Math.floor(e.containerPoint.x)}&y=${Math.floor(e.containerPoint.y)}`;
+    
+                    const response = await axios.get(url);
+    
+                    if (response.data.features && response.data.features.length > 0) {
+                        const value = response.data.features[0].properties.GRAY_INDEX;
+                        if (value !== null) {
+                            setSPIResults((prevState) => ({
+                                ...prevState,
+                                [layerName]: value,
+                            }));
+                            setNotFoundSPIResults((prevState) => ({
+                                ...prevState,
+                                [layerName]: "",
+                            }));
+                        } else {
+                            setSPIResults((prevState) => ({
+                                ...prevState,
+                                [layerName]: null,
+                            }));
+                            setNotFoundSPIResults((prevState) => ({
+                                ...prevState,
+                                [layerName]: "No se encontraron datos para la ubicación seleccionada.",
+                            }));
+                        }
+                    } else {
+                        setSPIResults((prevState) => ({
+                            ...prevState,
+                            [layerName]: null
+                        }));
+                        setNotFoundSPIResults((prevState) => ({
+                            ...prevState,
+                            [layerName]: "No se encontraron datos para la ubicación seleccionada.",
+                        }));
+                    }
+                } catch (error) {
+                    setSPIResults((prevState) => ({
+                        ...prevState,
+                        [layerName]: null
+                    }));
+                    setNotFoundSPIResults((prevState) => ({
+                        ...prevState,
+                        [layerName]: `Error al obtener el valor del raster para ${layerName}: ${error.message}`,
+                    }));
+                }
+            };
+    
+            map.on('click', handleMapClick);
+    
             updateLayer();
     
             return () => {
                 if (map.hasLayer(layer)) {
                     map.removeLayer(layer);
                 }
+                
+                map.off('click', handleMapClick);
             };
         }, [map, SPIlayersSwitches[layerName]]);
     
@@ -166,6 +335,7 @@ const MapRasterLayers = ({setIsMouseOverSearch}) => {
             }
         }, [layerOpacity[layerName]]);
     };
+    
     
     handleSPILayers('SPI_1', 'EHCPA:SPI_scale_1_Raster');
     handleSPILayers('SPI_2', 'EHCPA:SPI_scale_2_Raster');
@@ -202,6 +372,9 @@ const MapRasterLayers = ({setIsMouseOverSearch}) => {
             ...prevState,
             [layer]: checked
         }));
+
+        setPTMResult(null);
+        setNotFoundPTMResults("")
     };
 
     const handleSPINavbarSwitchChange = (checked) => {
@@ -227,6 +400,19 @@ const MapRasterLayers = ({setIsMouseOverSearch}) => {
             ...prevState,
             [layer]: checked
         }));
+
+       // Si se desactiva la capa, reinicia el resultado para esa capa
+    if (!checked) {
+        setSPIResults((prevState) => ({
+            ...prevState,
+            [layer]: null,
+        }));
+
+        setNotFoundSPIResults((prevState) => ({
+            ...prevState,
+            [layer]: "",
+        }));
+    }
     };
 
 
@@ -244,15 +430,70 @@ const MapRasterLayers = ({setIsMouseOverSearch}) => {
 
     const closePTMContainer = () => {
         setIsPTMOpen(false);
+        setIsMouseOverComponent(false)
     };
 
     const closeSPIContainer = () => {
         setIsSPIOpen(false);
+        setIsMouseOverComponent(false)
     };
 
+    const closeModal = () => {
+        setIsModalVisible(false);
+        setIsMouseOverComponent(false);
+    };
+
+    
+
+    const bindModal = useDrag(({ offset }) => {
+        const newPosition = {
+            x: modalPositionRef.current.x + offset[0],
+            y: modalPositionRef.current.y + offset[1],
+        };
+    
+        const modalWidth = modalRef.current ? modalRef.current.offsetWidth : 510; 
+        const modalHeight = modalRef.current ? modalRef.current.offsetHeight : 295; 
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+    
+        const boundedX = Math.min(Math.max(newPosition.x, 0), windowWidth - modalWidth);
+        const boundedY = Math.min(Math.max(newPosition.y, 95), windowHeight - modalHeight);
+    
+        setModalPosition({
+            x: boundedX,
+            y: boundedY,
+        });
+    }, {
+        onDragEnd: () => {
+            modalPositionRef.current = modalPosition;
+        },
+        from: () => [modalPositionRef.current.x, modalPositionRef.current.y]
+    });
+
+
+    const [isCopied, setIsCopied] = useState(false);
+
+    const handleCopyCoordinates = () => {
+        const coordinatesText = `Latitud: ${coordinatesResult.lat}, Longitud: ${coordinatesResult.lng}`;
+        
+        navigator.clipboard.writeText(coordinatesText)
+            .then(() => {
+                setIsCopied(true);
+    
+                setTimeout(() => {
+                    setIsCopied(false);
+                }, 2500);
+            })
+            .catch((err) => {
+                console.error('Error al copiar las coordenadas: ', err);
+            });
+    };
+
+    
+
     return(
-        <div ref={elementRef}>
-            <div className="bMenuContainer"  onMouseEnter={() => setIsMouseOverSearch(true)} onMouseLeave={() => setIsMouseOverSearch(false)}>
+        <div ref={elementRef} onMouseEnter={() => setIsMouseOverComponent(true)} onMouseLeave={() => setIsMouseOverComponent(false)}>
+            <div className="bMenuContainer" >
                 <button className='menuButton' onClick={handleOpenMenu} >
                     <FontAwesomeIcon className="menuIcon" icon={isMenuOpen ? faXmark : faBars}/>
                 </button>  
@@ -261,12 +502,12 @@ const MapRasterLayers = ({setIsMouseOverSearch}) => {
                 <div className="menuContent" >
                     <ul className="menuItems">
                         <li className="menuItemsli">
-                            <button className='bContent' onClick={handlePTMOpen} onMouseEnter={() => setIsMouseOverSearch(true)} onMouseLeave={() => setIsMouseOverSearch(false)}>
+                            <button className='bContent' onClick={handlePTMOpen}>
                                 <span>PTM</span>
                             </button>
                         </li>
                         {isPTMOpen && (
-                            <div className="PTMlayerContainer" onMouseEnter={() => setIsMouseOverSearch(true)} onMouseLeave={() => setIsMouseOverSearch(false)}>
+                            <div className="PTMlayerContainer">
                                 <div className="PTMNavbar" >
                                     <Switch checked={isPTMNavbarSwitchChecked} onChange={handlePTMNavbarSwitchChange}/>
                                     <h2 className="PTMNavarTitle">Precipitación Total Mensual</h2>
@@ -296,12 +537,12 @@ const MapRasterLayers = ({setIsMouseOverSearch}) => {
                             </div>
                         )}
                         <li>
-                            <button className='bContent' onClick={handleSPIOpen} onMouseEnter={() => setIsMouseOverSearch(true)} onMouseLeave={() => setIsMouseOverSearch(false)}>
+                            <button className='bContent' onClick={handleSPIOpen} >
                                 <span>SPI</span>
                             </button> 
                         </li>
                         {isSPIOpen && (
-                            <div className="SPIlayersContainer" onMouseEnter={() => setIsMouseOverSearch(true)} onMouseLeave={() => setIsMouseOverSearch(false)}>
+                            <div className="SPIlayersContainer">
                                 <div className="SPINavbar" >
                                     <Switch checked={isSPINavbarSwitchChecked} onChange={handleSPINavbarSwitchChange}/>
                                     <h2 className="SPINavarTitle">Índice de Precipitación Estandarizado</h2>
@@ -501,17 +742,77 @@ const MapRasterLayers = ({setIsMouseOverSearch}) => {
                             </div>
                         )}
                         <li>
-                            <button className='bContent'  onMouseEnter={() => setIsMouseOverSearch(true)} onMouseLeave={() => setIsMouseOverSearch(false)}>
+                            <button className='bContent'>
                                 <FontAwesomeIcon className="infoIcon" icon={faCircleInfo} />
                             </button>
                         </li>
                         <li>
-                            <button className='bContent'  onMouseEnter={() => setIsMouseOverSearch(true)} onMouseLeave={() => setIsMouseOverSearch(false)}>
+                            <button className='bContent'>
                                 <FontAwesomeIcon className="downloadIcon" icon={faDownload} />
                             </button>  
                         </li>
                     </ul>
                 </div>
+            )}
+            {isModalVisible && ( 
+                    <div className="modal"
+                        ref={modalRef}
+                        {...bindModal()} 
+                        style={{
+                            left: modalPosition.x,
+                            top: modalPosition.y,
+                        }}>
+                        <div className="modalNavBar">
+                            <div></div>
+                            <h2 className="modalNavarTitle">Información</h2>
+                            <FontAwesomeIcon className="modalCloseIcon" icon={faXmark} onClick={closeModal} />
+                        </div>
+                        <div className="modalCoordinates">
+                            <div className="coordinatesInfo">
+                                <span className='coordinatesTitle'>Coordenadas: </span>
+                                {!isCopied && (
+                                    <FontAwesomeIcon className='copyIcon' icon={faCopy} onClick={handleCopyCoordinates} />
+                                )}
+                                {isCopied && (
+                                    <FontAwesomeIcon className='okIcon' icon={faCheck} />
+                                )}
+                            </div>
+                            <div className="coordinatesResult">
+                                <span>Latitud: {coordinatesResult.lat}</span>
+                                <span>Longitud: {coordinatesResult.lng}</span>
+                            </div>
+                        </div>
+                        <div className="modalResults">
+                            <ul>
+                                {coordinatesResult.lat && coordinatesResult.lng && (
+                                    <>
+                                    {PTMlayerSwitch.PTM && (PTMResult !== null || notFoundPTMResults) && (
+                                        <li>
+                                            <span>PTM [mm]: </span>
+                                            {PTMResult !== null ? (
+                                                `${PTMResult}`
+                                            ) : (
+                                                notFoundPTMResults
+                                            )}
+                                        </li>
+                                    )}
+                                    {Object.keys(SPIResults).map((key) => (
+                                        SPIlayersSwitches[key] && (SPIResults[key] !== null || notFoundSPIResults[key]) && (
+                                            <li key={key}>
+                                                <span>{`SPI Escala ${key.replace('SPI_', '')}: `}</span>
+                                                {SPIResults[key] !== null ? (
+                                                    `${SPIResults[key]}`
+                                                ) : (
+                                                    notFoundSPIResults[key]
+                                                )}
+                                            </li>
+                                        )
+                                    ))}
+                                    </>
+                                )}
+                            </ul>
+                        </div>
+                    </div>
             )}
         </div>
     )

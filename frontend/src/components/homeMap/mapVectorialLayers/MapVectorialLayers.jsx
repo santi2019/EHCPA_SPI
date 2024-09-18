@@ -7,7 +7,7 @@ import {Switch} from "antd";
 import "./mapvectoriallayers.css";
 
 
-const MapVectorialLayers = ({setIsMouseOverSearch}) => {
+const MapVectorialLayers = ({setIsMouseOverComponent}) => {
     const elementRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
     const [isNavbarSwitchChecked, setIsNavbarSwitchChecked] = useState(true);
@@ -199,18 +199,19 @@ const MapVectorialLayers = ({setIsMouseOverSearch}) => {
 
     const closeLayersContainer = () => {
         setIsVisible(false);
+        setIsMouseOverComponent(false)
     };
 
 
     return(
-        <div ref={elementRef}>
-            <div className="bContainer"  onMouseEnter={() => setIsMouseOverSearch(true)} onMouseLeave={() => setIsMouseOverSearch(false)}>
+        <div ref={elementRef}  onMouseEnter={() => setIsMouseOverComponent(true)} onMouseLeave={() => setIsMouseOverComponent(false)}>
+            <div className="bContainer">
                 <button className='bLayers' onClick={handleVisibility}>
                     <FontAwesomeIcon className="layersIcon" icon={faLayerGroup} />
                 </button>  
             </div>
             {isVisible && (
-                <div className="layersContainer" onMouseEnter={() => setIsMouseOverSearch(true)} onMouseLeave={() => setIsMouseOverSearch(false)}>
+                <div className="layersContainer">
                     <div className="layersNavbar">
                         <Switch checked={isNavbarSwitchChecked} onChange={handleNavbarSwitchChange}/>
                         <h2 className="layersNavarTitle">Capas Vectoriales</h2>

@@ -3,7 +3,7 @@ import { useMapEvents, useMap } from 'react-leaflet';
 import "./mapmousecoordinates.css";
 import L from 'leaflet';
 
-const MapMouseCoordinates = ({isMouseOverSearch}) => {
+const MapMouseCoordinates = ({isMouseOverComponent}) => {
 
     const [coordinates, setCoordinates] = useState({ lat: '0', lng: '0' });
     const [isMouseOverCoordinates, setIsMouseOverCoordinates] = useState(false);
@@ -46,6 +46,9 @@ const MapMouseCoordinates = ({isMouseOverSearch}) => {
             L.DomEvent.on(element, 'wheel', function (event) {
                 L.DomEvent.stopPropagation(event);
             });
+            L.DomEvent.on(element, 'click', function (event) {
+                L.DomEvent.stopPropagation(event);
+            });
         }
 
         return () => {
@@ -54,6 +57,7 @@ const MapMouseCoordinates = ({isMouseOverSearch}) => {
                 L.DomEvent.off(element, 'mouseup');
                 L.DomEvent.off(element, 'mousemove');
                 L.DomEvent.off(element, 'wheel');
+                L.DomEvent.off(element, 'click');
             }
         };
     }, [map]);
@@ -72,7 +76,7 @@ const MapMouseCoordinates = ({isMouseOverSearch}) => {
     const HandleGetCoordinates = () => {
         useMapEvents({
             mousemove(e) {
-                if (!isMouseOverCoordinates && !isMouseOverSearch) {
+                if (!isMouseOverCoordinates && !isMouseOverComponent) {
                     setCoordinates({
                         lat: e.latlng.lat.toFixed(3),
                         lng: e.latlng.lng.toFixed(3),

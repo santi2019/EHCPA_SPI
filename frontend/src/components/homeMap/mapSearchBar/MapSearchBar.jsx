@@ -6,7 +6,7 @@ import { faMagnifyingGlass, faCircleInfo, faCircleXmark} from "@fortawesome/free
 import { faCircleQuestion} from "@fortawesome/free-regular-svg-icons";
 import "./mapsearchbar.css";
 
-const MapSearchBar = ({ handleSelectLocation, setIsMouseOverSearch  }) => { 
+const MapSearchBar = ({ handleSelectLocation, setIsMouseOverComponent  }) => { 
     
     const [searchValue, setSearchValue] = useState("");
     const [searchResults, setSearchResults] = useState([]);
@@ -164,8 +164,8 @@ const MapSearchBar = ({ handleSelectLocation, setIsMouseOverSearch  }) => {
     
     
     return(
-        <div  ref={elementRef}>
-            <div className="searchMap" onMouseEnter={() => setIsMouseOverSearch(true)} onMouseLeave={() => setIsMouseOverSearch(false)}>
+        <div ref={elementRef}>
+            <div className="searchMap" onMouseEnter={() => setIsMouseOverComponent(true)} onMouseLeave={() => setIsMouseOverComponent(false)}>
                 <form className='searchMapForm' autoComplete="none" onSubmit={handleFormSubmit}>
                     <input className="inputSearchMap" type="text" placeholder="Buscar" value={searchValue} onChange={handleSearchValue} />
                     <div className="inputItems">
@@ -178,7 +178,7 @@ const MapSearchBar = ({ handleSelectLocation, setIsMouseOverSearch  }) => {
                 </form>                
             </div>
             {(searchResults.length > 0 || notFoundResults || error) && (
-                <div className="resultsSearchMap" onMouseEnter={() => setIsMouseOverSearch(true)} onMouseLeave={() => setIsMouseOverSearch(false)}>
+                <div className="resultsSearchMap" onMouseEnter={() => setIsMouseOverComponent(true)} onMouseLeave={() => setIsMouseOverComponent(false)}>
                     <ul>
                         {searchResults.length > 0 ? (
                             searchResults.map((result, index) => (

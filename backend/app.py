@@ -8,7 +8,7 @@ app = Flask(__name__)
 cors = CORS(app, origins='*')
 
 scheduler = BackgroundScheduler(daemon=True)
-scheduler.add_job(ehcpa_process, 'cron', hour=3)
+scheduler.add_job(ehcpa_process, 'cron', hour=3, misfire_grace_time=3600)
 scheduler.start()
 
 
