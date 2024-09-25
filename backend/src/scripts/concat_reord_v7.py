@@ -79,8 +79,6 @@ def concat_reord():
             command2 = f'move {temp_file} {input_file}'
             Popen(command2, shell=True).wait()
 
-    print("Procesamiento de variable time en acumulados mensuales completado")
-
     ####################################################################################################################
 
     ## PASO 2: Proceso de concatenacion de los acumulados mensuales, es decir, agrupar todos los archivos en uno unico.
@@ -123,8 +121,6 @@ def concat_reord():
         command_concat_final = f'ncrcat -h {chunked_files_list} {final_concat_file}'
         Popen(command_concat_final, shell=True).wait()
 
-    print("Concatenacion completada")
-
     ####################################################################################################################
 
     ## PASO 3: Proceso de reordenamiento de dimensiones lat, lon, time sobre archivo "IMER_concat".
@@ -135,8 +131,6 @@ def concat_reord():
     reord_file = os.path.join(concat_reord_dir, 'IMERG_reord.nc4')
     command_reorder = f'ncpdq -a lat,lon,time {final_concat_file} {reord_file}'
     Popen(command_reorder, shell=True).wait()
-
-    print("Reordenamiento completado")
 
     ####################################################################################################################
 
@@ -158,8 +152,6 @@ def concat_reord():
         move_command = f'move {temp_fixed_file} {reord_fixed_file}'
         Popen(move_command, shell=True).wait()
 
-    print("Correccion de la dimension 'lat' completada")
-
     ####################################################################################################################
 
     ## PASO 5: Proceso de reordenamiento de las dimensiones time, lat, lon del archivo "IMERG_reord_lat_fix.nc4" para
@@ -171,10 +163,7 @@ def concat_reord():
     command_final_reorder = f'ncpdq -a time,lat,lon {reord_fixed_file} {IMERG_precip_file}'
     Popen(command_final_reorder, shell=True).wait()
 
-    print("Reordenamiento para precipitaciones totales mensuales completado")
 
-
-    print("El procesamiento se completó con exito")
 
 
 

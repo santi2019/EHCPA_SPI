@@ -169,9 +169,5 @@ def ptm_convertion_and_crop():
     pr_cropped_last_band.rio.to_raster(PTM_last_band_cropped_tif)
 
 
-
-    print("La conversión y recorte de PTM se completó con éxito")
-
-
 if __name__ == '__main__':
     ptm_convertion_and_crop()

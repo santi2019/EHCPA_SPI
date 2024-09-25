@@ -46,8 +46,6 @@ def geoserver_upload():
     geo.create_coveragestore(layer_name=PTM_layer_name, path=PTM_tif_file, workspace=workspace_name)
     geo.publish_style(layer_name=PTM_layer_name, style_name=PTM_style_name, workspace=workspace_name)
 
-    print("Publicación de la capa PTM completada.")
-
 
     spi_scales = ['1', '2', '3', '6', '9', '12', '24', '36', '48', '60', '72']
     SPI_style_name = 'SPI_Style'
@@ -64,9 +62,7 @@ def geoserver_upload():
         print(f"Publicando estilo para la capa: {SPI_layer_name}")
         geo.publish_style(layer_name=SPI_layer_name, style_name=SPI_style_name, workspace=workspace_name)
 
-    print("Publicación de todas las capas SPI completada.")
 
-    print("La publicacion de todos los archivos raster se completo con exito.")
         
     
 

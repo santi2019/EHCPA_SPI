@@ -97,7 +97,7 @@ const MapMouseCoordinates = ({isMouseOverComponent}) => {
             ref={elementRef}>
             <div className="coordinatesItems">
                 <HandleGetCoordinates />
-                <span className="coordinatesLatLng"> Lat: {coordinates.lat} Lng: {coordinates.lng}</span>
+                <span className="coordinatesLatLng"> Lat: {coordinates.lat} - Lng: {coordinates.lng}</span>
             </div>
         </div>
     );

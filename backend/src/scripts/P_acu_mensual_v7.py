@@ -71,10 +71,6 @@ def p_acu_mensual():
         ds_out.to_netcdf(output_file)
 
 
-    print("El proceso de generacion de acumulados mensuales se completó con exito")
-
-
-
 
 if __name__ == '__main__':
     p_acu_mensual()

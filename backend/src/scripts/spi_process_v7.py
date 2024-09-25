@@ -87,8 +87,6 @@ def spi_process():
     )
     Popen(spi_command, shell=True).wait()
 
-    print("Calculo SPI completado")
-
     ####################################################################################################################
 
     ## PASO 2: Proceso de reordenamiento de las dimensiones time, lat, lon de los archivos "nclimgrid_gamma.nc4".  
@@ -107,9 +105,6 @@ def spi_process():
         Popen(reorder_command, shell=True).wait()
 
         print(f"Reordenamiento de dimensiones para escala SPI {scale} completado")
-
-
-    print("El procesamiento se completó con exito")
 
 
 

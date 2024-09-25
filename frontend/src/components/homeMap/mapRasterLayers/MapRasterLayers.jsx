@@ -364,6 +364,11 @@ const MapRasterLayers = ({setIsMouseOverComponent, isMouseOverComponent}) => {
         setPTMLayerSwitch({
             PTM: checked
         });
+
+        if (!checked) {
+            setPTMResult(null);
+            setNotFoundPTMResults("");
+        }
     };
 
 
@@ -373,9 +378,13 @@ const MapRasterLayers = ({setIsMouseOverComponent, isMouseOverComponent}) => {
             [layer]: checked
         }));
 
-        setPTMResult(null);
-        setNotFoundPTMResults("")
+        if (!checked) {
+            setPTMResult(null);
+            setNotFoundPTMResults("");
+        }
     };
+
+
 
     const handleSPINavbarSwitchChange = (checked) => {
         setIsSPINavbarSwitchChecked(checked);
@@ -392,6 +401,30 @@ const MapRasterLayers = ({setIsMouseOverComponent, isMouseOverComponent}) => {
             SPI_60: checked,
             SPI_72: checked
         });
+
+        if (!checked) {
+            const layers = [
+                'SPI_1', 'SPI_2', 'SPI_3', 'SPI_6', 'SPI_9', 'SPI_12',
+                'SPI_24', 'SPI_36', 'SPI_48', 'SPI_60', 'SPI_72'
+            ];
+    
+            setSPIResults((prevState) => {
+                const updatedResults = { ...prevState };
+                layers.forEach((layer) => {
+                    updatedResults[layer] = null;
+                });
+                return updatedResults;
+            });
+    
+            setNotFoundSPIResults((prevState) => {
+                const updatedNotFoundResults = { ...prevState };
+                layers.forEach((layer) => {
+                    updatedNotFoundResults[layer] = "";
+                });
+                return updatedNotFoundResults;
+            });
+        }
+        
     };
 
 
@@ -401,18 +434,18 @@ const MapRasterLayers = ({setIsMouseOverComponent, isMouseOverComponent}) => {
             [layer]: checked
         }));
 
-       // Si se desactiva la capa, reinicia el resultado para esa capa
-    if (!checked) {
-        setSPIResults((prevState) => ({
-            ...prevState,
-            [layer]: null,
-        }));
+       
+        if (!checked) {
+            setSPIResults((prevState) => ({
+                ...prevState,
+                [layer]: null,
+            }));
 
-        setNotFoundSPIResults((prevState) => ({
-            ...prevState,
-            [layer]: "",
-        }));
-    }
+            setNotFoundSPIResults((prevState) => ({
+                ...prevState,
+                [layer]: "",
+            }));
+        }
     };
 
 
@@ -778,8 +811,8 @@ const MapRasterLayers = ({setIsMouseOverComponent, isMouseOverComponent}) => {
                                 )}
                             </div>
                             <div className="coordinatesResult">
-                                <span>Latitud: {coordinatesResult.lat}</span>
-                                <span>Longitud: {coordinatesResult.lng}</span>
+                                <span className='latResult'>Latitud: {coordinatesResult.lat.toFixed(3)} - </span>
+                                <span className='lngResult'> Longitud: {coordinatesResult.lng.toFixed(3)}</span>
                             </div>
                         </div>
                         <div className="modalResults">
@@ -790,7 +823,7 @@ const MapRasterLayers = ({setIsMouseOverComponent, isMouseOverComponent}) => {
                                         <li>
                                             <span>PTM [mm]: </span>
                                             {PTMResult !== null ? (
-                                                `${PTMResult}`
+                                                `${PTMResult.toFixed(1)}`
                                             ) : (
                                                 notFoundPTMResults
                                             )}
@@ -801,7 +834,7 @@ const MapRasterLayers = ({setIsMouseOverComponent, isMouseOverComponent}) => {
                                             <li key={key}>
                                                 <span>{`SPI Escala ${key.replace('SPI_', '')}: `}</span>
                                                 {SPIResults[key] !== null ? (
-                                                    `${SPIResults[key]}`
+                                                    `${SPIResults[key].toFixed(1)}`
                                                 ) : (
                                                     notFoundSPIResults[key]
                                                 )}

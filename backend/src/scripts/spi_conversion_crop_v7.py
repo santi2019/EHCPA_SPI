@@ -147,10 +147,5 @@ def spi_convertion_and_crop():
 
 
 
-
-    print("La conversión y recorte de SPI para todas las escalas se completó con éxito")
-
-
-
 if __name__ == '__main__':
     spi_convertion_and_crop()

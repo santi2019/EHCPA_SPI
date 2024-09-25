@@ -214,7 +214,7 @@ const MapVectorialLayers = ({setIsMouseOverComponent}) => {
                 <div className="layersContainer">
                     <div className="layersNavbar">
                         <Switch checked={isNavbarSwitchChecked} onChange={handleNavbarSwitchChange}/>
-                        <h2 className="layersNavarTitle">Capas Vectoriales</h2>
+                        <h2 className="layersNavarTitle">Capas</h2>
                         <FontAwesomeIcon className="closeIcon" icon={faXmark} onClick={closeLayersContainer}/>
                     </div>
                     <div className="layersContent">

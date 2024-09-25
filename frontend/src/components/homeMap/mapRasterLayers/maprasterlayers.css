@@ -377,16 +377,16 @@
 
 .modalCoordinates{
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     padding: 12px;
     border-bottom: 1px groove #babdc5;
     user-select: none;
 }
 
 .coordinatesInfo{
-    text-align: center;
+    display: flex;
     justify-content: space-between;
-    padding-right: 30px;
+    padding-bottom: 12px;
 }
 
 .coordinatesTitle{
@@ -394,8 +394,6 @@
     font-family: "Inter", system-ui;
     color: #585858;
     font-weight: bold;
-    padding-right: 5px;
-    user-select: none;
 }
 
 .copyIcon{
@@ -415,10 +413,15 @@
 
 .coordinatesResult{
     display: flex;
-    flex-direction: column;
 }
 
-.coordinatesResult span{
+.latResult{
+    font-size: 14px;
+    color: #000000;
+    padding-right: 4px;
+}
+
+.lngResult{
     font-size: 14px;
     color: #000000;
 }
