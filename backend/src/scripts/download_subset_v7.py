@@ -2,6 +2,8 @@ import sys
 import json
 import urllib3
 from urllib3.exceptions import MaxRetryError, NameResolutionError
+from urllib3.exceptions import TimeoutError as UrllibTimeoutError
+from requests.exceptions import Timeout as RequestsTimeoutError
 import certifi
 import requests
 from time import sleep
@@ -17,7 +19,7 @@ from dateutil.relativedelta import relativedelta
 
 results_length = 0
 
-def download_subset():
+def download_subset(begTime, endTime):
     
 
     ## PASO 1: Proceso de obtencion del subset de datos IMERG mediante conexion a la API de la NASA.
@@ -82,257 +84,287 @@ def download_subset():
     #             enlaces de los documentos PDF que se obtuvieron, pero como dijimos anteriormente, estos no nos interesan y se
     #             ignoran en la descarga.
 
-    global results_length
+    try: 
+        global results_length
 
-    http = urllib3.PoolManager(cert_reqs='CERT_REQUIRED',ca_certs=certifi.where())
+        downloadError = False
+        error_message = ""
+        apiErrorMessage = "API Error: Solicitud defectuosa."
 
-    svcurl = 'https://disc.gsfc.nasa.gov/service/subset/jsonwsp'
 
-    apiErrorMessage = "API Error: Solicitud defectuosa."
+        http = urllib3.PoolManager(cert_reqs='CERT_REQUIRED',ca_certs=certifi.where())
 
-    def get_http_data(request):
-        hdrs = {'Content-Type': 'application/json',
-                'Accept'      : 'application/json'}
-        data = json.dumps(request)
-        r = http.request('POST', svcurl, body=data, headers=hdrs)
-        response = json.loads(r.data)
+        svcurl = 'https://disc.gsfc.nasa.gov/service/subset/jsonwsp'
+
+        apiErrorMessage = "API Error: Solicitud defectuosa."
+
+        def get_http_data(request):
+            hdrs = {'Content-Type': 'application/json',
+                    'Accept'      : 'application/json'}
+            data = json.dumps(request)
+            r = http.request('POST', svcurl, body=data, headers=hdrs, timeout=20)
+            response = json.loads(r.data)
+            
+            if response['type'] == 'jsonwsp/fault' :
+                nonlocal apiErrorMessage
+                apiErrorMessage = "API Error: Solicitud defectuosa."
+            return response
         
-        if response['type'] == 'jsonwsp/fault' :
-            nonlocal apiErrorMessage
-            apiErrorMessage = "API Error: Solicitud defectuosa."
-        return response
-    
-    today_date = datetime.today()
-    print(f"Fecha actual: {today_date.strftime('%Y-%m-%d')}")
-    
-    download_date = today_date - relativedelta(days=2)
-    print(f"Fecha a descargar: {download_date.strftime('%Y-%m-%d')}")
+        print(f"Periodo a descargar: {begTime} a {endTime}")
 
-    download_date_year = download_date.year
-    download_date_month = download_date.month
-    download_date_day = download_date.day
+        product = 'GPM_3IMERGDL_07'
+        west = -73.5
+        south = -55
+        east = -53
+        north = -21
+        varName = 'precipitation'
 
-    product = 'GPM_3IMERGDL_07'
-    #begTime = '2024-05-01'
-    #endTime = '2024-05-31'
-    begTime = f'{download_date_year:04d}-{download_date_month:02d}-{download_date_day:02d}'
-    endTime = f'{download_date_year:04d}-{download_date_month:02d}-{download_date_day:02d}'
-    west = -73.5
-    south = -55
-    east = -53
-    north = -21
-    varName = 'precipitation'
-
-    subset_request = {
-        'methodname': 'subset',
-        'type': 'jsonwsp/request',
-        'version': '1.0',
-        'args': {
-            'role'  : 'subset',
-            'start' : begTime,
-            'end'   : endTime,
-            'box'   : [west, south, east, north],
-            'crop'  : True,
-            'data'  : [{'datasetId': product,
-                        'variable' : varName
-                    }]
+        subset_request = {
+            'methodname': 'subset',
+            'type': 'jsonwsp/request',
+            'version': '1.0',
+            'args': {
+                'role'  : 'subset',
+                'start' : begTime,
+                'end'   : endTime,
+                'box'   : [west, south, east, north],
+                'crop'  : True,
+                'data'  : [{'datasetId': product,
+                            'variable' : varName
+                        }]
+            }
         }
-    }
 
-    response = get_http_data(subset_request)
-
-
-
-    myJobId = response['result']['jobId']
-    print('Job ID: '+myJobId)
-    print('Job status: '+response['result']['Status'])
-
-    status_request = {
-        'methodname': 'GetStatus',
-        'version': '1.0',
-        'type': 'jsonwsp/request',
-        'args': {'jobId': myJobId}
-    }
-
-    while response['result']['Status'] in ['Accepted', 'Running']:
-        sleep(5)
-        response = get_http_data(status_request)
-        status  = response['result']['Status']
-        percent = response['result']['PercentCompleted']
-        print ('Job status: %s (%d%c complete)' % (status,percent,'%'))
-
-    if response['result']['Status'] == 'Succeeded' :
-        print ('Job Finished:  %s' % response['result']['message'])
-    else :
-        print('Job Failed: %s' % response['fault']['code'])
-        sys.exit(1)
+        response = get_http_data(subset_request)
 
 
 
-    batchsize = 20
-    results_request = {
-        'methodname': 'GetResult',
-        'version': '1.0',
-        'type': 'jsonwsp/request',
-        'args': {
-            'jobId': myJobId,
-            'count': batchsize,
-            'startIndex': 0
+        myJobId = response['result']['jobId']
+        print('Job ID: '+myJobId)
+        print('Job status: '+response['result']['Status'])
+
+        status_request = {
+            'methodname': 'GetStatus',
+            'version': '1.0',
+            'type': 'jsonwsp/request',
+            'args': {'jobId': myJobId}
         }
-    }
 
-    results = []
-    count = 0
-    response = get_http_data(results_request)
-    count = count + response['result']['itemsPerPage']
-    results.extend(response['result']['items'])
+        while response['result']['Status'] in ['Accepted', 'Running']:
+            sleep(5)
+            response = get_http_data(status_request)
+            status  = response['result']['Status']
+            percent = response['result']['PercentCompleted']
+            print ('Job status: %s (%d%c complete)' % (status,percent,'%'))
 
-    total = response['result']['totalResults']
-    while count < total :
-        results_request['args']['startIndex'] += batchsize
+        if response['result']['Status'] == 'Succeeded' :
+            print ('Job Finished:  %s' % response['result']['message'])
+        else :
+            print('Job Failed: %s' % response['fault']['code'])
+            sys.exit(1)
+
+
+
+        batchsize = 20
+        results_request = {
+            'methodname': 'GetResult',
+            'version': '1.0',
+            'type': 'jsonwsp/request',
+            'args': {
+                'jobId': myJobId,
+                'count': batchsize,
+                'startIndex': 0
+            }
+        }
+
+        results = []
+        count = 0
         response = get_http_data(results_request)
         count = count + response['result']['itemsPerPage']
         results.extend(response['result']['items'])
 
-    print('Retrieved %d out of %d expected items' % (len(results), total))
-    
-    result = requests.get('https://disc.gsfc.nasa.gov/api/jobs/results/'+myJobId)
-    try:
-        result.raise_for_status()
-        urls = result.text.split('\n')
-        for i in urls : print('\n%s' % i)
-    except :
-        print('Request returned error code %d' % result.status_code)
+        total = response['result']['totalResults']
+        while count < total :
+            results_request['args']['startIndex'] += batchsize
+            response = get_http_data(results_request)
+            count = count + response['result']['itemsPerPage']
+            results.extend(response['result']['items'])
 
-    docs = []
-    urls = []
-    for item in results :
-        try:
-            if item['start'] and item['end'] : urls.append(item)
-        except:
-            docs.append(item)
-
-    print('\nDocumentation:')
-    for item in docs : print(item['label']+': '+item['link'])
-
-    results_length = len(results)
-
-    ####################################################################################################################
-
-    ## PASO 2: Proceso de generacion de credenciales y autenticacion en el sitio NASA Earthdata, para acceder y descargar 
-    #          los datos resultantes dle paso anterior.
-    #
-    #          1. Establecemos la URL del sitio, el nombre de usuario y la contraseña en el sitio, para validar la 
-    #             autenticacion.
-    #          2. Creamos los siguientes archivos:
-    #             - .netrc: Este archivo se utiliza para almacenar las credenciales de acceso (nombre de usuario y 
-    #                       contraseña) y la URL para autenticar automáticamente las solicitudes sin necesidad de ingresar
-    #                       manualmente las credenciales cada vez. Este archivo se guarda en el directorio principal del
-    #                       usuario, implementando la escritura mediante "w". Si este no existe, se crea.
-    #             - .urs_cookies: Este archivo se utiliza para almacenar las cookies de autenticacion que pueden ser 
-    #                             necesarias durante las solicitudes HTTP. Dentro del archivo no es escribe nada, ya 
-    #                             que se crea vacio para su uso posterior.
-    #             - .dodsrc: Este archivo contiene configuraciones que permiten a las solicitudes HTTP saber donde buscar 
-    #                        las cookies y las credenciales.
-    #          3. Si el sistema no Linux o macOS, se ajustan los permisos para el archivo ".netrc", es decir, el comando
-    #             que se ejecuta cambia los permisos de dicho archivo para que se pueda leer y escribir en el, simepre
-    #             hablando en estos sistemas. Si el sistema es Windows en lugar de cambiar los permisos del archivo 
-    #             ".netrc", se copia el archivo ".dodsrc" al directorio "credentials".   
-
-    dotenv_path = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'credentials', '.env'))
-    load_dotenv(dotenv_path)
-    urs = os.getenv('NASA_URS')
-    username = os.getenv('NASA_USERNAME')
-    password = os.getenv('NASA_PASSWORD')
-
-    homeDir = os.path.expanduser("~") + os.sep
-
-    with open(homeDir + '.netrc', 'w') as file:
-        file.write(f'machine {urs} login {username} password {password}')
-        file.close()
-    with open(homeDir + '.urs_cookies', 'w') as file:
-        file.write('')
-        file.close()
-    with open(homeDir + '.dodsrc', 'w') as file:
-        file.write('HTTP.COOKIEJAR={}.urs_cookies\n'.format(homeDir))
-        file.write('HTTP.NETRC={}.netrc'.format(homeDir))
-        file.close()
-
-    print('Saved .netrc, .urs_cookies, and .dodsrc to:', homeDir)
-
-
-    if platform.system() != "Windows":
-        Popen('chmod og-rw ~/.netrc', shell=True)
-    else:
-
-        #auth_dir = os.path.join(os.getcwd(), 'credentials')
-        auth_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'credentials'))
+        print('Retrieved %d out of %d expected items' % (len(results), total))
         
-        if not os.path.exists(auth_dir):
-            os.makedirs(auth_dir)
-
-        shutil.copy2(os.path.join(homeDir, '.dodsrc'), auth_dir)
-        print('Copied .dodsrc to:', auth_dir)
-
-    ####################################################################################################################
-
-    ## PASO 3: Proceso de descarga de las imagenes IMERG.
-    #          
-    #          - download_dir: Carpeta donde se almacenaran las imagenes satelitales IMERG de precipitacion diaria, luego
-    #            de ser descargadas.
-    #          
-    #          1.  
-    #
-    #
-    #
-    #
-
-    download_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'ARG_late'))
-    
-    # Calculamos el tercer dia del proximo mes
-    next_month_third_day = (today_date + relativedelta(months=1)).replace(day=3)
-
-    # Restamos 1 al mes del proximo mes para la comparacion
-    comparison_date = next_month_third_day - relativedelta(months=1)
-
-    # Comprobamos si hoy es igual a la fecha de comparacion
-    if today_date.date() == comparison_date.date():
-        if os.path.exists(download_dir) and os.path.isdir(download_dir):
-            shutil.rmtree(download_dir)
-            os.makedirs(download_dir)
-        else:
-            os.makedirs(download_dir)
-    else:
-        print(f"Hoy no es la fecha de comparacion, la carpeta ARG_late no sera formateada")
-    
-    # Utilizamos la biblioteca de solicitudes para enviar las URL de HTTP_Services y escribir los resultados
-    print('\nHTTP_services output:')
-    for item in urls :
-        URL = item['link']
-        result = requests.get(URL)
+        result = requests.get('https://disc.gsfc.nasa.gov/api/jobs/results/'+myJobId)
         try:
             result.raise_for_status()
-            ##outfn = item['label']
-            ##f = open(outfn,'wb')
-            ##f.write(result.content)
-            ##f.close()
-            ##print(outfn)
+            urls = result.text.split('\n')
+            for i in urls : print('\n%s' % i)
+        except :
+            print('Request returned error code %d' % result.status_code)
 
-            # Modificamos la ruta de destino para que se guarden en la carpeta 'ARG_late'
-            outfn = os.path.join(download_dir, item['label'])
+        docs = []
+        urls = []
+        for item in results :
+            try:
+                if item['start'] and item['end'] : urls.append(item)
+            except:
+                docs.append(item)
+
+        print('\nDocumentation:')
+        for item in docs : print(item['label']+': '+item['link'])
+
+        results_length = len(results)
+
+        ####################################################################################################################
+
+        ## PASO 2: Proceso de generacion de credenciales y autenticacion en el sitio NASA Earthdata, para acceder y descargar 
+        #          los datos resultantes dle paso anterior.
+        #
+        #          1. Establecemos la URL del sitio, el nombre de usuario y la contraseña en el sitio, para validar la 
+        #             autenticacion.
+        #          2. Creamos los siguientes archivos:
+        #             - .netrc: Este archivo se utiliza para almacenar las credenciales de acceso (nombre de usuario y 
+        #                       contraseña) y la URL para autenticar automáticamente las solicitudes sin necesidad de ingresar
+        #                       manualmente las credenciales cada vez. Este archivo se guarda en el directorio principal del
+        #                       usuario, implementando la escritura mediante "w". Si este no existe, se crea.
+        #             - .urs_cookies: Este archivo se utiliza para almacenar las cookies de autenticacion que pueden ser 
+        #                             necesarias durante las solicitudes HTTP. Dentro del archivo no es escribe nada, ya 
+        #                             que se crea vacio para su uso posterior.
+        #             - .dodsrc: Este archivo contiene configuraciones que permiten a las solicitudes HTTP saber donde buscar 
+        #                        las cookies y las credenciales.
+        #          3. Si el sistema no Linux o macOS, se ajustan los permisos para el archivo ".netrc", es decir, el comando
+        #             que se ejecuta cambia los permisos de dicho archivo para que se pueda leer y escribir en el, simepre
+        #             hablando en estos sistemas. Si el sistema es Windows en lugar de cambiar los permisos del archivo 
+        #             ".netrc", se copia el archivo ".dodsrc" al directorio "credentials".   
+
+        dotenv_path = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'credentials', '.env'))
+        load_dotenv(dotenv_path)
+        urs = os.getenv('NASA_URS')
+        username = os.getenv('NASA_USERNAME')
+        password = os.getenv('NASA_PASSWORD')
+
+        homeDir = os.path.expanduser("~") + os.sep
+
+        with open(homeDir + '.netrc', 'w') as file:
+            file.write(f'machine {urs} login {username} password {password}')
+            file.close()
+        with open(homeDir + '.urs_cookies', 'w') as file:
+            file.write('')
+            file.close()
+        with open(homeDir + '.dodsrc', 'w') as file:
+            file.write('HTTP.COOKIEJAR={}.urs_cookies\n'.format(homeDir))
+            file.write('HTTP.NETRC={}.netrc'.format(homeDir))
+            file.close()
+
+        print('Saved .netrc, .urs_cookies, and .dodsrc to:', homeDir)
+
+
+        if platform.system() != "Windows":
+            Popen('chmod og-rw ~/.netrc', shell=True)
+        else:
+
+            #auth_dir = os.path.join(os.getcwd(), 'credentials')
+            auth_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'credentials'))
             
-            # Guardamos cada archivo en la carpeta 'ARG_late'
-            with open(outfn, 'wb') as f:
-                f.write(result.content)
-            print(outfn)
-        except:
-            print('Error! Status code is %d for this URL:\n%s' % (result.status.code,URL))
-            print('Help for downloading data is at https://disc.gsfc.nasa.gov/information/documents?title=Data%20Access')
+            if not os.path.exists(auth_dir):
+                os.makedirs(auth_dir)
 
-    ####################################################################################################################
+            shutil.copy2(os.path.join(homeDir, '.dodsrc'), auth_dir)
+            print('Copied .dodsrc to:', auth_dir)
 
-    return results_length
+        ####################################################################################################################
 
+        ## PASO 3: Proceso de descarga de las imagenes IMERG.
+        #          
+        #          - download_dir: Carpeta donde se almacenaran las imagenes satelitales IMERG de precipitacion diaria, luego
+        #            de ser descargadas.
+        #          
+        #          1.  
+        #
+        #
+        #
+        #
+
+        download_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'ARG_late'))
+
+        today_date = datetime.today()
+        
+        # Calculamos el tercer dia del proximo mes
+        next_month_third_day = (today_date + relativedelta(months=1)).replace(day=3)
+
+        # Restamos 1 al mes del proximo mes para la comparacion
+        comparison_date = next_month_third_day - relativedelta(months=1)
+
+        # Comprobamos si hoy es igual a la fecha de comparacion
+        if today_date.date() == comparison_date.date():
+            if os.path.exists(download_dir) and os.path.isdir(download_dir):
+                shutil.rmtree(download_dir)
+                os.makedirs(download_dir)
+            else:
+                os.makedirs(download_dir)
+        else:
+            print(f"Hoy no es la fecha de comparacion, la carpeta ARG_late no sera formateada.")
+        
+        # Utilizamos la biblioteca de solicitudes para enviar las URL de HTTP_Services y escribir los resultados
+        print('\nHTTP_services output:')
+        for item in urls :
+            URL = item['link']
+            result = requests.get(URL)
+            try:
+                result.raise_for_status()
+                ##outfn = item['label']
+                ##f = open(outfn,'wb')
+                ##f.write(result.content)
+                ##f.close()
+                ##print(outfn)
+
+                # Modificamos la ruta de destino para que se guarden en la carpeta 'ARG_late'
+                outfn = os.path.join(download_dir, item['label'])
+                
+                # Guardamos cada archivo en la carpeta 'ARG_late'
+                with open(outfn, 'wb') as f:
+                    f.write(result.content)
+                print(outfn)
+            except:
+                print('Error! Status code is %d for this URL:\n%s' % (result.status.code,URL))
+                print('Help for downloading data is at https://disc.gsfc.nasa.gov/information/documents?title=Data%20Access')
+
+        ####################################################################################################################
+
+    except KeyError as e:
+        downloadError = True
+        error_message = (
+            f"{apiErrorMessage}\n"
+            f"- Descripción: Parametros de solicitud del subset incorrectos o sitio GES DISC en mantenimiento.\n"
+            f"- Verificar estado del sitio GES DISC en:\n"
+            f"https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDL_07/summary?keywords=imerg\n"
+            f"- Detalles: El campo o clave {e} no se encontró en la respuesta.\n"
+        )
+        print(error_message)
+    except json.JSONDecodeError as e:
+        downloadError = True
+        error_message = (
+            f"Error decoding JSON: Fallo en la solicitud a la API.\n"
+            f"- Descripción: Posible problema de conectividad local o API fuera de servicio, por lo que se obtuvo una respuesta vacía o en un formato inesperado.\n"
+            f"- Detalles: {e}\n"
+        )
+        print(error_message)
+    except (NameResolutionError, MaxRetryError) as e:
+        downloadError = True
+        error_message = (
+            f"Error de conexión Wifi.\n"
+            f"- Descripción: Máximo número de intentos superados y no se pudo resolver el nombre del servidor.\n"
+            f"- Detalles: {e}\n"
+        )
+        print(error_message)
+    except (UrllibTimeoutError, RequestsTimeoutError) as e:
+        downloadError = True
+        error_message = (
+            f"TimeoutError: El tiempo de espera para la solicitud se excedió.\n"
+            f"- Descripción: La solicitud del subset de datos a la API tardó demasiado y no se completó dentro del tiempo límite.\n"
+            f"- Detalles: {e}\n"
+        )
+        print(error_message)
+    
+    return results_length, downloadError, error_message
 
 
 

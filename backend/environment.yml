@@ -22,5 +22,6 @@ dependencies:
   - rioxarray
   - fiona
   - geoserver-rest
+  - boto3
   - pip:
     - climate-indices

@@ -2,15 +2,15 @@ import os
 from flask import Flask, send_file, render_template, jsonify, request
 from flask_cors import CORS
 from apscheduler.schedulers.background import BackgroundScheduler
-from main_v7 import ehcpa_process
+from main_v7 import ehcpa_process, remote_download_process
 
 app = Flask(__name__)
 cors = CORS(app, origins='*')
 
 scheduler = BackgroundScheduler(daemon=True)
 scheduler.add_job(ehcpa_process, 'cron', hour=3, misfire_grace_time=3600)
+#scheduler.add_job(remote_download_process, 'interval', minutes=5, misfire_grace_time=3600)
 scheduler.start()
-
 
 
 @app.route('/')
