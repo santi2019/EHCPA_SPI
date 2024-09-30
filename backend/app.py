@@ -3,13 +3,15 @@ from flask import Flask, send_file, render_template, jsonify, request
 from flask_cors import CORS
 from apscheduler.schedulers.background import BackgroundScheduler
 from main_v7 import ehcpa_process, remote_download_process
+from src.scripts.inspect_arglate_v7 import inspect_arglate
+
 
 app = Flask(__name__)
 cors = CORS(app, origins='*')
 
 scheduler = BackgroundScheduler(daemon=True)
 scheduler.add_job(ehcpa_process, 'cron', hour=3, misfire_grace_time=3600)
-#scheduler.add_job(remote_download_process, 'interval', minutes=5, misfire_grace_time=3600)
+scheduler.add_job(remote_download_process, 'cron', minute='0,30', hour='0-2,5-23', misfire_grace_time=3600)
 scheduler.start()
 
 
@@ -38,7 +40,13 @@ def download_file(id_data):
         return jsonify(message=f'Lo sentimos, el archivo {id_data} no se encuentra disponible para su descarga en este momento.'), 404
     except Exception as e:
         return jsonify(message=str(e)), 401
-    
+
+
+@app.route('/lastdate', methods=['GET'])
+def last_partial_date():
+    formatted_date = inspect_arglate()
+    return formatted_date
+
 
 
 if __name__ == "__main__":

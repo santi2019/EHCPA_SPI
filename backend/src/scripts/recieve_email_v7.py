@@ -48,6 +48,10 @@ def recieve_email():
                 # Divide los correos en la lista
                 email_ids = messages[0].split()
 
+                if not email_ids:
+                    not_found_petition = "No se detectó petición de descarga remota."
+                    return None, None, not_found_petition
+
                 for email_id in email_ids:
                     if email_id in read_emails:
                         continue  # Si ya se leyó, se omite
@@ -82,13 +86,12 @@ def recieve_email():
                                 begTime = f'{begTime}'
                                 endTime = f'{endTime}'
 
-                                return begTime, endTime
+                                return begTime, endTime, None
             
             #time.sleep(5)
     except KeyboardInterrupt:
         print("Terminando proceso...")
     
-
 
 
 

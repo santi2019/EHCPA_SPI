@@ -19,6 +19,7 @@ from src.scripts.automatic_s3_downloader_v7 import automatic_s3_downloader
 from src.scripts.automatic_s3_uploader_v7 import automatic_s3_uploader
 
 
+
 ## Funcion de delay para evitar colisiones entre funciones del proceso
 #
 def sleep_for_a_bit(seconds):
@@ -163,11 +164,6 @@ def ehcpa_process():
 
 
 
-
-
-
-
-
 ## Funcion para descarga remota
 #
 def remote_download_process():
@@ -183,11 +179,12 @@ def remote_download_process():
         formatted_third_day = next_month_third_day.strftime('%Y-%m-%d')
 
     try:
-        begTime, endTime = recieve_email()
 
-        sleep_for_a_bit(15)
+        begTime, endTime, not_found_petition = recieve_email()
 
         if begTime and endTime:
+
+            sleep_for_a_bit(15)
 
             results_length, downloadError, error_message = download_subset(begTime, endTime)
 
@@ -237,7 +234,8 @@ def remote_download_process():
                 send_email_with_internet(subject, body) 
                 print("El proceso de descarga remota finalizó con éxito y sin errores.")
         else:
-            print("No se detecto petición de descarga remota.")
+            print(f"{not_found_petition}")
+
     
     except Exception as e:
         subject = "EHCPA - Error en Descarga Remota"
