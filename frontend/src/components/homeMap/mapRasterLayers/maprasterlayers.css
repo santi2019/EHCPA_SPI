@@ -488,7 +488,9 @@
 }
 
 
-
+.swal2-container {
+    z-index: 999999999 !important;  /* Establecer un z-index superior al resto */
+}
 
 
 

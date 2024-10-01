@@ -10,7 +10,7 @@ import rasterio.mask
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-def spi_convertion_and_crop():
+def spi_convertion_and_crop(calibration_end_year, calibration_end_month):
 
     ## Distribucion de carpetas/directorios:
     #
@@ -113,32 +113,11 @@ def spi_convertion_and_crop():
         with fiona.open(shp_file, "r") as shapefile:
             shapes = [feature["geometry"] for feature in shapefile]
 
-        today_date = datetime.today()
 
-        next_year_first_day = (today_date + relativedelta(years=1)).replace(day=1).replace(month=1)
-
-        comparison_first_day = next_year_first_day - relativedelta(years=1)
-
-        next_year_third_day = (today_date + relativedelta(years=1)).replace(day=3).replace(month=1)
-
-        comparison_third_day = next_year_third_day - relativedelta(years=1)
-
-        if today_date.date() >= comparison_third_day.date():
-            calibration_end_year = comparison_third_day.year
-            calibration_end_month = today_date.strftime('%b').lower()
-        elif today_date.date() >= comparison_first_day.date() and today_date.date() < comparison_third_day.date():
-            calibration_end_year = today_date.year - 1
-            calibration_end_year = "dec"
-        else:
-            calibration_end_year = today_date.year
-            calibration_end_month = today_date.strftime('%b').lower()
-
-        # Recortar todas las bandas con el shapefile de Argentina
         spi_cropped_all_bands = spi_all_bands.rio.clip(shapes, spi_data.rio.crs)
         SPI_all_bands_cropped_tif = os.path.join(downloable_data_SPI_dir, f'SPI_jun_2000_{calibration_end_month}_{calibration_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
         spi_cropped_all_bands.rio.to_raster(SPI_all_bands_cropped_tif)
 
-        # Recortar la última banda con el shapefile de Argentina
         spi_cropped_last_band = spi_last_band.rio.clip(shapes, spi_data.rio.crs)
         SPI_last_band_cropped_tif = os.path.join(geoserver_SPI_dir, f'SPI_jun_2000_present_scale_{scale}_last_band_ARG_cropped.tif')
         spi_cropped_last_band.rio.to_raster(SPI_last_band_cropped_tif)

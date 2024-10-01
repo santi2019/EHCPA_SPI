@@ -4,19 +4,19 @@ import json
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from geo.Geoserver import GeoserverException
+from src.scripts.automatic_s3_downloader_v7 import automatic_s3_downloader
 from src.scripts.download_subset_v7 import download_subset
+from src.scripts.inspect_arglate_v7 import inspect_arglate
+from src.scripts.get_calibration_date_v7 import get_calibration_date
 from src.scripts.P_acu_mensual_v7 import p_acu_mensual
+from src.scripts.automatic_s3_uploader_v7 import automatic_s3_uploader
 from src.scripts.concat_reord_v7 import concat_reord
 from src.scripts.ptm_conversion_crop_v7 import ptm_convertion_and_crop
-from src.scripts.spi_conversion_crop_v7 import spi_convertion_and_crop
 from src.scripts.spi_process_v7 import spi_process
+from src.scripts.spi_conversion_crop_v7 import spi_convertion_and_crop
 from src.scripts.geoserver_upload_v7 import geoserver_upload
-from src.scripts.zip_output_data_v7 import zip_output_data
 from src.scripts.send_email_v7 import check_internet_connection, send_email_with_internet
-from src.scripts.inspect_arglate_v7 import inspect_arglate
 from src.scripts.recieve_email_v7 import recieve_email
-from src.scripts.automatic_s3_downloader_v7 import automatic_s3_downloader
-from src.scripts.automatic_s3_uploader_v7 import automatic_s3_uploader
 
 
 
@@ -63,6 +63,8 @@ def ehcpa_process():
 
         formatted_date = inspect_arglate()
 
+        calibration_end_year, calibration_end_month = get_calibration_date()
+
         if not downloadError and results_length == 0:
             no_data_downloaded = True
 
@@ -73,11 +75,11 @@ def ehcpa_process():
         sleep_for_a_bit(30)
         concat_reord()
         sleep_for_a_bit(30)
-        ptm_convertion_and_crop()
+        ptm_convertion_and_crop(calibration_end_year, calibration_end_month)
         sleep_for_a_bit(30)
         spi_process()
         sleep_for_a_bit(30)
-        spi_convertion_and_crop()
+        spi_convertion_and_crop(calibration_end_year, calibration_end_month)
         sleep_for_a_bit(30)
 
         if check_internet_connection():
@@ -86,7 +88,7 @@ def ehcpa_process():
             except GeoserverException as e:
                 downloadError = True
                 error_message = (
-                    f"Geoserver Error."
+                    f"Geoserver Error.\n"
                     f"- Descripción: Error al subir datos al servidor Geoserver.\n"
                     f"- Detalles: {e}\n"
                 )
@@ -270,11 +272,11 @@ def main():
 
 
 if __name__ == "__main__":
+    #main()
     schedule.every().day.at("03:00").do(main)
     while True:
         schedule.run_pending()
         time.sleep(1)
-    
 
 
 

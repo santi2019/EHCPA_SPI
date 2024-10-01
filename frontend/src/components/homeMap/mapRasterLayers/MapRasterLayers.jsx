@@ -8,6 +8,8 @@ import {Switch} from "antd";
 import "./maprasterlayers.css";
 import 'leaflet-geoserver-request';
 import axios from 'axios';
+import FileDownload from "js-file-download"
+import Swal from 'sweetalert2' 
 import {useDrag} from 'react-use-gesture';
 
 
@@ -86,6 +88,91 @@ const MapRasterLayers = ({setIsMouseOverComponent, isMouseOverComponent}) => {
     const modalPositionRef = useRef(modalInitialPosition);
     const [modalPosition, setModalPosition] = useState(modalPositionRef.current);
     const modalRef = useRef(null); 
+    const [error, setError] = useState(null);
+    const [downloadProgress, setDownloadProgress] = useState(null); 
+    const [isDownloading, setIsDownloading] = useState(false);
+
+
+    const handleDownloadClick = async (e) => {
+        e.preventDefault();
+    
+        // Recopilamos los switches activados
+        const selectedLayers = [];
+        
+        // Si PTM está activado, lo agregamos
+        if (PTMlayerSwitch.PTM) {
+            selectedLayers.push('PTM');
+        }
+        
+        // Verificamos cada capa SPI activada
+        Object.keys(SPIlayersSwitches).forEach((key) => {
+            if (SPIlayersSwitches[key]) {
+                selectedLayers.push(key);  // Ejemplo: 'SPI_1', 'SPI_6', etc.
+            }
+        });
+    
+        // Si no hay capas seleccionadas, mostramos un mensaje de alerta
+        if (selectedLayers.length === 0) {
+            Swal.fire({
+                title: 'Oops!',
+                text: 'Debe seleccionar al menos una capa para descargar.',
+                icon: 'warning',
+                confirmButtonText: 'Continuar'
+            });
+            return;
+        }
+    
+        try {
+            setIsDownloading(true); // Inicia la descarga
+            setDownloadProgress(0);
+
+            // Generamos la URL dinámica con las capas activadas
+            const url = `http://127.0.0.1:8800/download/${selectedLayers.join(',')}`;
+    
+            // Hacemos la solicitud al backend
+            const res = await axios.get(url, {
+                responseType: 'blob', // Para recibir archivos binarios
+                onDownloadProgress: function (progressEvent) {
+                    if (progressEvent.lengthComputable) {
+                        const percentComplete = ((progressEvent.loaded / progressEvent.total) * 100).toFixed();
+                        setDownloadProgress(percentComplete);
+                    } else {
+                        console.log("Descarga en proceso, por favor espere...");
+                    }
+                }
+            });
+    
+            FileDownload(res.data, 'EHCPA_Data.zip');
+            setTimeout(() => {
+                setIsDownloading(false); // Termina la descarga
+                setDownloadProgress(null); // Reinicia el progreso después de la descarga
+            }, 1200);
+
+        } catch (error) { // Manejamos el error adecuadamente porque es un blob
+
+            setIsDownloading(false); // Termina la descarga en caso de error
+            setDownloadProgress(null);
+
+            if (error.response && error.response.data) {
+                const errorBlobText = await error.response.data.text();
+                const errorMessage = JSON.parse(errorBlobText);
+                setError(errorMessage.message);
+                
+                Swal.fire({
+                    title: 'Oops!',
+                    text: errorMessage.message,
+                    icon: 'error',
+                    confirmButtonText: 'Continuar'
+                });
+            } else {
+                const otherError = error.message;
+                setError(otherError);
+                console.error("Error:", otherError);
+            }
+        }
+    };
+
+
 
 
     useEffect(() => {
@@ -780,8 +867,12 @@ const MapRasterLayers = ({setIsMouseOverComponent, isMouseOverComponent}) => {
                             </button>
                         </li>
                         <li>
-                            <button className='bContent'>
-                                <FontAwesomeIcon className="downloadIcon" icon={faDownload} />
+                            <button className='bContent' onClick={handleDownloadClick}>
+                                {isDownloading ? (
+                                    <span>{downloadProgress}%</span> // Muestra el progreso de la descarga
+                                ) : (
+                                    <FontAwesomeIcon className="downloadIcon" icon={faDownload} /> // Muestra el ícono de descarga cuando no hay descarga en proceso
+                                )}
                             </button>  
                         </li>
                     </ul>

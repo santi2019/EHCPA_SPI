@@ -1,9 +1,12 @@
 import os
+import zipfile
+from io import BytesIO
 from flask import Flask, send_file, render_template, jsonify, request
 from flask_cors import CORS
 from apscheduler.schedulers.background import BackgroundScheduler
 from main_v7 import ehcpa_process, remote_download_process
 from src.scripts.inspect_arglate_v7 import inspect_arglate
+from src.scripts.get_calibration_date_v7 import get_calibration_date
 
 
 app = Flask(__name__)
@@ -24,22 +27,53 @@ def home():
 def download_file(id_data):
 
     downloable_data_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'downloable_data'))
-    spi_scales = ['1', '2', '3', '6', '9', '12', '24', '36', '48', '60', '72']
+    PTM_dir = os.path.join(downloable_data_dir, 'PTM')
+    SPI_dir = os.path.join(downloable_data_dir, 'SPI')
     
-    if id_data == "PTM":
-        file_path = os.path.join(downloable_data_dir, 'EHCPA_PTM_Data.zip')
-    elif id_data in [f"SPI_{scale}" for scale in spi_scales]:
-        scale = id_data.split('_')[-1]
-        file_path = os.path.join(downloable_data_dir, f'EHCPA_SPI_scale_{scale}.zip')
-    else:
-        return jsonify(message='El identificador no es correcto.'), 400
+    spi_scales = ['1', '2', '3', '6', '9', '12', '24', '36', '48', '60', '72']
 
-    try:
-        return send_file(file_path, as_attachment=True)
-    except FileNotFoundError:
-        return jsonify(message=f'Lo sentimos, el archivo {id_data} no se encuentra disponible para su descarga en este momento.'), 404
-    except Exception as e:
-        return jsonify(message=str(e)), 401
+    calibration_end_year, calibration_end_month = get_calibration_date()
+
+    
+    ids = id_data.split(',')
+    files_to_zip = []
+    not_found_files = []
+
+    for data_id in ids:
+        if data_id == "PTM":
+            file_path = os.path.join(PTM_dir, f'PTM_jun_2000_{calibration_end_month}_{calibration_end_year}_all_bands_ARG_cropped.tif')
+        elif data_id.startswith("SPI_"):
+            scale = data_id.split("_")[1]
+            if scale in spi_scales:
+                file_path = os.path.join(SPI_dir, f'SPI_jun_2000_{calibration_end_month}_{calibration_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
+            else:
+                return jsonify(message=f'La escala {scale} no es correcta.'), 400
+        else:
+            return jsonify(message=f'El identificador {data_id} no es correcto.'), 400
+
+        if os.path.exists(file_path):
+            files_to_zip.append(file_path)
+        else:
+            not_found_files.append(data_id)
+           
+    
+    if not_found_files:
+        if len(not_found_files) == 1:
+            return jsonify(message=f'El archivo {not_found_files[0]} no se encuentra disponible para su descarga en este momento.'), 404
+        else:
+            return jsonify(message=f'Los siguientes archivos no están disponibles para su descarga en este momento: {", ".join(not_found_files)}'), 404
+
+
+
+    zip_buffer = BytesIO()
+    with zipfile.ZipFile(zip_buffer, 'w') as zip_file:
+        for file_path in files_to_zip:
+            zip_file.write(file_path, os.path.basename(file_path)) 
+    zip_buffer.seek(0)
+
+    return send_file(zip_buffer, as_attachment=True, download_name='EHCPA_Data.zip', mimetype='application/zip')
+
+
 
 
 @app.route('/lastdate', methods=['GET'])
