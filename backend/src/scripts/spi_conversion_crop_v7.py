@@ -10,7 +10,13 @@ import rasterio.mask
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-def spi_convertion_and_crop(calibration_end_year, calibration_end_month):
+try:
+    from get_dates_v7 import get_calibration_date 
+except ModuleNotFoundError:
+    from src.scripts.get_dates_v7 import get_calibration_date
+
+
+def spi_convertion_and_crop():
 
     ## Distribucion de carpetas/directorios:
     #
@@ -96,9 +102,8 @@ def spi_convertion_and_crop(calibration_end_year, calibration_end_month):
 
     ## PASO 2: Proceso de corte de ambos archivos tif generados, sobre el archivo shape de Argentina.
     #          - Se abre el shapefile que contiene el contorno de Argentina. Ahora, para asignar el mes y año de 
-    #            calibracion del SPI de todas las bandas, obtenemos la fecha de actual, luego calculamos el primer 
-    #            dia del proximo año, y restamos 1 al año, del primer dia del proximo año, para la comparacion. Por 
-    #            otro lado, calculamos el tercer dia del proximo año, le restamos 1 al año, del tercer dia del proximo 
+    #            calibracion del SPI de todas las bandas, extraemos dichos valores de la funcion "get_calibration_date()". 
+    #            Por otro lado, calculamos el tercer dia del proximo año, le restamos 1 al año, del tercer dia del proximo 
     #            año, para la comparacion. Ahora bien, para la asignacion del final del año de calibracion:
     #            - Si la fecha actual es mayor o igual al tercer dia del proximo año de la comparacion, se asigna el 
     #              año del tercer dia de comparacion.
@@ -113,6 +118,7 @@ def spi_convertion_and_crop(calibration_end_year, calibration_end_month):
         with fiona.open(shp_file, "r") as shapefile:
             shapes = [feature["geometry"] for feature in shapefile]
 
+        calibration_end_year, calibration_end_month = get_calibration_date()
 
         spi_cropped_all_bands = spi_all_bands.rio.clip(shapes, spi_data.rio.crs)
         SPI_all_bands_cropped_tif = os.path.join(downloable_data_SPI_dir, f'SPI_jun_2000_{calibration_end_month}_{calibration_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')

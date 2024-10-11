@@ -23,5 +23,7 @@ dependencies:
   - fiona
   - geoserver-rest
   - boto3
+  - pytest
+  - pytest-mock
   - pip:
     - climate-indices

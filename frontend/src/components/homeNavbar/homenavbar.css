@@ -1,3 +1,6 @@
+/*Estilo de contenedores generales
+* - El z-index del Navbar es mayor que el de todos los elementos del sitio. 
+*/
 .homeNavbar{
     width: 100%;
     height: 95px;
@@ -7,7 +10,6 @@
     box-shadow: 0px 10px 10px -6px rgba(0, 0, 0, 0.3);
     z-index: 1000000;
 }
-
 
 .navbarItems{
     width: 100%;
@@ -19,19 +21,19 @@
 
 
 
-
-.navbarLogo {
+/*Estilo titulo*/
+.navbarEHCPALogo {
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
 }
 
-.navbarLogo a{
+.navbarEHCPALogo a{
     text-decoration: none;
 }
 
-.logo{
+.ehcpalogo{
     font-size: 37px;
     font-family: "Anton", system-ui;
     color: #ffffff;
@@ -40,7 +42,7 @@
 
 
 
-
+/*Estilo titulo*/
 .navbarTitle{
     display: flex;
     align-items: center;
@@ -48,7 +50,7 @@
     text-align: center;
 }
 
-.title{
+.ehcpatitle{
     font-family: "Anton", system-ui;
     color: #ffffff;
     font-size: 23px;
@@ -56,16 +58,15 @@
 
 
 
-
-
-.navbarImage{
+/*Estilo logo UCC*/
+.navbarUCCLogo{
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
 }
 
-.imageucc{
+.uccImage{
     height: 100px;
     width: 200px;
     background-size: contain;

@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { MapContainer, TileLayer, ScaleControl, useMap, Marker, useMapEvents  } from 'react-leaflet'
 import "leaflet/dist/leaflet.css"
 import "leaflet-geosearch/dist/geosearch.css";
+import 'leaflet-geoserver-request';
 import "./homemap.css";
 import MapMouseCoordinates from './mapMouseCoordinates/MapMouseCoordinates';
 import MapSearchBar from './mapSearchBar/MapSearchBar';
-import MapVectorialLayers from './mapVectorialLayers/MapVectorialLayers';
+import MapZoomController from './mapZoomController/MapZoomController';
+import MapSolidLayers from './mapSolidLayers/MapSolidLayers';
 import MapRasterLayers from './mapRasterLayers/MapRasterLayers';
-import 'leaflet-geoserver-request';
+
 
 const HomeMap = () => { 
 
-    const [centerCoordinates, setCenterCoordinates] = useState({lat: '-32.4146', lng:'-63.1821'})
+    const centerCoordinates = {lat: '-32.4146', lng:'-63.1821'}
     const [markerPosition, setMarkerPosition] = useState(null);
     const zoom = 7
     const minZoom = 3 
@@ -21,7 +23,6 @@ const HomeMap = () => {
     const [temporaryZoom, setTemporaryZoom] = useState();
     const [shouldCenterMap, setShouldCenterMap] = useState(false);
     const [isMouseOverComponent, setIsMouseOverComponent] = useState(false);
-
     
 
     /* Función handleSelectLocation: sirve para seleccionar una ubicación 
@@ -35,9 +36,10 @@ const HomeMap = () => {
                 lng: result.x 
             });
 
+            setMarkerPosition([result.y, result.x]); 
             setShouldCenterMap(true);
         }
-
+        
         if(result.raw.place_rank==4 && result.raw.addresstype=="country"){ //Country (Pais)
             setTemporaryZoom(4);
         }
@@ -130,21 +132,26 @@ const HomeMap = () => {
 
 
 
-    // Manejador para agregar el marcador al hacer clic
     const MapMarkerHandler = ({ isMouseOverComponent }) => {
+        //const map = useMap();
         useMapEvents({
             click(e) {
-                if (!isMouseOverComponent) { // Verifica si no está interactuando con los menús de capas
-                    setMarkerPosition([e.latlng.lat, e.latlng.lng]);  // Solo coloca el marcador si no está sobre los menús
+                if (!isMouseOverComponent) { 
+                    const newMarkerPosition = [e.latlng.lat, e.latlng.lng];
+                    setMarkerPosition(newMarkerPosition);  
+                    //map.flyTo(newMarkerPosition, map.getZoom());
                 }
             }
         });
-        return null;  // Este componente no necesita renderizar nada
+        return null;  
     };
 
+
+
     const handleRemoveMarker = () => {
-        setMarkerPosition(null); // Remueve el marcador
+        setMarkerPosition(null); 
     };
+
 
 
     return(
@@ -153,25 +160,27 @@ const HomeMap = () => {
                 center={centerCoordinates}  
                 zoom={zoom} minZoom={minZoom} maxZoom={maxZoom}
                 attributionControl={attributionControlValue}
+                zoomControl={false}
                 doubleClickZoom={false}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png"/>
                 <MapRasterLayers setIsMouseOverComponent={setIsMouseOverComponent} isMouseOverComponent={isMouseOverComponent}/>
-                <MapVectorialLayers setIsMouseOverComponent={setIsMouseOverComponent}/>
+                <MapSolidLayers setIsMouseOverComponent={setIsMouseOverComponent}/>
+                <MapZoomController setIsMouseOverComponent={setIsMouseOverComponent}/>
                 <ScaleControl imperial={false} />
-                <MapMouseCoordinates setIsMouseOverComponent={setIsMouseOverComponent}/>
+                <MapMouseCoordinates setIsMouseOverComponent={setIsMouseOverComponent} isMouseOverComponent={isMouseOverComponent}/>
                 <CenterMap center={temporaryCoordinates} zoom={temporaryZoom} />
                 <MapSearchBar handleSelectLocation={handleSelectLocation} setIsMouseOverComponent={setIsMouseOverComponent}/>
                 <MapMarkerHandler isMouseOverComponent={isMouseOverComponent}/>
                 {markerPosition && (
-                <Marker 
-                    position={markerPosition}
-                    eventHandlers={{
-                        click: handleRemoveMarker 
-                    }}
-                />
-            )}
+                    <Marker 
+                        position={markerPosition}
+                        eventHandlers={{
+                            click: handleRemoveMarker 
+                        }}
+                    />
+                )}
             </MapContainer >
         </div>
     );

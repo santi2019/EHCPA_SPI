@@ -9,8 +9,7 @@ def p_acu_mensual():
     #
     #   - arg_late_dir: Carpeta donde se encuentran los archivos IMERG de precipitacion diaria.
     #   - IMERG_late_month_dir: Carpeta donde se van a guardar los archivos de precipitacion mensual acumulada.
-    #
-    #   - Si la carpeta IMERG_late_month_dir no existe, se crea.
+    #     Si dicha carpeta no existe, se crea.
 
     arg_late_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'ARG_late'))      # input_dir = os.path.join(os.getcwd(), 'ARG_late')
 
@@ -22,7 +21,7 @@ def p_acu_mensual():
     ####################################################################################################################
 
     ## PROCEDIMIENTO:  
-    #     - Creamos una lista que contenga todos los archivos IMERG de precipitacion diaria en el directorio de entrada
+    #       - Creamos una lista que contenga todos los archivos IMERG de precipitacion diaria en el directorio de entrada
     #       y calculamos la cantidad de archivos en el mismo. Se aplica un filtro a los archivos, dejando aquellos que
     #       que solo contienen la palabra "IMERG" para ser procesados, y esto es asi ya que la descarga desde la API de
     #       la NASA provee dos archivos PDF. 
@@ -69,6 +68,8 @@ def p_acu_mensual():
 
         output_file = os.path.join(IMERG_late_month_dir, f'IMERG_monthly_accumulated_precip_{year}_{month}.nc4')
         ds_out.to_netcdf(output_file)
+
+
 
 
 

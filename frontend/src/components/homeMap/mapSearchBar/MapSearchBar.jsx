@@ -15,7 +15,10 @@ const MapSearchBar = ({ handleSelectLocation, setIsMouseOverComponent  }) => {
     const elementRef = useRef(null);
     const map = useMap();   //Instancia del mapa react-leaflet
     const provider = new OpenStreetMapProvider({
-        params: { countrycodes: 'AR' }
+        params: { 
+            countrycodes: 'AR',
+            retainZoomLevel: false
+        }
       });
 
 

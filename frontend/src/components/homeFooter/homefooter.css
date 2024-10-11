@@ -1,3 +1,4 @@
+/*Estilo de contenedores generales*/
 .homeFooter{
     height: 40px;
     width: 235px;
@@ -12,13 +13,16 @@
     margin-bottom: 10px;
     margin-right: 10px;
     opacity: .80;
-    z-index: 1000;
+    z-index: 100000;
 }
 
 .footerItem{
     text-align: center;
 }
 
+
+
+/*Estilo titulo*/
 .footerText{
     font-size: 13px;
     font-family: "Inter", system-ui;

@@ -10,7 +10,16 @@ import rasterio.mask
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-def ptm_convertion_and_crop(calibration_end_year, calibration_end_month):
+try:
+    from get_dates_v7 import get_calibration_date 
+except ModuleNotFoundError:
+    from src.scripts.get_dates_v7 import get_calibration_date
+
+
+
+
+
+def ptm_convertion_and_crop():
     
     ## Distribucion de carpetas/directorios:
     #
@@ -66,34 +75,6 @@ def ptm_convertion_and_crop(calibration_end_year, calibration_end_month):
     else:
         os.makedirs(geoserver_PTM_dir)
 
-    '''
-    if platform.system() != "Windows":
-        geoserver_EHCPA_dir = os.path.join('/usr', 'local', 'GeoServer', 'data', 'EHCPA')
-
-        if not os.path.exists(geoserver_EHCPA_dir):
-            os.makedirs(geoserver_EHCPA_dir)
-
-        geoserver_PTM_dir = os.path.join(geoserver_EHCPA_dir, 'PTM')
-
-        if os.path.exists(geoserver_PTM_dir):
-            shutil.rmtree(geoserver_PTM_dir)
-            os.makedirs(geoserver_PTM_dir)
-        else:
-            os.makedirs(geoserver_PTM_dir)
-    else:
-        geoserver_EHCPA_dir = os.path.join('C:\\', 'ProgramData', 'GeoServer', 'data', 'EHCPA')
-
-        if not os.path.exists(geoserver_EHCPA_dir):
-            os.makedirs(geoserver_EHCPA_dir)
-
-        geoserver_PTM_dir =   os.path.join(geoserver_EHCPA_dir, 'PTM')
-
-        if os.path.exists(geoserver_PTM_dir):
-            shutil.rmtree(geoserver_PTM_dir)
-            os.makedirs(geoserver_PTM_dir)
-        else:
-            os.makedirs(geoserver_PTM_dir)
-    '''
     ####################################################################################################################
 
     ## PASO 1: Proceso de conversion de archivo "PTM" en formato netCDF a GeoTiff, generando dos archivos, uno que incluya 
@@ -120,9 +101,8 @@ def ptm_convertion_and_crop(calibration_end_year, calibration_end_month):
 
     ## PASO 2: Proceso de corte de ambos archivos tif generados, sobre el archivo shape de Argentina.
     #          - Se abre el shapefile que contiene el contorno de Argentina. Ahora, para asignar el mes y año de 
-    #            calibracion del PTM de todas las bandas, obtenemos la fecha de actual, luego calculamos el primer 
-    #            dia del proximo año, y restamos 1 al año, del primer dia del proximo año, para la comparacion. Por 
-    #            otro lado, calculamos el tercer dia del proximo año, le restamos 1 al año, del tercer dia del proximo 
+    #            calibracion del PTM de todas las bandas, extraemos dichos valores de la funcion "get_calibration_date()". 
+    #            Por otro lado, calculamos el tercer dia del proximo año, le restamos 1 al año, del tercer dia del proximo 
     #            año, para la comparacion. Ahora bien, para la asignacion del final del año de calibracion:
     #            - Si la fecha actual es mayor o igual al tercer dia del proximo año de la comparacion, se asigna el 
     #              año del tercer dia de comparacion.
@@ -137,6 +117,8 @@ def ptm_convertion_and_crop(calibration_end_year, calibration_end_month):
     with fiona.open(shp_file, "r") as shapefile:
         shapes = [feature["geometry"] for feature in shapefile]
     
+    calibration_end_year, calibration_end_month = get_calibration_date()
+    
 
     pr_cropped_all_bands = pr_all_bands.rio.clip(shapes, pr.rio.crs)
     PTM_all_bands_cropped_tif = os.path.join(downloable_data_PTM_dir, f'PTM_jun_2000_{calibration_end_month}_{calibration_end_year}_all_bands_ARG_cropped.tif')
@@ -146,6 +128,8 @@ def ptm_convertion_and_crop(calibration_end_year, calibration_end_month):
     pr_cropped_last_band = pr_last_band.rio.clip(shapes, pr.rio.crs)
     PTM_last_band_cropped_tif = os.path.join(geoserver_PTM_dir, f'PTM_jun_2000_present_last_band_ARG_cropped.tif')
     pr_cropped_last_band.rio.to_raster(PTM_last_band_cropped_tif)
+
+
 
 
 if __name__ == '__main__':

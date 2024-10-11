@@ -84,7 +84,7 @@ const MapRasterLayers = ({setIsMouseOverComponent, isMouseOverComponent}) => {
         SPI_72: 1,
     });
     const layers = useRef({});
-    const modalInitialPosition = { x: 54, y: 105 };
+    const modalInitialPosition = { x: 58, y: 105 };
     const modalPositionRef = useRef(modalInitialPosition);
     const [modalPosition, setModalPosition] = useState(modalPositionRef.current);
     const modalRef = useRef(null); 
@@ -114,7 +114,7 @@ const MapRasterLayers = ({setIsMouseOverComponent, isMouseOverComponent}) => {
         // Si no hay capas seleccionadas, mostramos un mensaje de alerta
         if (selectedLayers.length === 0) {
             Swal.fire({
-                title: 'Oops!',
+                title: 'Atención!',
                 text: 'Debe seleccionar al menos una capa para descargar.',
                 icon: 'warning',
                 confirmButtonText: 'Continuar'
@@ -167,7 +167,21 @@ const MapRasterLayers = ({setIsMouseOverComponent, isMouseOverComponent}) => {
             } else {
                 const otherError = error.message;
                 setError(otherError);
-                console.error("Error:", otherError);
+                if(otherError == "Network Error"){
+                    Swal.fire({
+                        title: otherError,
+                        text: 'Error de conexión con el servidor, por lo que no es posible realizar la descarga en este momento. Intente nuevamente más tarde.',
+                        icon: 'error',
+                        confirmButtonText: 'Continuar'
+                    });
+                }else{
+                    Swal.fire({
+                        title: 'Error',
+                        text: otherError,
+                        icon: 'error',
+                        confirmButtonText: 'Continuar'
+                    });
+                }   
             }
         }
     };

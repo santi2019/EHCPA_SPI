@@ -1,6 +1,7 @@
+/*Estilo de contenedores generales*/
 .coordinatesMap{
-    height: 30px;
-    width: 180px;
+    height: 35px;
+    width: 190px;
     bottom: 0;
     right: 0;
     position: fixed;
@@ -11,7 +12,7 @@
     border-radius: 5px;
     margin-bottom: 60px;
     margin-right: 10px;
-    z-index: 3300;
+    z-index: 100000;
     opacity: .80;
 }
 
@@ -21,6 +22,9 @@
     user-select: text;
 }
 
+
+
+/*Estilo coordenadas*/
 .coordinatesLatLng{
     font-size: 13px;
     font-family: "Inter", system-ui;

@@ -96,7 +96,6 @@ def spi_process():
 
     spi_scales = ['1', '2', '3', '6', '9', '12', '24', '36', '48', '60', '72']
 
-    # Reordenamiento de las dimensiones para cada archivo de SPI generado
     for scale in spi_scales:
         input_spi_file = os.path.join(SPI_gp_dir, f'nclimgrid_spi_gamma_{scale}_month.nc')
         output_spi_file = os.path.join(SPI_gamma_reord_dir, f'spi_gamma_{scale}_reord.nc4')

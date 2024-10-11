@@ -29,6 +29,7 @@
     "react-draggable": "^4.4.6",
     "react-fontawesome": "^1.7.1",
     "react-leaflet": "^4.2.1",
+    "react-range": "^1.10.0",
     "react-router-dom": "^6.26.1",
     "react-spring": "^9.7.4",
     "react-use-gesture": "^9.1.3",

@@ -3,7 +3,6 @@
     height: 100vh;
 }
 
-
 .leaflet-container{
     height: 100%;
 }
@@ -11,6 +10,7 @@
 .leaflet-container.leaflet-touch-drag {
     cursor:default;
 }
+
 
 
 
@@ -23,7 +23,7 @@
     bottom: 0;
     right: 0;
     position: fixed;
-    margin: 100px 15px;
+    margin: 105px 15px;
     text-align: center;
     transition: all .25s;
     border-top: none;

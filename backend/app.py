@@ -1,12 +1,13 @@
 import os
 import zipfile
+import locale
+from datetime import datetime
 from io import BytesIO
 from flask import Flask, send_file, render_template, jsonify, request
 from flask_cors import CORS
 from apscheduler.schedulers.background import BackgroundScheduler
 from main_v7 import ehcpa_process, remote_download_process
-from src.scripts.inspect_arglate_v7 import inspect_arglate
-from src.scripts.get_calibration_date_v7 import get_calibration_date
+from src.scripts.get_dates_v7 import get_calibration_date, get_ARG_late_last_date
 
 
 app = Flask(__name__)
@@ -20,7 +21,7 @@ scheduler.start()
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return jsonify("backend connected!")
 
 
 @app.route('/download/<id_data>', methods=['GET'])
@@ -78,8 +79,22 @@ def download_file(id_data):
 
 @app.route('/lastdate', methods=['GET'])
 def last_partial_date():
-    formatted_date = inspect_arglate()
-    return formatted_date
+    ARG_late_last_date = get_ARG_late_last_date()
+    if ARG_late_last_date != 'No disponible':
+        locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+        date_obj = datetime.strptime(ARG_late_last_date, '%d/%m/%Y')
+        date_month_es = date_obj.strftime('%B').capitalize()  
+        response = {
+            'fecha': ARG_late_last_date,  
+            'fecha_mes_es': date_month_es
+        }
+    else:
+        response = {
+            'fecha': ARG_late_last_date,
+            'fecha_mes_es': 'No disponible'
+        }
+
+    return jsonify(response)
 
 
 
