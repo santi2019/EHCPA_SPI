@@ -6,7 +6,7 @@ from dateutil.relativedelta import relativedelta
 from src.scripts.check_internet_connection_v7 import check_internet_connection
 from src.scripts.automatic_s3_downloader_v7 import automatic_s3_downloader
 from src.scripts.download_subset_v7 import download_subset
-from src.scripts.get_dates_v7 import get_today_date, get_download_date, get_ARG_late_last_date, get_ARG_late_reset_date, get_calibration_date
+from src.scripts.get_dates_v7 import get_today_date, get_download_date, get_ARG_late_last_date, get_ARG_late_reset_date
 from src.scripts.P_acu_mensual_v7 import p_acu_mensual
 from src.scripts.automatic_s3_uploader_v7 import automatic_s3_uploader
 from src.scripts.concat_reord_v7 import concat_reord
@@ -107,7 +107,7 @@ def ehcpa_process():
                     f"- Fecha de formateo de carpeta ARG_Late: \n"
                     f" {ARG_late_reset_date}\n" 
                 )
-                email_sent = send_email_with_internet(subject, error_message)
+                email_sent = send_email_with_internet(subject, body)
                 if email_sent:
                     print("El proceso finalizó con errores. Se ha enviado una alerta por correo.")
                 else:
@@ -243,7 +243,7 @@ def remote_download_process():
                         f"- Fecha de formateo de carpeta ARG_Late: \n"
                         f" {ARG_late_reset_date}\n" 
                     )
-                    email_sent = send_email_with_internet(subject, error_message)
+                    email_sent = send_email_with_internet(subject, body)
                     if email_sent:
                         print("El proceso de descarga remota finalizó con errores. Se ha enviado una alerta por correo.")
                     else:
@@ -308,13 +308,15 @@ def remote_download_process():
 
 
 def main():
-   ehcpa_process()
-   #remote_download_process()
+   #ehcpa_process()
+   remote_download_process()
 
 
 if __name__ == "__main__":
+    remote_download_process()
+    '''
     schedule.every().day.at("03:00").do(main)
     while True:
         schedule.run_pending()
         time.sleep(1)
-    
+    '''

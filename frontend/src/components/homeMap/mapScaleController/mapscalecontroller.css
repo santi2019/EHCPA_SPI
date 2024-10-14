@@ -1,0 +1,40 @@
+/*Estilo de contenedores generales*/
+.scaleControllerMap{
+    height: 30px;
+    width: 120px;
+    bottom: 0;
+    right: 0;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #D2D5DA;
+    border-radius: 5px;
+    margin-bottom: 105px;
+    margin-right: 10px;
+    opacity: .80;
+    z-index: 100000;
+    padding: 0px 2px;
+}
+
+.scaleControllerItem{
+    text-align: center;
+    cursor: text;
+    user-select: text;
+    border-bottom: 2px solid #585858;
+    border-left: 2px solid #585858;
+    border-right: 2px solid #585858;
+    border-radius:  0px 0px 2px 2px;
+    transition: width 0.3s ease-in-out; 
+}
+
+
+
+
+/*Estilo escala*/
+.scaleValue{
+    font-size: 13px;
+    font-family: "Inter", system-ui;
+    color: #585858;
+    font-weight: bold;
+}

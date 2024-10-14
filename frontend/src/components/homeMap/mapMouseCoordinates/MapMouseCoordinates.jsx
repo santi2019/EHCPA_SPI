@@ -10,7 +10,7 @@ import useMapEventHandlers from '../../../hooks/useMapEventHandlers';
  * - coordinatesMap: Contenedor general.
  * - coordinatesItems: Contenedor que se utiliza para estructurar el contenido que permite desde la 
  *   obtencion de las coordenadas hasta la visualizacion de las mismas.
- * - coordinatesLatLng: Texto para visualizar las coordendas resultantes de la funcion "HandleGetCoordinates".
+ *      - coordinatesLatLng: Texto para visualizar las coordendas resultantes de la funcion "HandleGetCoordinates".
  * - Por ultimo, se exporta "MapMouseCoordinates" como componente.
 */
 const MapMouseCoordinates = ({isMouseOverComponent, setIsMouseOverComponent}) => {

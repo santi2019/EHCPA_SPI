@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { MapContainer, TileLayer, ScaleControl, useMap, Marker, useMapEvents  } from 'react-leaflet'
+import React, { useEffect, useState } from 'react'
+import { MapContainer, TileLayer, useMap, Marker, useMapEvents  } from 'react-leaflet'
 import "leaflet/dist/leaflet.css"
 import "leaflet-geosearch/dist/geosearch.css";
 import 'leaflet-geoserver-request';
@@ -7,6 +7,7 @@ import "./homemap.css";
 import MapMouseCoordinates from './mapMouseCoordinates/MapMouseCoordinates';
 import MapSearchBar from './mapSearchBar/MapSearchBar';
 import MapZoomController from './mapZoomController/MapZoomController';
+import MapScaleController from './mapScaleController/MapScaleController';
 import MapSolidLayers from './mapSolidLayers/MapSolidLayers';
 import MapRasterLayers from './mapRasterLayers/MapRasterLayers';
 
@@ -168,7 +169,7 @@ const HomeMap = () => {
                 <MapRasterLayers setIsMouseOverComponent={setIsMouseOverComponent} isMouseOverComponent={isMouseOverComponent}/>
                 <MapSolidLayers setIsMouseOverComponent={setIsMouseOverComponent}/>
                 <MapZoomController setIsMouseOverComponent={setIsMouseOverComponent}/>
-                <ScaleControl imperial={false} />
+                <MapScaleController setIsMouseOverComponent={setIsMouseOverComponent}/>
                 <MapMouseCoordinates setIsMouseOverComponent={setIsMouseOverComponent} isMouseOverComponent={isMouseOverComponent}/>
                 <CenterMap center={temporaryCoordinates} zoom={temporaryZoom} />
                 <MapSearchBar handleSelectLocation={handleSelectLocation} setIsMouseOverComponent={setIsMouseOverComponent}/>

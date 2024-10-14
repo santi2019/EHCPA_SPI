@@ -14,21 +14,3 @@
 
 
 
-
-.leaflet-control-scale-line:not(:first-child){
-    border-top: none;
-}
-
-.leaflet-control-scale-line{
-    bottom: 0;
-    right: 0;
-    position: fixed;
-    margin: 105px 15px;
-    text-align: center;
-    transition: all .25s;
-    border-top: none;
-    border-bottom: 2px solid #777;
-    user-select: all;
-    pointer-events: auto;
-}
-
