@@ -68,7 +68,7 @@ const InfoSearchBar = ({ handleCloseInfoModal, setIsMouseOverComponent }) => {
                         <li className="liInfoModalContent">Rutas, Calles, Número de Casas o Lugares Puntuales (Plazas, Hospitales, Oficinas, Edificos, Etc.)</li>
                     </ul>
                     <p className="spanInfoModalContent">
-                        Presione la tecla "Enter" o haga clic en el ícono <FontAwesomeIcon className="searchIconInfoModalContent" icon={faMagnifyingGlass}/> para buscar . 
+                        Presione la tecla "Enter" o haga clic en el ícono <FontAwesomeIcon className="searchIconInfoModalContent" icon={faMagnifyingGlass}/> para buscar. 
                     </p>
                 </div>
             </div>
