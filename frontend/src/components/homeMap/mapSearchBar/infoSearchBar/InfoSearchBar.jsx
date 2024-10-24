@@ -56,8 +56,9 @@ const InfoSearchBar = ({ handleCloseInfoModal, setIsMouseOverComponent }) => {
                     <p className="spanInfoModalContent">
                         El buscador solo sirve para redirigir al usuario a una ubicación específica en el mapa.
                         Las búsquedas de ubicaciones están limitadas únicamente dentro de Argentina, lo que significa que si se intenta buscar 
-                        una ubicación por fuera del país, no se obtendrán resultados. En este mapa usted puede buscar por:
+                        una ubicación por fuera del país, no se obtendrán resultados. 
                     </p>
+                    <p className="spanInfoModalContent">En este mapa usted puede buscar por:</p>
                     <ul>
                         <li className="liInfoModalContent">Coordenadas en formato: Latitud, Longitud</li>
                         <li className="liInfoModalContent">Dirección Completa</li>
