@@ -1,0 +1,196 @@
+/*Estilo contenedores generales*/
+.infoMapContainer {
+    display: flex;    
+    position: fixed;
+    justify-content: center; 
+    align-items: center; 
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4); 
+    z-index: 10000000;
+    opacity: 1;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.itemsInfoMap {
+    width: 800px;
+    max-height: 475px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 2px solid #babdc5;
+    border-radius: 4px;
+    overflow: hidden;
+    transform: scale(0.2); 
+    opacity: 0;
+    animation: expand 0.3s ease forwards; 
+}
+
+@keyframes expand {
+    0% {
+        transform: scale(0.2); 
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1); 
+        opacity: 1;
+    }
+}
+
+.itemsInfoMap.closingInfoMap {
+    animation: reduce 0.2s ease forwards;
+}
+
+@keyframes reduce {
+    0% {
+        transform: scale(1); 
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.2); 
+        opacity: 0;
+    }
+}
+
+
+
+/*Estilo navbar*/
+.infoMapNavbar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e2e2e2;
+    border-bottom: 1px groove #babdc5;
+    position: relative;
+    padding: 5px 12px;
+    box-sizing: border-box;
+}
+
+.infoMapNavbarTitle{
+    font-size: 16px;
+    font-family: "Inter", system-ui;
+    color: #585858;
+    font-weight: bold;
+    cursor: text;
+    user-select: text;
+}
+
+.closeIconInfoMapNavbar{
+    position: absolute; 
+    right: 12px;
+    color: #868686;
+    font-size: 19px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.closeIconInfoMapNavbar:hover{
+    color: #4c4c4d;
+    transition: all 0.3s ease;
+}
+
+
+
+/*Estilo contenido del modal*/
+.infoMapContent{
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    text-align: justify;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.mapNameContainer, .mapDescriptionContainer, .mapPTMContainer, .mapSPIContainer, 
+.mapViewContainer, .mapDownloadContainer, .mapContactContainer{
+    display: flex;
+    flex-direction: column;
+    border-right: 1px groove #babdc5;
+}
+
+.mapNameTitleContainer, .mapDescriptionTitleContainer, .mapPTMTitleContainer, .mapSPITitleContainer, 
+.mapViewTitleContainer, .mapDownloadTitleContainer, .mapContactTitleContainer{
+    border-bottom: 1px groove #babdc5;
+    padding: 0px 12px;
+}
+
+.mapNameTitle, .mapDescriptionTitle, .mapPTMTitle, .mapSPITitle, 
+.mapViewTitle, .mapDownloadTitle, .mapContactTitle{
+    color: #3f74b1;
+    cursor: text;
+    user-select: text;
+    font-size: 18px;
+    font-family: "Inter", system-ui;
+}
+
+.mapName{
+    color: #000000;
+    margin-top: 0px 16px;
+    cursor: text;
+    font-size: 22px;
+    user-select: text;
+    font-family: "Inter", system-ui;
+    padding: 0px 12px;
+}
+
+.mapDescription, .mapPTM, .mapSPI, 
+.mapView, .mapDownload, .mapContact{
+    color: #000000;
+    cursor: text;
+    user-select: text;
+    text-align: justify;
+    font-size: 15px;
+    font-family: "Inter", system-ui;
+    font-weight: 500;
+    margin: 16px 0px;
+    padding: 0px 12px;
+}
+
+.mapSPI ul, .mapContact ul{
+    margin: 3px 0px;
+}
+
+.mapDescription p, .mapPTM p, .mapSPI p, 
+.mapView p, .mapDownload p, .mapContact p{
+    margin: 0;
+}
+
+.PTMLeyendContainer, .SPILeyendContainer{ 
+    padding-top: 10px
+}
+
+.liSPIScale::marker, .liDownload::marker, .liContact::marker {
+    font-size: 20px; 
+    color: #000000; 
+}
+
+.liDownloadIcon{
+    font-size: 16px;
+    color: #6D7280;
+}
+
+.mapContact p{
+    font-weight: bold;
+}
+
+.uccContact{
+    font-style: bold;
+}
+
+
+
+

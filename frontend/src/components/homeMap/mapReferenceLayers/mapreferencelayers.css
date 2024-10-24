@@ -1,0 +1,59 @@
+/*Estilo de contenedor general*/
+.buttonSolidLayersContainer{
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    display: flex;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    z-index: 100000;
+}
+
+
+
+/*Estilo boton*/
+.buttonSolidLayers{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+    opacity: .80;
+    background-color: #868686;
+    cursor: pointer;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    position: relative; 
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.buttonSolidLayers:hover{
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.layersIcon{
+    color: #ffffff;
+    font-size: 25px;
+    opacity: 1;
+}
+
+
+
+/*Estilo y animacion para el efecto ripple*/
+.buttonSolidLayers .ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple-animation 0.4s linear;
+    background-color: rgba(255, 255, 255, 0.7);
+    pointer-events: none;
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}

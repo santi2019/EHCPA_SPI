@@ -1,0 +1,34 @@
+/*Estilo de contenedores generales*/
+.homeFooter{
+    height: 40px;
+    width: 235px;
+    bottom: 0;
+    right: 0;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #D2D5DA;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    opacity: .80;
+    z-index: 100000;
+}
+
+.footerItem{
+    text-align: center;
+}
+
+
+
+/*Estilo titulo*/
+.footerText{
+    font-size: 13px;
+    font-family: "Inter", system-ui;
+    color: #585858;
+    font-weight: bold;
+    cursor: text;
+    user-select: text;
+}
+

@@ -1,0 +1,116 @@
+/*Estilo de contenedor general*/
+.menuContainer{
+    top: 0;
+    right: 0;
+    position: fixed;
+    display: flex;
+    z-index: 100000;
+    margin: 104px 10px;
+}
+
+
+
+/*Estilo boton*/
+.menuButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+    opacity: .80;
+    background-color: #868686;
+    cursor: pointer;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    position: relative; 
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.menuButton:hover{
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.menuButtonIcons{
+    color: #ffffff;
+    font-size: 25px;
+    opacity: 1;
+}
+
+
+
+/* Animaciones de rotación para el ícono */
+.rotate-right {
+    transform: rotate(180deg);
+    transition: transform 0.4s ease;
+}
+
+.rotate-left {
+    transform: rotate(-180deg);
+    transition: transform 0.4s ease;
+}
+
+
+
+/*Estilo y animacion para el efecto ripple*/
+.menuButton .ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple-animation 0.4s linear;
+    background-color: rgba(255, 255, 255, 0.7);
+    pointer-events: none;
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+
+
+/*Estilo Alerts*/
+.swal2-container {
+    z-index: 999999999 !important; 
+}
+
+.swal2-popup{
+    background-color: #ffffff !important; 
+}
+
+.swal2-title{
+    font-size: 25px !important;
+    color: #545454 !important;
+    font-family: "Inter", system-ui !important;
+}
+
+.swal2-html-container {
+    font-size: 16px !important;
+    font-family: "Inter", system-ui !important; 
+    color: #545454 !important; 
+    font-weight: 500 !important;
+}
+
+.swal2-confirm {
+    font-size: 16px !important;
+    background-color: #3c4a79 !important; 
+    border: none !important;
+    font-family: "Inter", system-ui !important;
+    transition: all 0.3s ease-out !important;
+}
+
+.swal2-confirm:hover {
+    background-color: #4968aa !important;
+    transition: all 0.3s ease-in !important;
+}
+
+
+
+
+
+
+
+

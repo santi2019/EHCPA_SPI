@@ -1,0 +1,29 @@
+name: EHCPA_venv
+channels: 
+ - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - pandas
+  - numpy
+  - nco
+  - udunits2
+  - dask
+  - requests
+  - xarray
+  - netcdf4
+  - h5py
+  - python-dotenv
+  - scipy
+  - schedule
+  - flask
+  - flask-cors
+  - apscheduler
+  - rioxarray
+  - fiona
+  - geoserver-rest
+  - boto3
+  - pytest
+  - pytest-mock
+  - pip:
+    - climate-indices

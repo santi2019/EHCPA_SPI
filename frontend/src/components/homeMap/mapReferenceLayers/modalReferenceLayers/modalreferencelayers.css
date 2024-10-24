@@ -1,0 +1,159 @@
+/*Contenedor general*/
+.referenceLayersContainer{
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 358px;
+    margin-bottom: 75px;
+    margin-left: 10px;
+    z-index: 10000;
+    background-color: #ffffff;
+    border: 1px groove #babdc5;
+    max-height: 372px;
+    box-shadow: 0px 10px 10px -6px rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+    opacity: 0; 
+    transition: opacity 0.3s ease-in-out, visibility 0s 0.3s; 
+    visibility: hidden; 
+}
+
+.referenceLayersContainer.visible {
+    opacity: 1;
+    visibility: visible; 
+    transition: opacity 0.3s ease-in-out, visibility 0s; 
+}
+
+.referenceLayersContainer.hidden {
+    opacity: 0; 
+    visibility: hidden; 
+    transition: opacity 0.3s ease-in-out, visibility 0s 0.3s; 
+}
+
+
+
+/*Estilo navbar*/
+.referenceLayersNavbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 12px;
+    background-color: #e2e2e2;
+    position: sticky;
+    top: 0;
+    border-bottom: 1px groove #babdc5;
+    border-radius: 2px 2px 0px 0px;
+}
+
+.referenceLayersNavbarTitle{
+    font-size: 14px;
+    font-family: "Inter", system-ui;
+    color: #585858;
+    font-weight: bold;
+    cursor: text;
+    user-select: text;
+}
+
+.referenceCloseIcon{
+    color: #868686;
+    font-size: 19px;
+    cursor: pointer;
+    padding-left: 15px;
+    transition: all 0.3s ease;
+}
+
+.referenceCloseIcon:hover{
+    color: #4c4c4d;
+    transition: all 0.3s ease;
+}
+
+.referenceLayersContainer.hidden .referenceCloseIcon {
+    cursor: default;
+}
+
+
+
+/*Estilo contenedor de capas*/
+.referenceLayersContent {
+    overflow-y: auto; 
+    flex-grow: 1;
+    z-index: 3300;
+    border-radius: 0px 0px 2px 2px;
+}
+
+.referenceLayersItems{ 
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 0px 0px 2px 2px;
+}
+
+.referenceLayersItems li{ 
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    list-style-type: none;
+    padding: 12px 12px;
+    border-right: 1px groove #babdc5;
+    border-top: 1px groove #babdc5;
+    box-sizing: border-box;
+    height: 82px;
+}
+
+.referenceLayersItems li:first-child {
+    border-top: none;
+}
+
+.referenceLayersItems li:last-child {
+    border-bottom: none;
+}
+
+
+
+/*Estilo elementos de cada capa*/
+.referenceLayersSwitchText{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.referenceLayerName{
+    color: #000000;
+    cursor: text;
+    user-select: text;
+    font-size: 14px;
+    font-family: "Inter", system-ui;
+    font-weight: 500;
+}
+
+.referenceLayersRange{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.referenceLayerOpacityValue{
+    padding-left: 15px;
+    width: 40px;
+    text-align: right;
+    cursor: text;
+    color: #000000;
+    font-size: 14px;
+    font-family: "Inter", system-ui;
+    font-weight: 500;
+}
+
+
+
+
+
+
+
+
+
+
+
