@@ -1,0 +1,71 @@
+/*Estilo de contenedores generales*/
+.zoomControllerMap{
+    height: 65px;
+    width: 34px;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    margin: 104px 10px;
+    z-index: 100000;
+    flex-direction: column;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.zoomControllerMap button {
+    width: 100%;
+}
+
+
+
+/*Estilo botones*/
+.zoomInButton{
+    height: 51%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    cursor: pointer;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease; 
+    overflow: hidden;
+}
+
+.zoomOutButton{
+    height: 49%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease; 
+    overflow: hidden;
+}
+
+.zoomInButton:hover, .zoomOutButton:hover{
+    background-color: #e9e9e9;
+    transition: all 0.3s ease; 
+}
+
+.zoomInButton, .zoomOutIcon{
+    font-size: 15px;
+    color: #000000;
+}
+
+.zoomInButton.disabled, .zoomOutButton.disabled {
+    background-color: #f4f4f4;
+    cursor: not-allowed;
+}
+
+.zoomInButton.disabled .zoomInIcon, .zoomOutButton.disabled .zoomOutIcon {
+    color: #bbbbbb;
+}
+
+
+
