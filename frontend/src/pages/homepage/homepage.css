@@ -85,10 +85,13 @@
   border-radius: 20px;
   border: 1px solid transparent;
   background-clip: content-box;
+  cursor: default;
+  transition: all 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: #4c4c4d;
+  transition: all 0.3s ease;
 }
 
 

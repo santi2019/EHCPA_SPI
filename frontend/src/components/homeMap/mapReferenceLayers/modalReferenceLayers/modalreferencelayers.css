@@ -1,5 +1,5 @@
 /*Contenedor general*/
-.modalSolidLayersContainer{
+.referenceLayersContainer{
     bottom: 0;
     left: 0;
     position: fixed;
@@ -19,13 +19,13 @@
     visibility: hidden; 
 }
 
-.modalSolidLayersContainer.visible {
+.referenceLayersContainer.visible {
     opacity: 1;
     visibility: visible; 
     transition: opacity 0.3s ease-in-out, visibility 0s; 
 }
 
-.modalSolidLayersContainer.hidden {
+.referenceLayersContainer.hidden {
     opacity: 0; 
     visibility: hidden; 
     transition: opacity 0.3s ease-in-out, visibility 0s 0.3s; 
@@ -34,7 +34,7 @@
 
 
 /*Estilo navbar*/
-.solidLayersNavbar{
+.referenceLayersNavbar{
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -46,7 +46,7 @@
     border-radius: 2px 2px 0px 0px;
 }
 
-.solidLayersNavarTitle{
+.referenceLayersNavbarTitle{
     font-size: 14px;
     font-family: "Inter", system-ui;
     color: #585858;
@@ -55,82 +55,96 @@
     user-select: text;
 }
 
-.closeIcon{
+.referenceCloseIcon{
     color: #868686;
     font-size: 19px;
     cursor: pointer;
     padding-left: 15px;
+    transition: all 0.3s ease;
 }
 
-.closeIcon:hover{
+.referenceCloseIcon:hover{
     color: #4c4c4d;
+    transition: all 0.3s ease;
+}
+
+.referenceLayersContainer.hidden .referenceCloseIcon {
+    cursor: default;
 }
 
 
 
 /*Estilo contenedor de capas*/
-.solidLayersContent {
+.referenceLayersContent {
     overflow-y: auto; 
     flex-grow: 1;
     z-index: 3300;
     border-radius: 0px 0px 2px 2px;
 }
 
-.solidLayersItems{ 
+.referenceLayersItems{ 
     list-style-type: none;
     padding: 0;
     margin: 0;
     border-radius: 0px 0px 2px 2px;
 }
 
-.solidLayersItems li{ 
+.referenceLayersItems li{ 
     display: flex;
     justify-content: space-between;
     flex-direction: column;
     align-items: center;
     list-style-type: none;
-    color: #000000;
     padding: 12px 12px;
-    height: 57px;
-    font-size: 14px;
     border-right: 1px groove #babdc5;
     border-top: 1px groove #babdc5;
+    box-sizing: border-box;
+    height: 82px;
 }
 
-.solidLayersItems li:first-child {
+.referenceLayersItems li:first-child {
     border-top: none;
 }
 
-.solidLayersItems li:last-child {
+.referenceLayersItems li:last-child {
     border-bottom: none;
 }
 
 
 
 /*Estilo elementos de cada capa*/
-.solidLayersSwitchText{
+.referenceLayersSwitchText{
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
 }
 
-.solidLayerName{ 
+.referenceLayerName{
+    color: #000000;
     cursor: text;
     user-select: text;
+    font-size: 14px;
+    font-family: "Inter", system-ui;
+    font-weight: 500;
 }
 
-.solidLayersRange{
+.referenceLayersRange{
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
 }
 
-.maxValue{
+.referenceLayerOpacityValue{
     padding-left: 15px;
     width: 40px;
     text-align: right;
+    cursor: text;
+    color: #000000;
+    font-size: 14px;
+    font-family: "Inter", system-ui;
+    font-weight: 500;
 }
 
 

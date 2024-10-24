@@ -28,5 +28,7 @@
     font-family: "Inter", system-ui;
     color: #585858;
     font-weight: bold;
+    cursor: text;
+    user-select: text;
 }
 

@@ -412,6 +412,8 @@ def download_subset(begTime, endTime, reset_ARG_late):
         error_message = (
             f"Error decoding JSON: Fallo en la solicitud a la API.\n"
             f"- Descripción: Posible problema de conectividad local o API fuera de servicio, por lo que se obtuvo una respuesta vacía o en un formato inesperado.\n"
+            f"- Verificar estado del sitio GES DISC en:\n"
+            f"https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDL_07/summary?keywords=imerg\n"
             f"- Detalles: {e}\n"
         )
         print(error_message)

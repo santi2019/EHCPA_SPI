@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch } from "antd";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import "./modalsolidlayers.css";
+import "./modalreferencelayers.css";
 
 
 /**
@@ -29,7 +29,7 @@ import "./modalsolidlayers.css";
  *        identifica a cada capa.
  * - Por ultimo, se exporta "ModalSolidLayers" como componente.
 */
-const ModalSolidLayers = ({
+const ModalReferenceLayers = ({
     isVisible, 
     closeLayersContainer, 
     isNavbarSwitchChecked, 
@@ -57,21 +57,21 @@ const ModalSolidLayers = ({
 
 
     return  (
-        <div className={`modalSolidLayersContainer ${isVisible ? 'visible' : 'hidden'}`}>
-            <div className="solidLayersNavbar">
+        <div className={`referenceLayersContainer ${isVisible ? 'visible' : 'hidden'}`}>
+            <div className="referenceLayersNavbar">
                 <Switch checked={isNavbarSwitchChecked} onChange={handleNavbarSwitchChange}/>
-                <h2 className="solidLayersNavarTitle">Capas Sólidas</h2>
-                <FontAwesomeIcon className="closeIcon" icon={faXmark} onClick={closeLayersContainer}/>
+                <h2 className="referenceLayersNavbarTitle">Capas de Referencia</h2>
+                <FontAwesomeIcon className="referenceCloseIcon" icon={faXmark} onClick={closeLayersContainer}/>
             </div>
-            <div className="solidLayersContent">
-                <ul className="solidLayersItems">
+            <div className="referenceLayersContent">
+                <ul className="referenceLayersItems">
                     {layers.map(layer => (
                         <li key={layer.key}>
-                            <div className="solidLayersSwitchText">
+                            <div className="referenceLayersSwitchText">
                                 <Switch checked={layersSwitches[layer.key]} onChange={(checked) => handleLayerSwitchChange(layer.key, checked)}/>
-                                <span className="solidLayerName">{layer.name}</span>
+                                <span className="referenceLayerName">{layer.name}</span>
                             </div>
-                            <div className="solidLayersRange">
+                            <div className="referenceLayersRange">
                                 <input 
                                     type="range"
                                     className="inputRange"
@@ -84,7 +84,7 @@ const ModalSolidLayers = ({
                                     }}
                                     onChange={(e) => handleOpacityChange(layer.key, parseFloat(e.target.value))}
                                 />
-                                <div className="maxValue">
+                                <div className="referenceLayerOpacityValue">
                                     <span>{Math.round(layerOpacity[layer.key] * 100)}%</span>
                                 </div>
                             </div>
@@ -97,4 +97,4 @@ const ModalSolidLayers = ({
 };
 
 
-export default ModalSolidLayers;
+export default ModalReferenceLayers;

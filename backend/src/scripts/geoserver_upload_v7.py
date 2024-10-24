@@ -66,7 +66,9 @@ def geoserver_upload():
     PTM_layer_name = "PTM_Raster"
     PTM_style_name = 'PTM_Style'
 
+    print(f"Creando coveragestore para la capa: {PTM_layer_name}")
     geo.create_coveragestore(layer_name=PTM_layer_name, path=PTM_tif_file, workspace=workspace_name)
+    print(f"Publicando estilo para la capa: {PTM_layer_name}")
     geo.publish_style(layer_name=PTM_layer_name, style_name=PTM_style_name, workspace=workspace_name)
 
 
@@ -86,9 +88,6 @@ def geoserver_upload():
         geo.publish_style(layer_name=SPI_layer_name, style_name=SPI_style_name, workspace=workspace_name)
     
 
-
-        
-    
 
 
 if __name__ == '__main__':

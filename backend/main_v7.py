@@ -91,7 +91,8 @@ def ehcpa_process():
             sleep_for_a_bit(10)
             #automatic_s3_downloader()
             sleep_for_a_bit(30)
-            get_today_date()
+            today_date = get_today_date()
+            print(f"Fecha actual: {today_date}")
 
             begTime, endTime = get_download_date()
             reset_ARG_late = True
@@ -308,12 +309,13 @@ def remote_download_process():
 
 
 def main():
-   #ehcpa_process()
-   remote_download_process()
+   ehcpa_process()
+   #remote_download_process()
 
 
 if __name__ == "__main__":
-    remote_download_process()
+    main()
+    #remote_download_process()
     '''
     schedule.every().day.at("03:00").do(main)
     while True:

@@ -9,7 +9,8 @@ from dateutil.relativedelta import relativedelta
 #         "Año-Mes-Día".
 def get_today_date():
     today_date = datetime.today()
-    print(f"Fecha actual: {today_date.strftime('%Y-%m-%d')}")
+    today_date_formatted = today_date.strftime('%Y-%m-%d')
+    return today_date_formatted
 
 ####################################################################################################################
 
@@ -137,6 +138,7 @@ def get_calibration_date():
 
 if __name__ == "__main__":
    today_date = get_today_date()
+   print(f"Fecha actual: {today_date}")
 
    begTime, endTime = get_download_date()
    print(f"Periodo a descargar: {begTime} a {endTime}")

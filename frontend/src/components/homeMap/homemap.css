@@ -12,5 +12,18 @@
 }
 
 
+.leaflet-tooltip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    background-color: #ffffff;
+    border: 1px solid #cccccc; 
+    border-radius: 4px;
+    font-size: 14px;
+    color: #000000;
+    font-family: "Inter", system-ui;
+    font-weight: 500;
+}
 
 

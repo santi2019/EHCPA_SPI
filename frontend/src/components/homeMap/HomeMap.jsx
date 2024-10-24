@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { MapContainer, TileLayer, useMap, Marker, useMapEvents  } from 'react-leaflet'
+import React, { useEffect, useState, useRef } from 'react'
+import { MapContainer, TileLayer, useMap, Marker, Popup, useMapEvents, Tooltip  } from 'react-leaflet'
 import "leaflet/dist/leaflet.css"
 import "leaflet-geosearch/dist/geosearch.css";
 import 'leaflet-geoserver-request';
@@ -8,8 +8,9 @@ import MapMouseCoordinates from './mapMouseCoordinates/MapMouseCoordinates';
 import MapSearchBar from './mapSearchBar/MapSearchBar';
 import MapZoomController from './mapZoomController/MapZoomController';
 import MapScaleController from './mapScaleController/MapScaleController';
-import MapSolidLayers from './mapSolidLayers/MapSolidLayers';
-import MapRasterLayers from './mapRasterLayers/MapRasterLayers';
+import MapReferenceLayers from './mapReferenceLayers/MapReferenceLayers';
+import DraggableModal from './mapMenu/draggableModal/DraggableModal';
+import MapMenu from './mapMenu/MapMenu';
 
 
 const HomeMap = () => { 
@@ -24,12 +25,13 @@ const HomeMap = () => {
     const [temporaryZoom, setTemporaryZoom] = useState();
     const [shouldCenterMap, setShouldCenterMap] = useState(false);
     const [isMouseOverComponent, setIsMouseOverComponent] = useState(false);
+    const [markerPopupContent, setMarkerPopupContent] = useState(null);
+    const markerRef = useRef(null);
     
 
     /* Función handleSelectLocation: sirve para seleccionar una ubicación 
     */
     const handleSelectLocation = (result) => {
-        //console.log(result)
 
         if (result.y && result.x) { 
             setTemporaryCoordinates({
@@ -37,7 +39,8 @@ const HomeMap = () => {
                 lng: result.x 
             });
 
-            setMarkerPosition([result.y, result.x]); 
+            setMarkerPosition([result.y, result.x]);
+            setMarkerPopupContent(result.label); 
             setShouldCenterMap(true);
         }
         
@@ -134,13 +137,12 @@ const HomeMap = () => {
 
 
     const MapMarkerHandler = ({ isMouseOverComponent }) => {
-        //const map = useMap();
         useMapEvents({
             click(e) {
                 if (!isMouseOverComponent) { 
                     const newMarkerPosition = [e.latlng.lat, e.latlng.lng];
-                    setMarkerPosition(newMarkerPosition);  
-                    //map.flyTo(newMarkerPosition, map.getZoom());
+                    setMarkerPosition(newMarkerPosition);
+                    setMarkerPopupContent(null);
                 }
             }
         });
@@ -150,7 +152,8 @@ const HomeMap = () => {
 
 
     const handleRemoveMarker = () => {
-        setMarkerPosition(null); 
+        setMarkerPosition(null);  
+        setMarkerPopupContent(null);
     };
 
 
@@ -166,21 +169,27 @@ const HomeMap = () => {
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png"/>
-                <MapRasterLayers setIsMouseOverComponent={setIsMouseOverComponent} isMouseOverComponent={isMouseOverComponent}/>
-                <MapSolidLayers setIsMouseOverComponent={setIsMouseOverComponent}/>
+                <MapMenu setIsMouseOverComponent={setIsMouseOverComponent} isMouseOverComponent={isMouseOverComponent}/>
+                <MapReferenceLayers setIsMouseOverComponent={setIsMouseOverComponent}/>
                 <MapZoomController setIsMouseOverComponent={setIsMouseOverComponent}/>
                 <MapScaleController setIsMouseOverComponent={setIsMouseOverComponent}/>
-                <MapMouseCoordinates setIsMouseOverComponent={setIsMouseOverComponent} isMouseOverComponent={isMouseOverComponent}/>
+                <MapMouseCoordinates/>
                 <CenterMap center={temporaryCoordinates} zoom={temporaryZoom} />
                 <MapSearchBar handleSelectLocation={handleSelectLocation} setIsMouseOverComponent={setIsMouseOverComponent}/>
                 <MapMarkerHandler isMouseOverComponent={isMouseOverComponent}/>
                 {markerPosition && (
-                    <Marker 
+                    <Marker
                         position={markerPosition}
                         eventHandlers={{
                             click: handleRemoveMarker 
                         }}
-                    />
+                    >
+                        {markerPopupContent && (
+                            <Tooltip direction="top" opacity={1} offset={[-15.5, -12]} permanent>
+                                {markerPopupContent}
+                            </Tooltip>
+                        )}                    
+                    </Marker>
                 )}
             </MapContainer >
         </div>

@@ -1,0 +1,139 @@
+/*Contenedor general*/
+.precipitationLayerContainer{ 
+    top: 0;
+    right: 0;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 358px;
+    margin: 164px 70px;
+    z-index: 5000;
+    background-color: #ffffff;
+    max-height: 270px;
+    box-shadow: 0px 10px 10px -6px rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+    border: 1px groove #babdc5;
+    opacity: 0; 
+    transition: opacity 0.3s ease-in-out, visibility 0s 0.3s; 
+    visibility: hidden;
+    pointer-events: none; 
+}
+
+.precipitationLayerContainer.visible {
+    opacity: 1;
+    visibility: visible; 
+    transition: opacity 0.3s ease-in-out, visibility 0s;
+    pointer-events: all; 
+}
+
+.precipitationLayerContainer.hidden {
+    opacity: 0; 
+    visibility: hidden; 
+    transition: opacity 0.3s ease-in-out, visibility 0s 0.3s;
+    pointer-events: none; 
+}
+
+
+
+/*Estilo navbar*/
+.precipitationNavbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 12px;
+    background-color: #e2e2e2;
+    position: sticky;
+    top: 0;
+    z-index: 700;
+    border-bottom: 1px groove #babdc5;
+    border-radius: 2px 2px 0px 0px;
+}
+
+.precipitationNavbarTitle{
+    font-size: 14px;
+    font-family: "Inter", system-ui;
+    color: #585858;
+    font-weight: bold;
+    cursor: text;
+    user-select: text;
+}
+
+.precipitationCloseIcon{
+    color: #868686;
+    font-size: 19px;
+    cursor: pointer;
+    padding-left: 15px;
+    transition: all 0.3s ease;
+}
+
+.precipitationCloseIcon:hover{
+    color: #4c4c4d;
+    transition: all 0.3s ease;
+}
+
+.precipitationLayerContainer.hidden .precipitationCloseIcon {
+    cursor: default;
+}
+
+
+/*Estilo contenedor de capas*/
+.precipitationLayersContent{
+    overflow-y: auto; 
+    flex-grow: 1;
+    z-index: 3300;
+    border-radius: 0px 0px 2px 2px;
+}
+
+.precipitationLayersItems{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 0px 0px 2px 2px;
+}
+
+.precipitationLayersItems li{   
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    list-style-type: none;
+    padding: 12px 12px;
+    box-sizing: border-box;
+    height: 82px;
+}
+
+
+/*Estilo elementos de cada capa*/
+.precipitationSwitchText{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.precipitationLayerName{
+    color: #000000;
+    cursor: text;
+    user-select: text;
+    font-size: 14px;
+    font-family: "Inter", system-ui;
+    font-weight: 500;
+}
+
+.precipitationLayersRange{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.precipitationOpacityValue{
+    padding-left: 15px;
+    width: 40px;
+    text-align: right;
+    cursor: text;
+    color: #000000;
+    font-size: 14px;
+    font-family: "Inter", system-ui;
+    font-weight: 500;
+}

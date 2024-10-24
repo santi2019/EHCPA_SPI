@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 import useMapEventHandlers from '../../../hooks/useMapEventHandlers';
 import useRippleEffect from '../../../hooks/useRippleEffect';
-import ModalSolidLayers from './modalSolidLayers/ModalSolidLayers';
-import "./mapsolidlayers.css";
+import ModalSolidLayers from './modalReferenceLayers/ModalReferenceLayers';
+import "./mapreferencelayers.css";
 
 
 /**
@@ -19,7 +19,7 @@ import "./mapsolidlayers.css";
  *   menu de capas solidas.
  * - Por ultimo, se exporta "MapSolidLayers" como componente.
 */
-const MapSolidLayers = ({setIsMouseOverComponent}) => {
+const MapReferenceLayers = ({setIsMouseOverComponent}) => {
 
     /** Estados y variables:
      * - isVisible: variable para controlar la visibilidad del modal de capas solidas.
@@ -313,8 +313,10 @@ const MapSolidLayers = ({setIsMouseOverComponent}) => {
      *    componente, en este caso el modal.
     */
     const closeLayersContainer = () => {
+        setIsMouseOverComponent(false);
         setIsVisible(false);
-        setIsMouseOverComponent(false)
+        document.body.style.cursor = 'default';
+
     };
 
 
@@ -341,4 +343,4 @@ const MapSolidLayers = ({setIsMouseOverComponent}) => {
 };
 
 
-export default MapSolidLayers;
+export default MapReferenceLayers;

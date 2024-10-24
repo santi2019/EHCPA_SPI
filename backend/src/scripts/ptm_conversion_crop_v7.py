@@ -3,6 +3,7 @@ import shutil
 import platform
 import xarray as xr
 import rioxarray
+import subprocess
 import numpy as np
 import fiona
 import rasterio
@@ -128,9 +129,19 @@ def ptm_convertion_and_crop():
     pr_cropped_last_band = pr_last_band.rio.clip(shapes, pr.rio.crs)
     PTM_last_band_cropped_tif = os.path.join(geoserver_PTM_dir, f'PTM_jun_2000_present_last_band_ARG_cropped.tif')
     pr_cropped_last_band.rio.to_raster(PTM_last_band_cropped_tif)
-
-
-
+    
+    '''
+    gdal_command = [
+        "gdal_translate", 
+        "-of", "GTiff", 
+        "-co", "TILED=YES",  # Para mejorar la lectura del archivo en sistemas GIS
+        PTM_last_band_cropped_tif, 
+        PTM_last_band_cropped_tif  
+    ]
+    
+    subprocess.run(gdal_command, check=True)
+    print(f"Archivo procesado con gdal_translate: {PTM_last_band_cropped_tif}")
+    '''
 
 if __name__ == '__main__':
     ptm_convertion_and_crop()
