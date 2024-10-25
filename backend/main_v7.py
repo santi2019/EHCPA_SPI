@@ -3,6 +3,7 @@ import schedule
 import json
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from src.scripts.sleep_for_a_bit_v7 import sleep_for_a_bit
 from src.scripts.check_internet_connection_v7 import check_internet_connection
 from src.scripts.automatic_s3_downloader_v7 import automatic_s3_downloader
 from src.scripts.download_subset_v7 import download_subset
@@ -19,16 +20,6 @@ from src.scripts.recieve_email_v7 import recieve_email
 
 
 
-## Funcion sleep_for_a_bit(): Sirve para generar un delay, con el objetivo de evitar colisiones entre las 
-#                             funciones de los procesos.
-#       - La funcion recibe como parametros los segundos deseados para pausar el proceso, y se utiliza el modulo
-#         "sleep" de la libraria "time", para pausar la ejecucion durante el tiempo definido.
-def sleep_for_a_bit(seconds):
-    print(f"Pausando proceso por {seconds} segundo(s)")
-    time.sleep(seconds)
-    print("Fin de la pausa, continuando proceso...")
-
-####################################################################################################################
 ## Funcion ehcpa_process(): Funcion central del sistema, que permite la automatizacion de la siguiente secuencia:
 #       1. Mediante "get_ARG_late_last_date()" se obtiene la fecha del archivo IMERG de precipitacion diaria mas 
 #          recientemente descargado, para que pueda ser notificado via email, al finalizar el proceso. De igual
