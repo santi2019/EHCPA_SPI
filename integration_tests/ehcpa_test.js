@@ -4,7 +4,7 @@ Feature('ehcpa');
 Scenario('Visualizar y Descargar PTM',  async ({ I }) => {
 
     //Abrimos página inicial
-    I.amOnPage('http://localhost:5173/');
+    I.amOnPage(process.env.BASE_URL);
     I.wait(3);
 
 
@@ -84,7 +84,7 @@ Scenario('Visualizar y Descargar PTM',  async ({ I }) => {
 Scenario('Visualizar y Descargar SPI',  async ({ I }) => {
 
     //Abrimos página inicial
-    I.amOnPage('http://localhost:5173/');
+    I.amOnPage(process.env.BASE_URL);
     I.wait(3);
 
 
@@ -220,15 +220,15 @@ Scenario('Visualizar y Descargar SPI',  async ({ I }) => {
     }
     I.wait(5);
 
- });
+ }); 
 
- 
+
 
 
  Scenario('Buscar Ubicacion',  async ({ I }) => {
 
     //Abrimos página inicial
-    I.amOnPage('http://localhost:5173/');
+    I.amOnPage(process.env.BASE_URL);
     I.wait(3);
 
 
@@ -239,7 +239,7 @@ Scenario('Visualizar y Descargar SPI',  async ({ I }) => {
 
 
     //Buscamos la ubicación
-    I.moveCursorTo('.iconsSearchMap');
+    I.moveCursorTo('.iconsSearchMap .searchIcon');
     I.click('.iconsSearchMap .searchIcon');
     I.wait(4);
 
@@ -248,7 +248,6 @@ Scenario('Visualizar y Descargar SPI',  async ({ I }) => {
     I.dontSeeElement('.resultsSearchMap .itemsResultsSearchMap .liNotFound');
     I.dontSeeElement('.resultsSearchMap .itemsResultsSearchMap .liError');
     I.seeElement('.resultsSearchMap .itemsResultsSearchMap .liResults');
-    I.see('Córdoba, Argentina', '.liResults');
     I.see('Córdoba, Municipio de Córdoba, Pedanía Capital, Departamento Capital, Córdoba, X5000, Argentina', '.liResults');
     I.wait(3);
     

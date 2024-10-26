@@ -16,5 +16,8 @@
         "@codeceptjs/ui": "^1.2.0",
         "codeceptjs": "^3.6.7",
         "playwright": "^1.48.1"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5"
     }
 }

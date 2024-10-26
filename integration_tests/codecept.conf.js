@@ -6,6 +6,8 @@ setHeadlessWhen(process.env.HEADLESS);
 // enable all common plugins https://github.com/codeceptjs/configure#setcommonplugins
 setCommonPlugins();
 
+require('dotenv').config();
+
 /** @type {CodeceptJS.MainConfig} */
 exports.config = {
   tests: './*_test.js',
@@ -13,7 +15,7 @@ exports.config = {
   helpers: {
     Playwright: {
       browser: 'chromium',
-      url: 'http://localhost:5173/',
+      url: process.env.BASE_URL,
       show: true
     }
   },
