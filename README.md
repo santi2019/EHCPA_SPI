@@ -43,11 +43,11 @@ El servicio backend está construido sobre `Flask`, un framework ligero de `Pyth
 
 #### Variables de Entorno:
 
-Para que el backend pueda ejecutar sus funcionalidades y conectarse con los diferentes servicios externos, es necesaria la creación y configuración de un archivo `.env` para definir todas aquellas variables sensibles como rutas, puertos y credenciales. Los pasos a seguir son los siguientes:
+Para que el backend pueda ejecutar sus funcionalidades y conectarse con los diferentes servicios externos, es necesaria la creación y configuración de un archivo `.env`. En dicho archivo se definen todas aquellas variables sensibles como rutas, puertos y credenciales necesarias. Los pasos a seguir para la configuración del archivo `.env` son los siguientes:
 
-1. Crear la carpeta `credentials` en el directorio `backend/src/credentials`.
+1. Crear la carpeta `credentials` en el directorio `backend/src`.
 
-2. Crear archivo `.env`, con las siguientes estructura, posteriormente asignarle a cada variable su respectivo valor:
+2. Crear el archivo `.env` en el directorio `backend/src/credentials`, con las siguientes estructura, y posteriormente asignarle a cada variable su respectivo valor:
     
     ```
     #Variables de configuración del Backend
