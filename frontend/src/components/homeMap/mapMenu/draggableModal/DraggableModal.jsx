@@ -49,7 +49,6 @@ const DraggableModal = ({
     onMouseEnter={() => setIsMouseOverComponent(true)} onMouseLeave={() => setIsMouseOverComponent(false)}
     >
     <div className="draggModalNavbar">
-        <div></div>
         <h2 className="draggModalNavbarTitle">Información</h2>
         <FontAwesomeIcon className="draggModalCloseIcon" icon={faXmark} onClick={closeModal} />
     </div>
