@@ -165,8 +165,9 @@ const HomeMap = () => {
                 zoomControl={false}
                 doubleClickZoom={false}>
                 <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png"/>
+                    attribution={import.meta.env.VITE_OSM_ATTRIBUTION}
+                    url={import.meta.env.VITE_ARGEN_MAP_URL}
+                />
                 <MapMenu setIsMouseOverComponent={setIsMouseOverComponent} isMouseOverComponent={isMouseOverComponent}/>
                 <MapReferenceLayers setIsMouseOverComponent={setIsMouseOverComponent}/>
                 <MapZoomController setIsMouseOverComponent={setIsMouseOverComponent}/>

@@ -4,7 +4,7 @@ Feature('ehcpa');
 Scenario('Visualizar y Descargar PTM',  async ({ I }) => {
 
     //Abrimos página inicial
-    I.amOnPage(process.env.BASE_URL);
+    I.amOnPage(process.env.FRONTEND_URL);
     I.wait(3);
 
 
@@ -84,7 +84,7 @@ Scenario('Visualizar y Descargar PTM',  async ({ I }) => {
 Scenario('Visualizar y Descargar SPI',  async ({ I }) => {
 
     //Abrimos página inicial
-    I.amOnPage(process.env.BASE_URL);
+    I.amOnPage(process.env.FRONTEND_URL);
     I.wait(3);
 
 
@@ -228,7 +228,7 @@ Scenario('Visualizar y Descargar SPI',  async ({ I }) => {
  Scenario('Buscar Ubicacion',  async ({ I }) => {
 
     //Abrimos página inicial
-    I.amOnPage(process.env.BASE_URL);
+    I.amOnPage(process.env.FRONTEND_URL);
     I.wait(3);
 
 

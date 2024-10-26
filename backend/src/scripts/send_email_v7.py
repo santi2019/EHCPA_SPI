@@ -52,7 +52,7 @@ def send_email(subject, body):
     ehcpa_email_password = os.getenv('EHCPA_PASSWORD')
     vietto_email_receiver = os.getenv('VIETTO_EMAIL')
     smtp_gmail_server = os.getenv('SMTP_GMAIL_SERVER')
-    smtp_port = os.getenv('SMTP_PORT')
+    smtp_port = int(os.getenv('SMTP_PORT'))
 
     em = EmailMessage()
     em['From'] = ehcpa_email_sender

@@ -1,4 +1,7 @@
+import os
+from dotenv import load_dotenv
 import socket
+
 
 
 ## Funcion check_internet_connection(): Sirve para determinar conectividad a Internet.  
@@ -16,7 +19,14 @@ import socket
 #         al host y puerto especificados. Si la conexión es exitosa, significa que hay conectividad a Internet, y la 
 #         función retorna "True". Si ocurre un error en la conexión, por ejemplo, si no hay acceso a Internet o el 
 #         servidor no responde, la excepción es capturada y la funcion retorna "False".
-def check_internet_connection(host="8.8.8.8", port=53, timeout=3):
+def check_internet_connection():
+
+    dotenv_path = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'credentials', '.env'))
+    load_dotenv(dotenv_path)
+    host = os.getenv('CHECK_INTERNET_HOST')
+    port = int(os.getenv('CHECK_INTERNET_PORT'))
+    timeout = 3
+
     try:
         socket.setdefaulttimeout(timeout)
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))

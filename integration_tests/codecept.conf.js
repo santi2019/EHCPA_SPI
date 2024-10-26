@@ -15,7 +15,7 @@ exports.config = {
   helpers: {
     Playwright: {
       browser: 'chromium',
-      url: process.env.BASE_URL,
+      url: process.env.FRONTEND_URL,
       show: true
     }
   },
