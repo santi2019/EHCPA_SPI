@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 import zipfile
 import locale
 from datetime import datetime
@@ -9,6 +10,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from main_v7 import ehcpa_process, remote_download_process
 from src.scripts.get_dates_v7 import get_today_date, get_calibration_date, get_ARG_late_last_date
 
+dotenv_path = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'credentials', '.env'))
+load_dotenv(dotenv_path)
+backend_port = int(os.getenv('BACKEND_PORT'))
 
 app = Flask(__name__)
 cors = CORS(app, origins='*')
@@ -116,4 +120,4 @@ def get_dates():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False, port=8800)
+    app.run(debug=True, use_reloader=False, port=backend_port)
