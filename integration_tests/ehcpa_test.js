@@ -29,6 +29,7 @@ Scenario('Visualizar y Descargar PTM',  async ({ I }) => {
     I.click('.precipitationSwitchText .ant-switch');
     I.wait(3);
     I.click('.precipitationSwitchText .ant-switch');
+    I.seeCheckboxIsChecked('[data-layer="PTM"] .ant-switch');
     I.wait(3); 
 
 
@@ -130,8 +131,11 @@ Scenario('Visualizar y Descargar SPI',  async ({ I }) => {
 
      I.moveCursorTo('.spiLayersContent')
      I.see('SPI Escala 1 [Mensual]');
+     I.seeCheckboxIsChecked('[data-layer="SPI_1"] .ant-switch');
      I.see('SPI Escala 2 [Mensual]');
+     I.seeCheckboxIsChecked('[data-layer="SPI_2"] .ant-switch');
      I.see('SPI Escala 3 [Mensual]');
+     I.seeCheckboxIsChecked('[data-layer="SPI_3"] .ant-switch');
      I.wait(3);
  
      I.executeScript(() => {
@@ -140,8 +144,11 @@ Scenario('Visualizar y Descargar SPI',  async ({ I }) => {
      });
 
      I.see('SPI Escala 6 [Mensual]');
+     I.seeCheckboxIsChecked('[data-layer="SPI_6"] .ant-switch');
      I.see('SPI Escala 9 [Mensual]');
+     I.seeCheckboxIsChecked('[data-layer="SPI_9"] .ant-switch');
      I.see('SPI Escala 12 [Mensual]');
+     I.seeCheckboxIsChecked('[data-layer="SPI_12"] .ant-switch');
      I.wait(3);
  
      I.executeScript(() => {
@@ -150,8 +157,11 @@ Scenario('Visualizar y Descargar SPI',  async ({ I }) => {
      });
 
      I.see('SPI Escala 24 [Mensual]');
+     I.seeCheckboxIsChecked('[data-layer="SPI_24"] .ant-switch');
      I.see('SPI Escala 36 [Mensual]');
+     I.seeCheckboxIsChecked('[data-layer="SPI_36"] .ant-switch');
      I.see('SPI Escala 48 [Mensual]');
+     I.seeCheckboxIsChecked('[data-layer="SPI_48"] .ant-switch');
      I.wait(3);
  
      I.executeScript(() => {
@@ -160,7 +170,9 @@ Scenario('Visualizar y Descargar SPI',  async ({ I }) => {
      });
 
      I.see('SPI Escala 60 [Mensual]');
+     I.seeCheckboxIsChecked('[data-layer="SPI_60"] .ant-switch');
      I.see('SPI Escala 72 [Mensual]');
+     I.seeCheckboxIsChecked('[data-layer="SPI_72"] .ant-switch');
      I.wait(3);
 
 
@@ -263,4 +275,4 @@ Scenario('Visualizar y Descargar SPI',  async ({ I }) => {
     I.see('Córdoba, Municipio de Córdoba, Pedanía Capital, Departamento Capital, Córdoba, X5000, Argentina', '.leaflet-tooltip');
     I.wait(5);
     
-});
+}); 
