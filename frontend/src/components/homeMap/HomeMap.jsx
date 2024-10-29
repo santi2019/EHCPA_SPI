@@ -9,7 +9,6 @@ import MapSearchBar from './mapSearchBar/MapSearchBar';
 import MapZoomController from './mapZoomController/MapZoomController';
 import MapScaleController from './mapScaleController/MapScaleController';
 import MapReferenceLayers from './mapReferenceLayers/MapReferenceLayers';
-import DraggableModal from './mapMenu/draggableModal/DraggableModal';
 import MapMenu from './mapMenu/MapMenu';
 
 
@@ -26,7 +25,6 @@ const HomeMap = () => {
     const [shouldCenterMap, setShouldCenterMap] = useState(false);
     const [isMouseOverComponent, setIsMouseOverComponent] = useState(false);
     const [markerPopupContent, setMarkerPopupContent] = useState(null);
-    const markerRef = useRef(null);
     
 
     /* Función handleSelectLocation: sirve para seleccionar una ubicación 
@@ -167,8 +165,9 @@ const HomeMap = () => {
                 zoomControl={false}
                 doubleClickZoom={false}>
                 <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png"/>
+                    attribution={import.meta.env.VITE_OSM_ATTRIBUTION}
+                    url={import.meta.env.VITE_ARGEN_MAP_URL}
+                />
                 <MapMenu setIsMouseOverComponent={setIsMouseOverComponent} isMouseOverComponent={isMouseOverComponent}/>
                 <MapReferenceLayers setIsMouseOverComponent={setIsMouseOverComponent}/>
                 <MapZoomController setIsMouseOverComponent={setIsMouseOverComponent}/>

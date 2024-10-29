@@ -24,7 +24,7 @@
 }
 
 .itemsInfoModal {
-    width: 600px;
+    width: 800px;
     max-height: 550px;
     display: flex;
     flex-direction: column;

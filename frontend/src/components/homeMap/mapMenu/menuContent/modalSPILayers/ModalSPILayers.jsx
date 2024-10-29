@@ -49,7 +49,7 @@ const ModalSPILayers = ({
       <div className="spiLayersContent">
         <ul className="spiLayersItems">
           {layers.map(layer => (
-            <li key={layer.key}>
+            <li key={layer.key} data-layer={layer.key}>
               <div className="spiSwitchText">
                 <Switch
                   checked={SPIlayersSwitches[layer.key]}

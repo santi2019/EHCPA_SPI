@@ -94,7 +94,7 @@ const MapReferenceLayers = ({setIsMouseOverComponent}) => {
     const handleCuencasLayers = (layerName, geoserverLayer) => {
         useEffect(() => {
             if (!layers.current[layerName]) {
-                const layer = L.Geoserver.wms('http://localhost:8080/geoserver/EHCPA/wms', {
+                const layer = L.Geoserver.wms(import.meta.env.VITE_GEOSERVER_DATA_URL, {
                     layers: geoserverLayer,
                     opacity: layerOpacity[layerName], 
                     zIndex: 2000,
@@ -169,7 +169,7 @@ const MapReferenceLayers = ({setIsMouseOverComponent}) => {
     const handleProvinciasLayer = (layerName, geoserverLayer) => {
         useEffect(() => {
             if (!layers.current[layerName]) {
-                const layer = L.Geoserver.wms('http://localhost:8080/geoserver/EHCPA/wms', {
+                const layer = L.Geoserver.wms(import.meta.env.VITE_GEOSERVER_DATA_URL, {
                     layers: geoserverLayer,
                     opacity: layerOpacity[layerName], 
                     format: 'image/png',

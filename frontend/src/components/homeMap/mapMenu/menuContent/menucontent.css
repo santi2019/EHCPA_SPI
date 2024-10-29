@@ -34,6 +34,7 @@
 }
 
 .spiButtonContent, .downloadProgressButtonContent{ 
+    color: #ffffff;
     font-size: 14px;
     font-family: "Inter", system-ui;
     font-weight: 500;

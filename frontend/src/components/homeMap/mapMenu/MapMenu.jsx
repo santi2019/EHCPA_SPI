@@ -105,8 +105,6 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
         last_band_year: "",
         calibration_date: ""
     });
-    const [errorDateMessage, setErrorDateMessage] = useState("");
-    //CREAR CONST PARA ERROR DE FECHAS
     useMapEventHandlers(elementRef, map, ['mousedown', 'mouseup', 'mousemove', 'wheel']);
     const createRipple = useRippleEffect();
 
@@ -150,7 +148,7 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
             setDownloadProgress(0);
 
             // Generamos la URL dinámica con las capas activadas
-            const url = `http://127.0.0.1:8800/download/${selectedLayers.join(',')}`;
+            const url = `${import.meta.env.VITE_BACKEND_DOWNLOAD_URL}/${selectedLayers.join(',')}`;
     
             // Hacemos la solicitud al backend
             const res = await axios.get(url, {
@@ -250,7 +248,7 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
     const handlePTMLayer = (layerName, geoserverLayer) => {
         useEffect(() => {
             if (!layers.current[layerName]) {
-                const layer = L.Geoserver.wms('http://localhost:8080/geoserver/EHCPA/wms', {
+                const layer = L.Geoserver.wms(import.meta.env.VITE_GEOSERVER_DATA_URL, {
                     layers: geoserverLayer,
                     opacity: layerOpacity[layerName], 
                     format: 'image/png',
@@ -288,7 +286,7 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
 
                 try {
                     
-                    const url = `http://localhost:8080/geoserver/EHCPA/wms?service=WMS&version=1.1.0&request=GetFeatureInfo&layers=EHCPA:PTM_Raster&query_layers=EHCPA:PTM_Raster&info_format=application/json&bbox=${map.getBounds().toBBoxString()}&width=${map.getSize().x}&height=${map.getSize().y}&srs=EPSG:4326&x=${Math.floor(e.containerPoint.x)}&y=${Math.floor(e.containerPoint.y)}`;
+                    const url = `${import.meta.env.VITE_GEOSERVER_DATA_URL}?service=WMS&version=1.1.0&request=GetFeatureInfo&layers=EHCPA:PTM_Raster&query_layers=EHCPA:PTM_Raster&info_format=application/json&bbox=${map.getBounds().toBBoxString()}&width=${map.getSize().x}&height=${map.getSize().y}&srs=EPSG:4326&x=${Math.floor(e.containerPoint.x)}&y=${Math.floor(e.containerPoint.y)}`;
     
                     const response = await axios.get(url);
     
@@ -339,7 +337,7 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
     const handleSPILayers = (layerName, geoserverLayer) => {
         useEffect(() => {
             if (!layers.current[layerName]) {
-                const layer = L.Geoserver.wms('http://localhost:8080/geoserver/EHCPA/wms', {
+                const layer = L.Geoserver.wms(import.meta.env.VITE_GEOSERVER_DATA_URL, {
                     layers: geoserverLayer,
                     opacity: layerOpacity[layerName], 
                     format: 'image/png',
@@ -376,7 +374,7 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
                 setCoordinatesResult({ lat, lng });
 
                 try {
-                    const url = `http://localhost:8080/geoserver/EHCPA/wms?service=WMS&version=1.1.0&request=GetFeatureInfo&layers=${geoserverLayer}&query_layers=${geoserverLayer}&info_format=application/json&bbox=${map.getBounds().toBBoxString()}&width=${map.getSize().x}&height=${map.getSize().y}&srs=EPSG:4326&x=${Math.floor(e.containerPoint.x)}&y=${Math.floor(e.containerPoint.y)}`;
+                    const url = `${import.meta.env.VITE_GEOSERVER_DATA_URL}?service=WMS&version=1.1.0&request=GetFeatureInfo&layers=${geoserverLayer}&query_layers=${geoserverLayer}&info_format=application/json&bbox=${map.getBounds().toBBoxString()}&width=${map.getSize().x}&height=${map.getSize().y}&srs=EPSG:4326&x=${Math.floor(e.containerPoint.x)}&y=${Math.floor(e.containerPoint.y)}`;
     
                     const response = await axios.get(url);
     
@@ -592,7 +590,7 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
 
     const fetchDates = async () => {
         try {
-            const response = await axios.get('http://127.0.0.1:8800/get_dates'); // Cambia la URL si es necesario
+            const response = await axios.get(import.meta.env.VITE_BACKEND_GET_DATES_URL); 
             setDates(response.data);
         } catch (error) {
             setDates({

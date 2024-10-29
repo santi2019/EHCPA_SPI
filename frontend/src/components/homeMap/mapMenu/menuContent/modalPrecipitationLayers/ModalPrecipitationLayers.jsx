@@ -23,7 +23,7 @@ const ModalPrecipitation = ({
 
 
     const handleClosePresipitation = () => {
-        setIsMouseOverComponent(false)
+        setIsMouseOverComponent(true)
         closePrecipitationContainer(); 
     };
       
@@ -38,9 +38,9 @@ const ModalPrecipitation = ({
         <div className="precipitationLayersContent">
             <ul className="precipitationLayersItems">
                 {layers.map(layer => (
-                    <li key={layer.key}>
+                    <li key={layer.key} data-layer={layer.key}>
                         <div className="precipitationSwitchText">
-                            <Switch checked={PTMlayerSwitch[layer.key]} onChange={(checked) => handlePTMLayerSwitchChange(layer.key, checked)} />
+                            <Switch checked={PTMlayerSwitch[layer.key]} onChange={(checked) => handlePTMLayerSwitchChange(layer.key, checked)}/>
                             <span className="precipitationLayerName">{layer.name}</span>
                         </div>
                         <div className="precipitationLayersRange">

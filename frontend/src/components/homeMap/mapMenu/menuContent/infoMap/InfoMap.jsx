@@ -41,9 +41,6 @@ const InfoMap = ({
                 </div>
                 <div className="infoMapContent">
                     <div className="mapNameContainer">
-                        <div className="mapNameTitleContainer">
-                            <h2 className="mapNameTitle">Nombre del Mapa</h2>
-                        </div>
                         <h1 className="mapName">Estudios Hidrológicos en Cuencas Pobremente Aforadas</h1>
                     </div>
                     <div className="mapDescriptionContainer">

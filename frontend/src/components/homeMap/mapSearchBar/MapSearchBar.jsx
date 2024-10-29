@@ -122,8 +122,9 @@ const MapSearchBar = ({ handleSelectLocation, setIsMouseOverComponent  }) => {
                         setNotFoundResults(notFoundMessage)
                     } 
                 } catch (err) {
-                    const osmServerErrorMessage = "Falla en el servidor de OSM."
-                    setError(osmServerErrorMessage);
+                    console.log(err)
+                    const serverErrorMessage = "Fallo en la conexión con el servidor de OSM."
+                    setError(serverErrorMessage);
                 }
             }, 1200);
             return () => clearTimeout(delay);

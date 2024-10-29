@@ -122,13 +122,13 @@
     border-right: 1px groove #babdc5;
 }
 
-.mapNameTitleContainer, .mapDescriptionTitleContainer, .mapPTMTitleContainer, .mapSPITitleContainer, 
+.mapDescriptionTitleContainer, .mapPTMTitleContainer, .mapSPITitleContainer, 
 .mapViewTitleContainer, .mapDownloadTitleContainer, .mapContactTitleContainer{
     border-bottom: 1px groove #babdc5;
     padding: 0px 12px;
 }
 
-.mapNameTitle, .mapDescriptionTitle, .mapPTMTitle, .mapSPITitle, 
+.mapDescriptionTitle, .mapPTMTitle, .mapSPITitle, 
 .mapViewTitle, .mapDownloadTitle, .mapContactTitle{
     color: #3f74b1;
     cursor: text;
@@ -145,6 +145,8 @@
     user-select: text;
     font-family: "Inter", system-ui;
     padding: 0px 12px;
+    margin: 16px 0px;
+
 }
 
 .mapDescription, .mapPTM, .mapSPI, 
