@@ -1,8 +1,12 @@
+/*Estilo de contenedor general*/
 .homeMap{
     min-width: 320px;
     height: 100vh;
 }
 
+
+
+/*Estilo del mapa*/
 .leaflet-container{
     height: 100%;
 }
@@ -12,6 +16,8 @@
 }
 
 
+
+/*Estilo del tooltip del marker*/
 .leaflet-tooltip {
     display: flex;
     justify-content: center;

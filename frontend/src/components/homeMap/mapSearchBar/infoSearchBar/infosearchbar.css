@@ -1,5 +1,5 @@
 /*Estilo contenedores generales*/
-.infoModalContainer {
+.infoSearchContainer {
     display: flex;    
     position: fixed;
     justify-content: center; 
@@ -23,7 +23,7 @@
     }
 }
 
-.itemsInfoModal {
+.itemsInfoSearchModal {
     width: 800px;
     max-height: 550px;
     display: flex;
@@ -49,7 +49,7 @@
     }
 }
 
-.itemsInfoModal.closing {
+.itemsInfoSearchModal.closing {
     animation: reduce 0.2s ease forwards;
 }
 
@@ -67,7 +67,7 @@
 
 
 /*Estilo navbar*/
-.infoModalNavbar {
+.infoSearchModalNavbar {
     width: 100%;
     display: flex;
     align-items: center;
@@ -79,7 +79,7 @@
     box-sizing: border-box;
 }
 
-.infoModalNavbarTitle{
+.infoSearchModalNavbarTitle{
     font-size: 16px;
     font-family: "Inter", system-ui;
     color: #585858;
@@ -88,7 +88,7 @@
     user-select: text;
 }
 
-.closeIconInfoModalNavbar{
+.closeIconInfoSearchModalNavbar{
     position: absolute; 
     right: 12px;
     color: #868686;
@@ -97,7 +97,7 @@
     transition: all 0.3s ease;
 }
 
-.closeIconInfoModalNavbar:hover{
+.closeIconInfoSearchModalNavbar:hover{
     color: #4c4c4d;
     transition: all 0.3s ease;
 }
@@ -105,7 +105,7 @@
 
 
 /*Estilo contenido del modal*/
-.infoModalContent{
+.infoSearchModalContent{
     width: 100%;
     height: 100%;
     background-color: #ffffff;
@@ -114,11 +114,11 @@
     text-align: justify;
 }
 
-.spanInfoModalContent{
+.infoSearchModalContent p{
     margin: 0;
 }
 
-.spanInfoModalContent, .liInfoModalContent{
+.infoSearchModalContent p, .liInfoSearchModalContent{
     color: #000000;
     cursor: text;
     user-select: text;
@@ -127,12 +127,12 @@
     font-weight: 500;
 }
 
-.liInfoModalContent::marker {
+.liInfoSearchModalContent::marker {
     font-size: 20px; 
     color: #000000; 
 }
 
-.searchIconInfoModalContent{
+.searchIconInfoSearchModalContent{
     font-size: 14px;
     color: #6D7280;
 }
