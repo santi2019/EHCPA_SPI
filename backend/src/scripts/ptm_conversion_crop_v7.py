@@ -16,9 +16,11 @@ try:
 except ModuleNotFoundError:
     from src.scripts.get_dates_v7 import get_calibration_date
 
+###################################################################################################################################
 
-
-
+## Funcion ptm_convertion_and_crop: Sirve para convertir el archivo de Precipitación Total Mensual (PTM) de formato netCDF a GeoTiff, 
+#  para luego obtener el archivo PTM de todas las bandas para la descarga, y el de la ultima banda para ser subido al servidor de 
+#  GeoServer, aplicando ademas en ambos archivos el corte sobre Argentina.
 
 def ptm_convertion_and_crop():
     
@@ -76,14 +78,14 @@ def ptm_convertion_and_crop():
     else:
         os.makedirs(geoserver_PTM_dir)
 
-    ####################################################################################################################
+    ###################################################################################################################################
 
-    ## PASO 1: Proceso de conversion de archivo "PTM" en formato netCDF a GeoTiff, generando dos archivos, uno que incluya 
-    #          todas las bandas para ser descargado, y otro con solo la ultima banda para su implementacion en GeoServer.
-    #          - Inicializamos el archivo PTM, seleccionamos la variable de interes que es "precipitation". Para el caso 
-    #            del archivo tif con todas las bandas, unicamente se configuran las dimensiones espaciales y se aplica el 
-    #            CRS (sistema de referencia de coordenadas). Y para el archivo tif de la ultima banda, es lo mismo solo 
-    #            que seleccionamos justamente la ultima banda a traves de "isel". 
+    ## PASO 1: Proceso de conversion de archivo "PTM" en formato netCDF a GeoTiff, generando dos archivos, uno que incluya todas las 
+    #  bandas para ser descargado, y otro con solo la ultima banda para su implementacion en GeoServer.
+    #  1. Inicializamos el archivo PTM, seleccionamos la variable de interes que es "precipitation". 
+    #  2. Para el caso del archivo tif con todas las bandas, unicamente se configuran las dimensiones espaciales y se aplica el CRS 
+    #     (sistema de referencia de coordenadas). Y para el archivo tif de la ultima banda, se aplica la misma configuaracion solo que 
+    #     previamente seleccionamos para este justamente la ultima banda a traves de "isel". 
 
     nc_PTM_file = xr.open_dataset(PTM_nc4_file)
 
@@ -98,22 +100,21 @@ def ptm_convertion_and_crop():
     pr_last_band.rio.write_crs("epsg:4326", inplace=True)
 
 
-    ####################################################################################################################
+    ###################################################################################################################################
 
     ## PASO 2: Proceso de corte de ambos archivos tif generados, sobre el archivo shape de Argentina.
-    #          - Se abre el shapefile que contiene el contorno de Argentina. Ahora, para asignar el mes y año de 
-    #            calibracion del PTM de todas las bandas, extraemos dichos valores de la funcion "get_calibration_date()". 
-    #            Por otro lado, calculamos el tercer dia del proximo año, le restamos 1 al año, del tercer dia del proximo 
-    #            año, para la comparacion. Ahora bien, para la asignacion del final del año de calibracion:
-    #            - Si la fecha actual es mayor o igual al tercer dia del proximo año de la comparacion, se asigna el 
-    #              año del tercer dia de comparacion.
-    #            - Si la fecha actual es mayor o igual al primer dia del proximo año de la comparacion, y menor al 
-    #              tercer dia del proximo año de comparacion, se asigna el año actual menos uno.
-    #            - Caso contrario se asigna el año.
-    #          -  Finalmente hacemos el corte espacial en ambos archivos. Para ambos casos se recortan utilizando el 
-    #             contorno geografico de Argentina y se almacenan en las variables "pr_cropped_...", luego se define
-    #             el nombre y la ubicacion de donde seran guardados ambos archivos, y por utlimo los archivos tif
-    #             cortados se guardan en la ruta especificada. 
+    #  1. Se abre el shapefile que contiene el contorno de Argentina. Ahora, para asignar el mes y año de calibracion del PTM de todas 
+    #     las bandas, extraemos dichos valores de la funcion "get_calibration_date()". Por otro lado, calculamos el tercer dia del proximo 
+    #     año, le restamos 1 al año, del tercer dia del proximo año, para la comparacion. Ahora bien, para la asignacion del final del 
+    #     año de calibracion:
+    #     - Si la fecha actual es mayor o igual al tercer dia del proximo año de la comparacion, se asigna el año del tercer dia de 
+    #       comparacion.
+    #     - Si la fecha actual es mayor o igual al primer dia del proximo año de la comparacion, y menor al tercer dia del proximo año 
+    #       de comparacion, se asigna el año actual menos uno.
+    #     - Caso contrario, se asigna el año actual.
+    #   2. Finalmente hacemos el corte espacial en ambos archivos. Para ambos casos se recortan utilizando el contorno geografico de 
+    #      Argentina y se almacenan en las variables "pr_cropped_...", luego se define el nombre y la ubicacion de donde seran guardados 
+    #      ambos archivos, y por utlimo los archivos tif cortados se guardan en la ruta especificada. 
 
     with fiona.open(shp_file, "r") as shapefile:
         shapes = [feature["geometry"] for feature in shapefile]
@@ -130,18 +131,9 @@ def ptm_convertion_and_crop():
     PTM_last_band_cropped_tif = os.path.join(geoserver_PTM_dir, f'PTM_jun_2000_present_last_band_ARG_cropped.tif')
     pr_cropped_last_band.rio.to_raster(PTM_last_band_cropped_tif)
     
-    '''
-    gdal_command = [
-        "gdal_translate", 
-        "-of", "GTiff", 
-        "-co", "TILED=YES",  # Para mejorar la lectura del archivo en sistemas GIS
-        PTM_last_band_cropped_tif, 
-        PTM_last_band_cropped_tif  
-    ]
-    
-    subprocess.run(gdal_command, check=True)
-    print(f"Archivo procesado con gdal_translate: {PTM_last_band_cropped_tif}")
-    '''
+
+
+
 
 if __name__ == '__main__':
     ptm_convertion_and_crop()

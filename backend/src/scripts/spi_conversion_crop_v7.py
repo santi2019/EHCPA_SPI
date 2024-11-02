@@ -15,6 +15,11 @@ try:
 except ModuleNotFoundError:
     from src.scripts.get_dates_v7 import get_calibration_date
 
+###################################################################################################################################
+
+## Funcion spi_convertion_and_crop: Sirve para convertir los archivos del Indice de Precipitación Estandarizado (SPI) de formato 
+#  netCDF a GeoTiff, para luego obtener los archivos de SPI de todas las bandas para la descarga, y los archivos con la ultima banda 
+#  para ser subidos al servidor de GeoServer, aplicando ademas para todos los archivos el corte sobre Argentina.
 
 def spi_convertion_and_crop():
 
@@ -71,26 +76,24 @@ def spi_convertion_and_crop():
     else:
         os.makedirs(geoserver_SPI_dir)
 
-    ####################################################################################################################
+    ###################################################################################################################################
 
-    ## PASO 1: Proceso de conversion de archivos "SPI" en formato netCDF a GeoTiff, generando dos archivos, uno que incluya 
-    #          todas las bandas para ser descargado, y otro con solo la ultima banda para su implementacion en GeoServer.
-    #          - Inicializamos los archivos SPI a traves de un bucle ya que debemos seleccionar todos y los identificamos
-    #            a traves de las escalas. Para todas las escalas seleccionamos la variable de interes que es 
-    #            "spi_gamma_{scale}_month". Para el caso del archivo tif con todas las bandas, unicamente se configuran
-    #            las dimensiones espaciales y se aplica el CRS (sistema de referencia de coordenadas). Y para el archivo 
-    #            tif de la ultima banda, es lo mismo solo que seleccionamos justamente la ultima banda a traves de "isel". 
+    ## PASO 1: Proceso de conversion de archivos "SPI" en formato netCDF a GeoTiff, generando dos archivos, uno que incluya todas las 
+    #  bandas para ser descargado, y otro con solo la ultima banda para su implementacion en GeoServer.
+    #  1. Inicializamos los archivos SPI a traves de un bucle ya que debemos seleccionar todos y los identificamos a traves de las 
+    #     escalas. Para todas las escalas seleccionamos la variable de interes que es "spi_gamma_{scale}_month". 
+    #  2. Para el caso de los archivos tif con todas las bandas, unicamente se configuran las dimensiones espaciales y se aplica el CRS 
+    #     (sistema de referencia de coordenadas). Y para los archivos tif de la ultima banda, es lo mismo solo que seleccionamos 
+    #     justamente la ultima banda a traves de "isel". 
 
     spi_scales = ['1', '2', '3', '6', '9', '12', '24', '36', '48', '60', '72']
     
     for scale in spi_scales:
         spi_nc_file = os.path.join(SPI_gamma_reord_dir, f'spi_gamma_{scale}_reord.nc4')
         
-        # Abrir el archivo NetCDF de SPI
         nc_spi_file = xr.open_dataset(spi_nc_file)
         spi_data = nc_spi_file[f'spi_gamma_{scale}_month'] 
 
-        # Configurar las dimensiones espaciales y el CRS
         spi_all_bands = spi_data.rio.set_spatial_dims('lon', 'lat')
         spi_all_bands.rio.write_crs("epsg:4326", inplace=True)
 
@@ -98,22 +101,21 @@ def spi_convertion_and_crop():
         spi_last_band = spi_last_band.rio.set_spatial_dims('lon', 'lat')
         spi_last_band.rio.write_crs("epsg:4326", inplace=True)
 
-    ####################################################################################################################
+    ###################################################################################################################################
 
     ## PASO 2: Proceso de corte de ambos archivos tif generados, sobre el archivo shape de Argentina.
-    #          - Se abre el shapefile que contiene el contorno de Argentina. Ahora, para asignar el mes y año de 
-    #            calibracion del SPI de todas las bandas, extraemos dichos valores de la funcion "get_calibration_date()". 
-    #            Por otro lado, calculamos el tercer dia del proximo año, le restamos 1 al año, del tercer dia del proximo 
-    #            año, para la comparacion. Ahora bien, para la asignacion del final del año de calibracion:
-    #            - Si la fecha actual es mayor o igual al tercer dia del proximo año de la comparacion, se asigna el 
-    #              año del tercer dia de comparacion.
-    #            - Si la fecha actual es mayor o igual al primer dia del proximo año de la comparacion, y menor al 
-    #              tercer dia del proximo año de comparacion, se asigna el año actual menos uno.
-    #            - Caso contrario se asigna el año.
-    #          -  Finalmente hacemos el corte espacial en ambos archivos. Para ambos casos se recortan utilizando el 
-    #             contorno geografico de Argentina y se almacenan en las variables "spi_cropped_...", luego se define
-    #             el nombre y la ubicacion de donde seran guardados ambos archivos, y por utlimo los archivos tif
-    #             cortados se guardan en la ruta especificada. 
+    #  1. Se abre el shapefile que contiene el contorno de Argentina. Ahora, para asignar el mes y año de calibracion del SPI de todas 
+    #     las bandas, extraemos dichos valores de la funcion "get_calibration_date()". Por otro lado, calculamos el tercer dia del proximo 
+    #     año, le restamos 1 al año, del tercer dia del proximo año, para la comparacion. Ahora bien, para la asignacion del final del 
+    #     año de calibracion:
+    #     - Si la fecha actual es mayor o igual al tercer dia del proximo año de la comparacion, se asigna el año del tercer dia de 
+    #       comparacion.
+    #     - Si la fecha actual es mayor o igual al primer dia del proximo año de la comparacion, y menor al tercer dia del proximo año 
+    #       de comparacion, se asigna el año actual menos uno.
+    #     - Caso contrario, se asigna el año actual.
+    #  2. Finalmente hacemos el corte espacial en ambos archivos. Para ambos casos se recortan utilizando el contorno geografico de 
+    #     Argentina y se almacenan en las variables "spi_cropped_...", luego se define el nombre y la ubicacion de donde seran guardados 
+    #     ambos archivos, y por utlimo los archivos tif cortados se guardan en la ruta especificada. 
 
         with fiona.open(shp_file, "r") as shapefile:
             shapes = [feature["geometry"] for feature in shapefile]
@@ -129,6 +131,11 @@ def spi_convertion_and_crop():
         spi_cropped_last_band.rio.to_raster(SPI_last_band_cropped_tif)
 
         print(f"Conversión y recorte completados para escala SPI {scale}")
+
+
+
+
+
 
 
 
