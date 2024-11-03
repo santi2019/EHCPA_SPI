@@ -1,3 +1,4 @@
+/*Contenedor general*/
 .draggModalContainer{
     width: 510px;
     display: flex;
@@ -15,6 +16,7 @@
 
 
 
+/*Estilo navbar*/
 .draggModalNavbar{
     display: flex;
     width: 100%;
@@ -53,6 +55,7 @@
 
 
 
+/*Estilo coordenadas*/
 .draggModalCoordinatesContainer{
     display: flex;
     flex-direction: column;
@@ -120,6 +123,7 @@
 
 
 
+/*Estilo valores*/
 .draggModalValuesContainer{
     overflow-y: auto; 
     flex-grow: 1;

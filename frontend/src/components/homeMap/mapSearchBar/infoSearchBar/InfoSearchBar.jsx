@@ -10,8 +10,8 @@ import "./infosearchbar.css";
  * Su estructura es la siguiente:
  * - infoSearchContainer: Contenedor general el cual produce un efecto de oscurecimiento del fondo.
  * - itemsInfoSearchModal: Contenedor que se utiliza para estructurar todo el contenido del modal. Si el estado de "closing" es "true", se agrega 
- *   dinamicamente la clase "closing", para la animación de cierre, es decir, un efecto de reduccion. Y si closing es false, la clase "closing" no se 
- *   aplica, ya que significa que el modal se abrio, y se visualiza un efecto de expancion.
+ *   dinamicamente la clase CSS "closing", para la animación de cierre, es decir, un efecto de reduccion. Y si "closing" es "false", la clase "closing" 
+ *   no se aplica, ya que significa que el modal se abrio, y se visualiza un efecto de expancion.
  * - infoSearchModalNavbar: Contenedor que se utiliza para estructurar el contenido del navbar del modal, como el titulo y el icono de "X" de cierre. 
  * - infoSearchModalContent: Contenedor que abarca todos los textos informativos del modal.
  * - Por ultimo, se exporta "InfoSearchBar" como componente.

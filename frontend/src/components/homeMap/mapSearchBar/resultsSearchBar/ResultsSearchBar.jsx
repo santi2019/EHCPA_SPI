@@ -20,7 +20,8 @@ import "./resultssearchbar.css";
 const ResultsSearchBar = ({ searchResults, notFoundResults, error, handleSelectLocation }) => {
  
   /** Estados y variables:
-   * - resultsContainerRef: Se utiliza para crear una referencia al contenedor que muestra los resultados de búsqueda.
+   * - resultsContainerRef: Se utiliza para crear una referencia al contenedor que muestra los resultados de búsqueda para quitar el borde derecho de los
+   *   elementos "li" en caso de que el scroll-bar no este presente.
   */
 
   const resultsContainerRef = useNoScroll([searchResults]); 

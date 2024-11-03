@@ -1,3 +1,4 @@
+/*Estilo de contenedor general*/
 .menuContent{
     top: 0;
     right: 0;
@@ -11,18 +12,13 @@
     border-radius: 2px;
 }
 
+
+
+/*Estilo estructura de botones*/
 .menuItems{
     list-style-type: none;
     padding: 0;
     margin: 0;
-}
-
-.menuItems li{ 
-    display: flex;
-    justify-content: right;
-    align-items: center;
-    list-style-type: none;
-    padding: 5px 0px;
 }
 
 .menuItems .menuItemsli:first-child {
@@ -33,15 +29,40 @@
     padding-bottom: 0px;
 }
 
-.spiButtonContent, .downloadProgressButtonContent{ 
-    color: #ffffff;
-    font-size: 14px;
-    font-family: "Inter", system-ui;
-    font-weight: 500;
+.menuItemsli {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    padding: 5px 0px;
+    opacity: 0; 
+    transform: translateY(-20px); 
+    transition: opacity 0.4s ease, transform 0.4s ease; 
+}
+
+.menuItemsli.appear {
+    opacity: 1; 
+    transform: translateY(0); 
+}
+
+.menuItemsli:nth-child(1) {
+    transition-delay: 0.1s; 
+}
+
+.menuItemsli:nth-child(2) {
+    transition-delay: 0.2s;
+}
+
+.menuItemsli:nth-child(3) {
+    transition-delay: 0.3s;
+}
+
+.menuItemsli:nth-child(4) {
+    transition-delay: 0.4s;
 }
 
 
 
+/*Estilo boton*/
 .buttonContent{
     display: flex;
     justify-content: center;
@@ -63,6 +84,20 @@
     transition: all 0.3s ease;
 }
 
+.spiButtonContent, .downloadProgressButtonContent{ 
+    color: #ffffff;
+    font-size: 14px;
+    font-family: "Inter", system-ui;
+    font-weight: 500;
+}
+
+.rainIcon, .infoIcon, .downloadIcon{ 
+    color: #ffffff;
+    font-size: 20px;
+}
+
+
+
 /*Estilo y animacion para el efecto ripple*/
 .buttonContent .ripple {
     position: absolute;
@@ -80,42 +115,4 @@
     }
 }
 
-.rainIcon, .infoIcon, .downloadIcon{ 
-    color: #ffffff;
-    font-size: 20px;
-}
-
-
-.menuItemsli {
-    display: flex;
-    justify-content: right;
-    align-items: center;
-    padding: 5px 0px;
-    opacity: 0; 
-    transform: translateY(-20px); 
-    transition: opacity 0.4s ease, transform 0.4s ease; 
-}
-
-.menuItemsli.appear {
-    opacity: 1; /* Visible */
-    transform: translateY(0); /* Posición final en su lugar */
-}
-
-
-/* Controlar el retraso de cada item */
-.menuItemsli:nth-child(1) {
-    transition-delay: 0.1s; /* El primer elemento aparece primero */
-}
-
-.menuItemsli:nth-child(2) {
-    transition-delay: 0.2s;
-}
-
-.menuItemsli:nth-child(3) {
-    transition-delay: 0.3s;
-}
-
-.menuItemsli:nth-child(4) {
-    transition-delay: 0.4s;
-}
 
