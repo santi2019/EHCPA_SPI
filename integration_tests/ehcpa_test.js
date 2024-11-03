@@ -118,9 +118,10 @@ Scenario('Visualizar y Descargar PTM',  async ({ I }) => {
  *    9.3 Por ultimo, verificamos que aparezcan los textos de "SPI Escala (escala):", desplazando el scroll-bar hacia abajo en el dragg modal validando 
  *        que esten todas las escalas, ya que unicamente se visualizan si las capas estan activadas. No se validan los datos ya que pueden contener un 
  *        valor no null o pueden ser de tipo S/D.
- * 8. Procedemos a realizar la descarga de los SPI, por lo que nos movemos al boton de descarga del menu, lo ejecutamos y esperamos unos segundos hasta 
+ * 10. Procedemos a realizar la descarga de los SPI, por lo que nos movemos al boton de descarga del menu, lo ejecutamos y esperamos unos segundos hasta 
  *    que finalice. 
- * 9. Para validar la descarga, almacenamos la cantidad de elementos que posee el contendor "swal2-container" de los alerts de errores, y verificamos que:
+ * 11. Para validar la descarga, almacenamos la cantidad de elementos que posee el contendor "swal2-container" de los alerts de errores, y verificamos 
+ *     que:
  *    - Si el numero de elementos es menor a 0, significa que no salto ninguna alerta, y por ende no ocurrio ningun error y la descarga se efectuo con
  *      exito.
  *    - Si el numero de elementos es mayor a 0, se verifica si se visualiza en el elemento "swal2-title" del contenedor aguno de los siguientes titulos:
