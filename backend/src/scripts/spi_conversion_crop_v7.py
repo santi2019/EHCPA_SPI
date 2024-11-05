@@ -123,7 +123,7 @@ def spi_convertion_and_crop():
         calibration_end_year, calibration_end_month = get_calibration_date()
 
         spi_cropped_all_bands = spi_all_bands.rio.clip(shapes, spi_data.rio.crs)
-        SPI_all_bands_cropped_tif = os.path.join(downloable_data_SPI_dir, f'SPI_jun_2000_{calibration_end_month}_{calibration_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
+        SPI_all_bands_cropped_tif = os.path.join(downloable_data_SPI_dir, f'SPI_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
         spi_cropped_all_bands.rio.to_raster(SPI_all_bands_cropped_tif)
 
         spi_cropped_last_band = spi_last_band.rio.clip(shapes, spi_data.rio.crs)

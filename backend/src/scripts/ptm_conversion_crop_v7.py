@@ -123,7 +123,7 @@ def ptm_convertion_and_crop():
     
 
     pr_cropped_all_bands = pr_all_bands.rio.clip(shapes, pr.rio.crs)
-    PTM_all_bands_cropped_tif = os.path.join(downloable_data_PTM_dir, f'PTM_jun_2000_{calibration_end_month}_{calibration_end_year}_all_bands_ARG_cropped.tif')
+    PTM_all_bands_cropped_tif = os.path.join(downloable_data_PTM_dir, f'PTM_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_all_bands_ARG_cropped.tif')
     pr_cropped_all_bands.rio.to_raster(PTM_all_bands_cropped_tif)
 
 
