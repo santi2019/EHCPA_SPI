@@ -5,6 +5,19 @@ import PTMLeyend from "../../../../../assets/images/PTM_Leyend.png";
 import SPILeyend from "../../../../../assets/images/SPI_Leyend.png";
 import "./infomap.css";
 
+/*******************************************************************************************************************************************************/
+
+/**
+ * Componente InfoMap: Permite visualizar el modal informativo del mapa. 
+ * Su estructura es la siguiente:
+ * - infoMapContainer: Contenedor general el cual produce un efecto de oscurecimiento del fondo.
+ * - itemsInfoSearchModal: Contenedor que se utiliza para estructurar todo el contenido del modal. Si el estado de "closingInfoMap" es "true", se agrega 
+ *   dinamicamente la clase CSS "closingInfoMap", para la animación de cierre, es decir, un efecto de reduccion. Y si "closingInfoMap" es "false", la 
+ *   clase "closingInfoMap" no se aplica, ya que significa que el modal se abrio, y se visualiza un efecto de expancion.
+ * - infoSearchModalNavbar: Contenedor que se utiliza para estructurar el contenido del navbar del modal, como el titulo y el icono de "X" de cierre. 
+ * - infoSearchModalContent: Contenedor que abarca todos los textos informativos del modal.
+ * - Por ultimo, se exporta "InfoMap" como componente.
+*/
 
 const InfoMap = ({ 
     handleCloseInfoMap,
@@ -17,8 +30,23 @@ const InfoMap = ({
     lastBandYear,
     calibrationDate,
 }) => { 
-    
+   
+    /** Estados y variables:
+     * - closingInfoMap: Estado que indica si el modal esta en proceso de cerrarse, y se utiliza para activar la animación de cierre. Inicialmente es "false" 
+     *   y mediante "setClosingInfoMap" actualizamos el estado del mismo.
+     */
+
     const [closingInfoMap, setClosingInfoMap] = useState(false);
+  
+   /*******************************************************************************************************************************************************/
+
+   /** Funcion handleCloseEffect: Sirve para aplicar la animacion de cierre del modal.
+     *  1. Se setea el estado "closingInfoMap" como "true" para indicar que el modal esta en proceso de cerrarse. Y esto ayuda a indicar que se aplicara la 
+     *     clase CSS "closingInfoMap" que activa la animacion de cierre.
+     *  2. Al setear "false" en setIsMouseOverComponent() indicamos que el mouse ya no está sobre ese componente, en este caso el modal.
+     *  3. Mediante "setTimeout" asignamos un delay para esperar 200 milisegundos, tiempo que coincide con la duración de la animacion de cierre, antes de 
+     *     ejecutar la funcion "handleCloseInfoMap", que efectivamente cierra el modal.
+    */ 
 
     const handleCloseEffect = () => {
         setClosingInfoMap(true);
@@ -28,7 +56,7 @@ const InfoMap = ({
         }, 200); 
     };
     
-    
+   /*******************************************************************************************************************************************************/
     
     return(
         <div className="infoMapContainer" 

@@ -2,6 +2,10 @@ import os
 import pandas as pd
 import xarray as xr
 
+###################################################################################################################################
+
+## Funcion p_acu_mensual: Sirve para procesar los archivos IMERG de precipitación diaria con el obteivo de calcular la precipitación 
+#  mensual acumulada.
 
 def p_acu_mensual():
     
@@ -18,24 +22,22 @@ def p_acu_mensual():
     if not os.path.exists(IMERG_late_month_dir):
         os.makedirs(IMERG_late_month_dir)
 
-    ####################################################################################################################
+    ###################################################################################################################################
 
     ## PROCEDIMIENTO:  
-    #       - Creamos una lista que contenga todos los archivos IMERG de precipitacion diaria en el directorio de entrada
-    #       y calculamos la cantidad de archivos en el mismo. Se aplica un filtro a los archivos, dejando aquellos que
-    #       que solo contienen la palabra "IMERG" para ser procesados, y esto es asi ya que la descarga desde la API de
-    #       la NASA provee dos archivos PDF. 
-    #     - Iteramos sobre cada uno de los archivos de entrada, y extraemos el año y el mes de cada uno, y concatenamos
-    #       en funcion del mes, es decir, concatenamos aquellos que pertenezcan al mismo mes.
-    #     - El acumulado mensual es basicamente la suma de la variable presipitacion de todos los archivos a traves de 
-    #       la variable "time". Luego de calcularlo, agregamos atributos a la variable mensual de precipitación, como
-    #       una descripcion de la variable, unidad de medida, y valores para representar datos faltantes.
-    #     - Expandimos la dimensión time para agregar el mes como una dimensión temporal, y aplicamos un reordenamiento
-    #       de las dimensiones para asegurar que "time" este primero, seguido de "lon" y "lat". Configuramos la variable
-    #       "precipitation" aplicando una variable "time_var" para representar el tiempo correspondiente al mes de los 
-    #       datos procesados (el primer dia del mes), como asi tambien la longitud y latitud extraidas del archivo 
-    #       original. 
-    #     - Finalmente, los acumulados son guardados como archivos netCDF.
+    #  1. Creamos una lista que contenga todos los archivos IMERG de precipitacion diaria en el directorio de entrada y calculamos la 
+    #     cantidad de archivos en el mismo. Se aplica un filtro a los archivos, dejando aquellos que solo contienen la palabra "IMERG" 
+    #     para ser procesados, y esto es asi ya que la descarga desde la API de la NASA provee dos archivos PDF. 
+    #  2. Iteramos sobre cada uno de los archivos de entrada, y extraemos el año y el mes de cada uno, y concatenamos en funcion del 
+    #     mes, es decir, concatenamos aquellos que pertenezcan al mismo mes.
+    #  3. El acumulado mensual es basicamente la suma de la variable presipitacion de todos los archivos a traves de la variable "time". 
+    #     Luego de calcularlo, agregamos atributos a la variable mensual de precipitación, como una descripcion de la variable, unidad 
+    #     de medida, y valores para representar datos faltantes.
+    #  4. Expandimos la dimensión time para agregar el mes como una dimensión temporal, y aplicamos un reordenamiento de las dimensiones 
+    #     para asegurar que "time" este primero, seguido de "lon" y "lat". Configuramos la variable "precipitation" aplicando una variable 
+    #     "time_var" para representar el tiempo correspondiente al mes de los datos procesados (el primer dia del mes), como asi tambien 
+    #     la longitud y latitud extraidas del archivo original. 
+    #  5. Finalmente, los acumulados son guardados como archivos netCDF.
 
     files = os.listdir(arg_late_dir)
     num_files = len(files)

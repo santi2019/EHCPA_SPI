@@ -4,6 +4,10 @@ from subprocess import Popen
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
+###################################################################################################################################
+
+## Funcion spi_process: Sirve para calcular el Indice de Precipitacion Estandarizado (SPI) en escalas 1 2 3 6 9 12 24 36 48 60 72,
+#  mediante el procesamiento de los archivos de precipitacion mensual acumulada.
 
 def spi_process():
 
@@ -42,21 +46,20 @@ def spi_process():
     else:
         os.makedirs(SPI_gamma_reord_dir)
 
-    ####################################################################################################################
+    ###################################################################################################################################
 
     ## PASO 1: Proceso de calculo de SPI.
-    #          - Para determinar el final del año de calibracion, como primera medida obtenemos la fecha de actual, luego 
-    #            calculamos el primer dia del proximo año, y restamos 1 al año, del primer dia del proximo año, para la 
-    #            comparacion. Por otro lado, calculamos el tercer dia del proximo año, le restamos 1 al año, del tercer 
-    #            dia del proximo año, para la comparacion. Ahora bien, para la asignacion del final del año de calibracion:
-    #            - Si la fecha actual es mayor o igual al tercer dia del proximo año de la comparacion, se asigna el año 
-    #              del tercer dia de comparacion.
-    #            - Si la fecha actual es mayor o igual al primer dia del proximo año de la comparacion, y menor al tercer
-    #              dia del proximo año de comparacion, se asigna el año actual menos uno.
-    #            - Caso contrario se asigna el año.
-    #          - Luego, se ejecuta el comando del SPI, en funcion de sus parametros, lo que genera los archivos crudos 
-    #            del SPI en funcion de Gamma y Pearson. Se ejecuta con "Popen" y el proceso espera hasta que finalice 
-    #            con "wait()".
+    #  1. Para determinar el final del año de calibracion, como primera medida obtenemos la fecha de actual, luego calculamos el primer 
+    #     dia del proximo año, y restamos 1 al año, del primer dia del proximo año, para la comparacion. Por otro lado, calculamos el 
+    #     tercer dia del proximo año, le restamos 1 al año, del tercer dia del proximo año, para la comparacion. Ahora bien, para la 
+    #     asignacion del final del año de calibracion:
+    #     - Si la fecha actual es mayor o igual al tercer dia del proximo año de la comparacion, se asigna el año del tercer dia de 
+    #       comparacion.
+    #     - Si la fecha actual es mayor o igual al primer dia del proximo año de la comparacion, y menor al tercer dia del proximo año 
+    #       de comparacion, se asigna el año actual menos uno.
+    #     - Caso contrario, se asigna el año actual.
+    #  2. Luego, se ejecuta el comando del SPI, en funcion de sus parametros, lo que genera los archivos crudos del SPI en funcion de 
+    #     Gamma y Pearson. Se ejecuta con "Popen" y el proceso espera hasta que finalice con "wait()".
 
     today_date = datetime.today()
 
@@ -87,12 +90,11 @@ def spi_process():
     )
     Popen(spi_command, shell=True).wait()
 
-    ####################################################################################################################
+    ###################################################################################################################################
 
     ## PASO 2: Proceso de reordenamiento de las dimensiones time, lat, lon de los archivos "nclimgrid_gamma.nc4".  
-    #          - Se define una lista con las escalas del SPI que generamos en el paso anterior. Para cada escala se 
-    #            genera un archivo reordenado mediante el comando "ncpdq". Este comando se ejecuta con "Popen" y el 
-    #            proceso espera hasta que finalice con "wait()".
+    #  1. Se define una lista con las escalas del SPI que generamos en el paso anterior. Para cada escala se genera un archivo reordenado 
+    #     mediante el comando "ncpdq". Este comando se ejecuta con "Popen" y el proceso espera hasta que finalice con "wait()".
 
     spi_scales = ['1', '2', '3', '6', '9', '12', '24', '36', '48', '60', '72']
 
@@ -104,6 +106,9 @@ def spi_process():
         Popen(reorder_command, shell=True).wait()
 
         print(f"Reordenamiento de dimensiones para escala SPI {scale} completado")
+
+
+
 
 
 

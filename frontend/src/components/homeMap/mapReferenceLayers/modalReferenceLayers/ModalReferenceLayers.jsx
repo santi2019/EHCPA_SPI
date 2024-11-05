@@ -4,31 +4,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import "./modalreferencelayers.css";
 
+/*******************************************************************************************************************************************************/
 
 /**
- * Componente ModalSolidLayers: Modal que constituye el menu que permite el control de la visualizacion
- * en el mapa de las capas de las provincias de Argentina, y las cuencas de Salsipuedes, San Antonio, 
- * Cosquin, San Roque, Los Molinos y Embalse. Su visualizacion depende del estado del boton del 
- * componente "MapSolidLayers", por lo que si su valor es "true", el modal se muestra, caso contrario
- * retorna "null" para no renderizar nada.
+ * Componente ModalReferenceLayers: Modal que permite controlar tanto la visualizacion como el manejo de opacidad en el mapa de las capas de las 
+ * provincias de Argentina, y las cuencas de Salsipuedes, San Antonio, Cosquin, San Roque, Los Molinos y Embalse.
  * Su estructura es la siguiente:
- * - modalSolidLayersContainer: Contenedor general que en un principio no es visible dado que su opacidad
- *   inicial es 0, definido en su estilo, pero si el estado "isVisible" es "true", añade dinámicamente la 
- *   clase "visible" a "modalSolidLayersContainer", cambiando la opacidad a 1 en su estilo, y de esta manera
- *   se permite la visualizacion. 
- *   "isVisible" es "true".
- * - solidLayersNavbar: Contenedor que se utiliza para estructurar el contenido del navbar del modal.
- *      - solidLayersNavarTitle: Titulo del navbar del modal.
- *      - closeIcon: Icono de "x" para cerrar el modal.
- * - solidLayersContent: Contenedor que se utiliza para estructurar las capas del modal.
- *      - solidLayersItems: Lista de capas. Para evitar duplicar codigo utilizamos metodo "map()"" para 
- *        iterar sobre el arreglo "layers" y generar los elementos <li> de forma dinamica. En cada iteración, 
- *        se accede a los valores necesarios como "layersSwitches" y "layerOpacity" para controlar el estado 
- *        y las acciones.
- *      - solidLayersSwitchText: Contenedor que se utiliza para estructurar el switch y el texto que
- *        identifica a cada capa.
- * - Por ultimo, se exporta "ModalSolidLayers" como componente.
+ * - referenceLayersContainer: Contenedor general que en un principio no es visible dado que su visibilidad inicial esta desactivada, definido en su 
+ *   estilo, pero si el estado "isVisible" es "true", añade dinámicamente la clase "visible" al contenedor, activando la visibilidad en su estilo, y de 
+ *   esta manera se renderiza el modal. 
+ * - referenceLayersNavbar: Contenedor que se utiliza para estructurar el contenido del navbar del modal, como el titulo y el icono de cierre.
+ * - referenceLayersContent: Contenedor que se utiliza para estructurar contenido del modal.
+ *   - referenceLayersItems: Lista de capas. Para evitar duplicar codigo utilizamos metodo "map()" para iterar sobre el arreglo "layers" y generar los 
+ *     elementos "li" de forma dinamica. En cada iteración, se accede a los valores necesarios como "layersSwitches" y "layerOpacity" para controlar el 
+ *     estado y las acciones.
+ * - Por ultimo, se exporta "ModalReferenceLayers" como componente.
 */
+
 const ModalReferenceLayers = ({
     isVisible, 
     closeLayersContainer, 
@@ -44,6 +36,7 @@ const ModalReferenceLayers = ({
     /** Estados y variables:
      * - layers: Arreglo que contiene el nombre de cada capa y su identificador.
     */
+   
     const layers = [
         { name: 'Cuenca Salsipuedes', key: 'salsipuedes' },
         { name: 'Cuenca San Antonio', key: 'sanAntonio' },
@@ -53,8 +46,8 @@ const ModalReferenceLayers = ({
         { name: 'Cuenca Embalse', key: 'embalse' },
         { name: 'Límites Provinciales', key: 'provincias' }
     ];
-    
 
+    /*******************************************************************************************************************************************************/
 
     return  (
         <div className={`referenceLayersContainer ${isVisible ? 'visible' : 'hidden'}`}>

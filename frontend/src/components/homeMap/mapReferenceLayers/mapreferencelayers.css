@@ -1,5 +1,5 @@
 /*Estilo de contenedor general*/
-.buttonSolidLayersContainer{
+.buttonReferenceLayersContainer{
     bottom: 0;
     left: 0;
     position: fixed;
@@ -12,7 +12,7 @@
 
 
 /*Estilo boton*/
-.buttonSolidLayers{
+.buttonReferenceLayers{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -28,7 +28,7 @@
     transition: all 0.3s ease;
 }
 
-.buttonSolidLayers:hover{
+.buttonReferenceLayers:hover{
     opacity: 1;
     transition: all 0.3s ease;
 }
@@ -42,7 +42,7 @@
 
 
 /*Estilo y animacion para el efecto ripple*/
-.buttonSolidLayers .ripple {
+.buttonReferenceLayers .ripple {
     position: absolute;
     border-radius: 50%;
     transform: scale(0);

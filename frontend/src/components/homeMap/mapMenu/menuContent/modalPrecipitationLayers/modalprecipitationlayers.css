@@ -76,6 +76,7 @@
 }
 
 
+
 /*Estilo contenedor de capas*/
 .precipitationLayersContent{
     overflow-y: auto; 
@@ -101,6 +102,7 @@
     box-sizing: border-box;
     height: 82px;
 }
+
 
 
 /*Estilo elementos de cada capa*/
@@ -137,6 +139,7 @@
     font-family: "Inter", system-ui;
     font-weight: 500;
 }
+
 
 
 /* Input Range */
