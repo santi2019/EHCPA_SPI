@@ -16,7 +16,7 @@ import boto3
 #     almacenados en el bucket del servicio S3, y verificamos que:
 #     - Si el número de archivos locales es menor que el número de archivos en S3, se avisa mediante un mensaje, y se vuelve a 
 #       llamar a la función "download_files()" para descargar el backup.
-#     - Caso contrario, significa que tenemos todos los archivos por lo que no es necesaria la descarga.
+#     - Caso contrario, significa que tenemos todos los archivos o incluso mas, por lo que no es necesaria la descarga.
 
 def automatic_s3_downloader():
 
@@ -48,7 +48,7 @@ def automatic_s3_downloader():
             print("El número de archivos no coincide. Descargando archivos...")
             download_files(client, bucket_name, prefix, IMERG_late_month_dir)
         else:
-            print("Los archivos locales y los del bucket son los mismos. No es necesaria la descarga.")
+            print("No es necesaria la descarga del backup.")
 
 ###################################################################################################################################
 

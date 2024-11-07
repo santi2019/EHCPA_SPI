@@ -447,7 +447,7 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
                     }
                 } catch (error) {
                     setPTMResult(null);
-                    setNotFoundPTMResults(error);
+                    setNotFoundPTMResults(`Error: ${error.message}`);
                 }
             };
     
@@ -587,7 +587,7 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
                     }));
                     setNotFoundSPIResults((prevState) => ({
                         ...prevState,
-                        [layerName]: `Error al obtener el valor del raster para ${layerName}: ${error.message}`,
+                        [layerName]: `Error en ${layerName}: ${error.message}`,
                     }));
                 }
             };

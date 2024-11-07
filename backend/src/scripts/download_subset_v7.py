@@ -427,8 +427,8 @@ def download_subset(begTime, endTime, reset_ARG_late):
 
 
 if __name__ == '__main__':
-    begTime = '2024-05-01'
-    endTime = '2024-05-02'
+    begTime = '2024-11-05'
+    endTime = '2024-11-05'
     reset_ARG_late = False
 
     download_subset(begTime, endTime, reset_ARG_late)

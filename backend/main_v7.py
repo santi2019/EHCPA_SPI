@@ -77,7 +77,7 @@ def ehcpa_process():
     if check_internet_connection():
         try:
             sleep_for_a_bit(10)
-            #automatic_s3_downloader()
+            automatic_s3_downloader()
             sleep_for_a_bit(30)
             today_date = get_today_date()
             print(f"Fecha actual: {today_date}")
@@ -110,7 +110,7 @@ def ehcpa_process():
             sleep_for_a_bit(30)
             p_acu_mensual()
             sleep_for_a_bit(30)
-            #automatic_s3_uploader()
+            automatic_s3_uploader()
             sleep_for_a_bit(30)
             concat_reord()
             sleep_for_a_bit(30)
