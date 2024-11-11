@@ -16,6 +16,11 @@ try:
 except ModuleNotFoundError:
     from src.scripts.get_dates_v7 import get_calibration_date
 
+try:
+    from sleep_for_a_bit_v7 import sleep_for_a_bit 
+except ModuleNotFoundError:
+    from src.scripts.sleep_for_a_bit_v7 import sleep_for_a_bit
+
 ###################################################################################################################################
 
 ## Funcion ptm_convertion_and_crop: Sirve para convertir el archivo de Precipitación Total Mensual (PTM) de formato netCDF a GeoTiff, 
@@ -64,6 +69,8 @@ def ptm_convertion_and_crop():
         os.makedirs(downloable_data_PTM_dir)
     else:
         os.makedirs(downloable_data_PTM_dir)
+    
+    sleep_for_a_bit(20)
 
     geoserver_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'geoserver'))
 
@@ -77,6 +84,8 @@ def ptm_convertion_and_crop():
         os.makedirs(geoserver_PTM_dir)
     else:
         os.makedirs(geoserver_PTM_dir)
+    
+    sleep_for_a_bit(20)
 
     ###################################################################################################################################
 

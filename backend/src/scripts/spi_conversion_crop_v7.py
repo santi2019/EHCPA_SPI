@@ -15,6 +15,11 @@ try:
 except ModuleNotFoundError:
     from src.scripts.get_dates_v7 import get_calibration_date
 
+try:
+    from sleep_for_a_bit_v7 import sleep_for_a_bit 
+except ModuleNotFoundError:
+    from src.scripts.sleep_for_a_bit_v7 import sleep_for_a_bit
+
 ###################################################################################################################################
 
 ## Funcion spi_convertion_and_crop: Sirve para convertir los archivos del Indice de Precipitación Estandarizado (SPI) de formato 
@@ -62,6 +67,8 @@ def spi_convertion_and_crop():
         os.makedirs(downloable_data_SPI_dir)
     else:
         os.makedirs(downloable_data_SPI_dir)
+    
+    sleep_for_a_bit(20)
 
     geoserver_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'geoserver'))
 
@@ -75,6 +82,8 @@ def spi_convertion_and_crop():
         os.makedirs(geoserver_SPI_dir)
     else:
         os.makedirs(geoserver_SPI_dir)
+    
+    sleep_for_a_bit(20)
 
     ###################################################################################################################################
 

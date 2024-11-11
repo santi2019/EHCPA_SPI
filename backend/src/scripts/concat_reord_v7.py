@@ -6,6 +6,11 @@ import math
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
+try:
+    from sleep_for_a_bit_v7 import sleep_for_a_bit 
+except ModuleNotFoundError:
+    from src.scripts.sleep_for_a_bit_v7 import sleep_for_a_bit
+
 ###################################################################################################################################
 
 ## Funcion concat_reord: Sirve para realizar la concatenación, reordenamiento y corrección de los archivos de precipitación mensual
@@ -41,6 +46,8 @@ def concat_reord():
     else:
         os.makedirs(concat_reord_dir)
 
+    sleep_for_a_bit(20)
+
     PTM_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'input', 'PTM'))
 
     if os.path.exists(PTM_dir):
@@ -49,6 +56,7 @@ def concat_reord():
     else:
         os.makedirs(PTM_dir)
 
+    sleep_for_a_bit(20)
 
     files = [f for f in os.listdir(IMERG_late_month_dir) if f.endswith('.nc4')]
 

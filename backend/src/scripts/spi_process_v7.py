@@ -4,6 +4,12 @@ from subprocess import Popen
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
+try:
+    from sleep_for_a_bit_v7 import sleep_for_a_bit 
+except ModuleNotFoundError:
+    from src.scripts.sleep_for_a_bit_v7 import sleep_for_a_bit
+
+
 ###################################################################################################################################
 
 ## Funcion spi_process: Sirve para calcular el Indice de Precipitacion Estandarizado (SPI) en escalas 1 2 3 6 9 12 24 36 48 60 72,
@@ -37,6 +43,8 @@ def spi_process():
         os.makedirs(SPI_gp_dir)
     else:
         os.makedirs(SPI_gp_dir)
+    
+    sleep_for_a_bit(20)
 
     SPI_gamma_reord_dir = os.path.join(SPI_dir, 'SPI_gamma_reord')
 
@@ -45,6 +53,8 @@ def spi_process():
         os.makedirs(SPI_gamma_reord_dir)
     else:
         os.makedirs(SPI_gamma_reord_dir)
+    
+    sleep_for_a_bit(20)
 
     ###################################################################################################################################
 
