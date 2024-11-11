@@ -19,7 +19,7 @@ def concat_reord():
     #   - input: Carpeta donde se guardan todos los archivos utilizados para el procesamiento.
     #   - concat_reord_dir: Carpeta donde se van a guardar los archivos procesados IMERG_concat_chunk_N, IMER_concat, 
     #     IMER_reord e IMERG_reord_lat_fix.  
-    #   - PTM_dir: Carpeta donde se van a guardar todos los resultados relkacionados con la precipitacion total mensual.
+    #   - PTM_dir: Carpeta donde se van a guardar todos los resultados reldacionados con la precipitacion total mensual.
     #
     #   - Si la carpeta input no existe, se la crea.
     #   - Para las carpetas concat_reord y PTM, en caso de que estas existan, al momento de ejecutar el proceso, 
