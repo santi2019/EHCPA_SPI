@@ -76,9 +76,9 @@ def ehcpa_process():
 
     if check_internet_connection():
         try:
-            sleep_for_a_bit(10)
+            sleep_for_a_bit(15)
             #automatic_s3_downloader()
-            sleep_for_a_bit(30)
+            sleep_for_a_bit(45)
             today_date = get_today_date()
             print(f"Fecha actual: {today_date}")
 
@@ -107,21 +107,21 @@ def ehcpa_process():
 
             ARG_late_last_date = get_ARG_late_last_date()
 
-            sleep_for_a_bit(30)
+            sleep_for_a_bit(45)
             p_acu_mensual()
-            sleep_for_a_bit(30)
+            sleep_for_a_bit(45)
             #automatic_s3_uploader()
-            sleep_for_a_bit(30)
+            sleep_for_a_bit(45)
             concat_reord()
-            sleep_for_a_bit(30)
+            sleep_for_a_bit(45)
             ptm_convertion_and_crop()
-            sleep_for_a_bit(30)
+            sleep_for_a_bit(45)
             spi_process()
-            sleep_for_a_bit(30)
+            sleep_for_a_bit(45)
             spi_convertion_and_crop()
-            sleep_for_a_bit(30)
+            sleep_for_a_bit(45)
             geoserver_upload()
-            sleep_for_a_bit(30)
+            sleep_for_a_bit(45)
             
             
             subject = "EHCPA - Proceso exitoso"
@@ -215,7 +215,7 @@ def remote_download_process():
 
             if begTime and endTime:
 
-                sleep_for_a_bit(15)
+                sleep_for_a_bit(30)
 
                 reset_ARG_late = False
                 error_found, error_message = download_subset(begTime, endTime, reset_ARG_late)
