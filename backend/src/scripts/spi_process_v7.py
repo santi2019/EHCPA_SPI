@@ -35,26 +35,27 @@ def spi_process():
 
     if not os.path.exists(SPI_dir):
         os.makedirs(SPI_dir)
+    sleep_for_a_bit(20)
 
     SPI_gp_dir = os.path.join(SPI_dir, 'SPI_gamma_pearson')
 
     if os.path.exists(SPI_gp_dir):
         shutil.rmtree(SPI_gp_dir)
+        sleep_for_a_bit(20)
         os.makedirs(SPI_gp_dir)
     else:
         os.makedirs(SPI_gp_dir)
-    
-    sleep_for_a_bit(20)
+    sleep_for_a_bit(60)
 
     SPI_gamma_reord_dir = os.path.join(SPI_dir, 'SPI_gamma_reord')
 
     if os.path.exists(SPI_gamma_reord_dir):
         shutil.rmtree(SPI_gamma_reord_dir)
+        sleep_for_a_bit(60)
         os.makedirs(SPI_gamma_reord_dir)
     else:
         os.makedirs(SPI_gamma_reord_dir)
-    
-    sleep_for_a_bit(20)
+    sleep_for_a_bit(60)
 
     ###################################################################################################################################
 
@@ -114,6 +115,7 @@ def spi_process():
         
         reorder_command = f'ncpdq -a time,lat,lon {input_spi_file} {output_spi_file}'
         Popen(reorder_command, shell=True).wait()
+        sleep_for_a_bit(20)
 
         print(f"Reordenamiento de dimensiones para escala SPI {scale} completado")
 

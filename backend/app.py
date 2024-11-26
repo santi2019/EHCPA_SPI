@@ -48,8 +48,8 @@ cors = CORS(app, origins='*')   # origins=['https://example-front.com']
 #     se inicie el servidor.
 
 scheduler = BackgroundScheduler(daemon=True)
-#scheduler.add_job(ehcpa_process, 'cron', hour=3, misfire_grace_time=3600)
-scheduler.add_job(ehcpa_process, 'cron', hour='15,16,17,18,19,20', misfire_grace_time=3600)
+scheduler.add_job(ehcpa_process, 'cron', hour=3, misfire_grace_time=3600)
+#scheduler.add_job(ehcpa_process, 'cron', hour='22,23', misfire_grace_time=3600)
 scheduler.add_job(remote_download_process, 'cron', minute='0,30', hour='20-23,0-2', misfire_grace_time=3600)
 scheduler.start()
 

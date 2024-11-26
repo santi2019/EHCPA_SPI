@@ -56,35 +56,38 @@ def ptm_convertion_and_crop():
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
+    sleep_for_a_bit(20)
 
     downloable_data_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'downloable_data'))
 
     if not os.path.exists(downloable_data_dir):
         os.makedirs(downloable_data_dir)
-        
+    sleep_for_a_bit(20)
+
     downloable_data_PTM_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'downloable_data', 'PTM'))
 
     if os.path.exists(downloable_data_PTM_dir):
         shutil.rmtree(downloable_data_PTM_dir)
+        sleep_for_a_bit(20)
         os.makedirs(downloable_data_PTM_dir)
     else:
         os.makedirs(downloable_data_PTM_dir)
-    
     sleep_for_a_bit(20)
 
     geoserver_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'geoserver'))
 
     if not os.path.exists(geoserver_dir):
         os.makedirs(geoserver_dir)
-    
+    sleep_for_a_bit(20)
+
     geoserver_PTM_dir = os.path.join(geoserver_dir, 'PTM')
 
     if os.path.exists(geoserver_PTM_dir):
         shutil.rmtree(geoserver_PTM_dir)
+        sleep_for_a_bit(20)
         os.makedirs(geoserver_PTM_dir)
     else:
-        os.makedirs(geoserver_PTM_dir)
-    
+        os.makedirs(geoserver_PTM_dir)  
     sleep_for_a_bit(20)
 
     ###################################################################################################################################
