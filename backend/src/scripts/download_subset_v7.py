@@ -372,7 +372,7 @@ def download_subset(begTime, endTime, reset_ARG_late):
             error_found = True
             error_message = (
                 f"No se descargaron datos.\n"
-                f"- Descripción: No se descargaron datos para el rango de fechas solicitado, debido a que se obtuvieron {results_length} resultados en la solicitud del subset.\n"
+                f"- Descripción: No se efectuo la descarga de datos, para el rango de fechas solicitado, debido a que se obtuvieron {results_length} resultados en la solicitud del subset.\n"
                 f"- Verificar disponibilidad de datos IMERG en:\n"
                 f"https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDL_07/summary?keywords=imerg\n"
             )
