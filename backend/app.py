@@ -138,11 +138,11 @@ def download_file(id_data):
 
     for data_id in ids:
         if data_id == "PTM":
-            file_path = os.path.join(PTM_dir, f'PTM_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_all_bands_ARG_cropped.tif')
+            file_path = os.path.join(PTM_dir, f'PTM_jun_2000_{calibration_end_month}_{calibration_end_year}_all_bands_ARG_cropped.tif')
         elif data_id.startswith("SPI_"):
             scale = data_id.split("_")[1]
             if scale in spi_scales:
-                file_path = os.path.join(SPI_dir, f'SPI_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
+                file_path = os.path.join(SPI_dir, f'SPI_jun_2000_{calibration_end_month}_{calibration_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
             else:
                 return jsonify(message=f'La escala {scale} no es correcta.'), 400
         else:

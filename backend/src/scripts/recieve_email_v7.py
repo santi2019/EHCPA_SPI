@@ -104,7 +104,7 @@ def recieve_email():
 
     subject_to_search = 'DESCARGAR'
 
-    imap = imaplib.IMAP4_SSL(imap_server)
+    imap = imaplib.IMAP4_SSL(imap_server, timeout=60)
     imap.login(ehcpa_email, ehcpa_password)
     
     read_emails = set()

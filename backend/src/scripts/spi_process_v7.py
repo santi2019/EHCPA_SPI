@@ -50,8 +50,16 @@ def spi_process():
     SPI_gamma_reord_dir = os.path.join(SPI_dir, 'SPI_gamma_reord')
 
     if os.path.exists(SPI_gamma_reord_dir):
-        shutil.rmtree(SPI_gamma_reord_dir)
-        sleep_for_a_bit(60)
+        # Eliminación individual de archivos
+        for file in os.listdir(SPI_gamma_reord_dir):
+            file_path = os.path.join(SPI_gamma_reord_dir, file)
+            try:
+                os.remove(file_path)
+                print(f"Archivo eliminado: {file_path}")
+            except Exception as e:
+                print(f"No se pudo eliminar el archivo {file_path}: {e}")
+            sleep_for_a_bit(25)
+        shutil.rmtree(SPI_gamma_reord_dir)  # Elimina el directorio vacío
         os.makedirs(SPI_gamma_reord_dir)
     else:
         os.makedirs(SPI_gamma_reord_dir)

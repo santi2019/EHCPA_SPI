@@ -10,9 +10,7 @@
 
 ## Descripción 
 
-El siguiente repositorio... (Descripcion del sitio web y el proyecto) 
-
-
+El siguiente repositorio fue creado con el objetivo de gestionar los cambios y configuraciones efectuadas en el desarrollo del sistema EHCPA, desarrollado en el marco del Trabajo Final de la carrera Ingenieria en Sistemas, el cual permite la visualización y descarga de la Precipitación Total Mensual (PTM) y el Índice de Precipitación Estandarizado (SPI) para las escalas mensuales 1, 2, 3, 6, 9, 12, 24, 36, 48, 60 y 72.
 
 ## Instalación y Configuración
 
