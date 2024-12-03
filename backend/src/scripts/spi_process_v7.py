@@ -4,6 +4,12 @@ from subprocess import Popen
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
+try:
+    from sleep_for_a_bit_v7 import sleep_for_a_bit 
+except ModuleNotFoundError:
+    from src.scripts.sleep_for_a_bit_v7 import sleep_for_a_bit
+
+
 ###################################################################################################################################
 
 ## Funcion spi_process: Sirve para calcular el Indice de Precipitacion Estandarizado (SPI) en escalas 1 2 3 6 9 12 24 36 48 60 72,
@@ -29,22 +35,35 @@ def spi_process():
 
     if not os.path.exists(SPI_dir):
         os.makedirs(SPI_dir)
+    sleep_for_a_bit(20)
 
     SPI_gp_dir = os.path.join(SPI_dir, 'SPI_gamma_pearson')
 
     if os.path.exists(SPI_gp_dir):
         shutil.rmtree(SPI_gp_dir)
+        sleep_for_a_bit(20)
         os.makedirs(SPI_gp_dir)
     else:
         os.makedirs(SPI_gp_dir)
+    sleep_for_a_bit(60)
 
     SPI_gamma_reord_dir = os.path.join(SPI_dir, 'SPI_gamma_reord')
 
     if os.path.exists(SPI_gamma_reord_dir):
-        shutil.rmtree(SPI_gamma_reord_dir)
+        # Eliminación individual de archivos
+        for file in os.listdir(SPI_gamma_reord_dir):
+            file_path = os.path.join(SPI_gamma_reord_dir, file)
+            try:
+                os.remove(file_path)
+                print(f"Archivo eliminado: {file_path}")
+            except Exception as e:
+                print(f"No se pudo eliminar el archivo {file_path}: {e}")
+            sleep_for_a_bit(25)
+        shutil.rmtree(SPI_gamma_reord_dir)  # Elimina el directorio vacío
         os.makedirs(SPI_gamma_reord_dir)
     else:
         os.makedirs(SPI_gamma_reord_dir)
+    sleep_for_a_bit(60)
 
     ###################################################################################################################################
 
@@ -104,6 +123,7 @@ def spi_process():
         
         reorder_command = f'ncpdq -a time,lat,lon {input_spi_file} {output_spi_file}'
         Popen(reorder_command, shell=True).wait()
+        sleep_for_a_bit(20)
 
         print(f"Reordenamiento de dimensiones para escala SPI {scale} completado")
 

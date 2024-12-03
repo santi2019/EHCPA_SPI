@@ -6,6 +6,7 @@ dependencies:
   - pip
   - pandas
   - numpy
+  - pynco
   - nco
   - udunits2
   - dask

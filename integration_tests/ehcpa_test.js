@@ -23,8 +23,8 @@ Feature('ehcpa');
  *    el dragg modal con los valores de las coordenadas y el PTM en dicho punto.
  *    7.1. Verificamos que se coloca el marker en el mapa.
  *    7.2. Verificamos que se renderiza el dragg modal visualizando su titulo de "Información".
- *    7.3. Por ultimo, verificamos que aparezca el texto de "PTM [mm]", ya que unicamente se visualiza si la capa esta activada. No se validan los datos ya
- *         que pueden contener un valor no null o pueden ser de tipo S/D.
+ *    7.3. Verificamos que aparezca el texto de "PTM [mm]", ya que unicamente se visualiza un unico valor.
+ *    7.4. Por ultimo, Verificamos que no aparezcan datos vacio o ningun mensaje de error en el componente "li".
  * 8. Procedemos a realizar la descarga del PTM, por lo que nos movemos al boton de descarga del menu, lo ejecutamos y esperamos unos segundos hasta que
  *    finalice. 
  * 9. Para validar la descarga, almacenamos la cantidad de elementos que posee el contendor "swal2-container" de los alerts de errores, y verificamos que:
@@ -76,6 +76,8 @@ Scenario('Visualizar y Descargar PTM',  async ({ I }) => {
     I.seeElement('.leaflet-marker-icon');
     I.see('Información', '.draggModalContainer .draggModalNavbar .draggModalNavbarTitle');
     I.see('PTM [mm]:', '.draggModalContainer .draggModalValuesContainer .draggModalValuesItems .lidraggModalValues');
+    I.dontSee('S/D', '.draggModalContainer .draggModalValuesContainer .draggModalValuesItems .lidraggModalValues');
+    I.dontSee('Error:', '.draggModalContainer .draggModalValuesContainer .draggModalValuesItems .lidraggModalValues');
     I.wait(3); 
 
     I.moveCursorTo('.menuButton');
@@ -115,7 +117,8 @@ Scenario('Visualizar y Descargar PTM',  async ({ I }) => {
  *    el dragg modal con los valores de las coordenadas y el SPI en dicho punto.
  *    9.1. Verificamos que se coloca el marker en el mapa.
  *    9.2. Verificamos que se renderiza el dragg modal visualizando su titulo de "Información".
- *    9.3 Por ultimo, verificamos que aparezcan los textos de "SPI Escala (escala):", desplazando el scroll-bar hacia abajo en el dragg modal validando 
+ *    9.3  Verificamos que no aparezca ningun mensaje de error en los componentes "li".
+ *    9.4 Por ultimo, verificamos que aparezcan los textos de "SPI Escala (escala):", desplazando el scroll-bar hacia abajo en el dragg modal validando 
  *        que esten todas las escalas, ya que unicamente se visualizan si las capas estan activadas. No se validan los datos ya que pueden contener un 
  *        valor no null o pueden ser de tipo S/D.
  * 10. Procedemos a realizar la descarga de los SPI, por lo que nos movemos al boton de descarga del menu, lo ejecutamos y esperamos unos segundos hasta 
@@ -215,6 +218,7 @@ Scenario('Visualizar y Descargar SPI',  async ({ I }) => {
     I.click('.leaflet-container');
     I.seeElement('.leaflet-marker-icon');
     I.see('Información', '.draggModalContainer .draggModalNavbar .draggModalNavbarTitle');
+    I.dontSee('Error', '.draggModalContainer .draggModalValuesContainer .draggModalValuesItems');
     I.see('SPI Escala 1:', '.draggModalContainer .draggModalValuesContainer .draggModalValuesItems .lidraggModalValues');
     I.see('SPI Escala 2:', '.draggModalContainer .draggModalValuesContainer .draggModalValuesItems .lidraggModalValues');
     I.see('SPI Escala 3:', '.draggModalContainer .draggModalValuesContainer .draggModalValuesItems .lidraggModalValues');

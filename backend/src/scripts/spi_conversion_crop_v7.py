@@ -15,6 +15,11 @@ try:
 except ModuleNotFoundError:
     from src.scripts.get_dates_v7 import get_calibration_date
 
+try:
+    from sleep_for_a_bit_v7 import sleep_for_a_bit 
+except ModuleNotFoundError:
+    from src.scripts.sleep_for_a_bit_v7 import sleep_for_a_bit
+
 ###################################################################################################################################
 
 ## Funcion spi_convertion_and_crop: Sirve para convertir los archivos del Indice de Precipitación Estandarizado (SPI) de formato 
@@ -49,32 +54,39 @@ def spi_convertion_and_crop():
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
+    sleep_for_a_bit(20)
 
     downloable_data_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'downloable_data'))
 
     if not os.path.exists(downloable_data_dir):
         os.makedirs(downloable_data_dir)
+    sleep_for_a_bit(20)
 
     downloable_data_SPI_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'downloable_data', 'SPI'))
 
     if os.path.exists(downloable_data_SPI_dir):
         shutil.rmtree(downloable_data_SPI_dir)
+        sleep_for_a_bit(20) 
         os.makedirs(downloable_data_SPI_dir)
     else:
         os.makedirs(downloable_data_SPI_dir)
+    sleep_for_a_bit(20)
 
     geoserver_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'geoserver'))
 
     if not os.path.exists(geoserver_dir):
         os.makedirs(geoserver_dir)
-    
+    sleep_for_a_bit(20)
+
     geoserver_SPI_dir = os.path.join(geoserver_dir, 'SPI')
 
     if os.path.exists(geoserver_SPI_dir):
         shutil.rmtree(geoserver_SPI_dir)
+        sleep_for_a_bit(20)
         os.makedirs(geoserver_SPI_dir)
     else:
         os.makedirs(geoserver_SPI_dir)
+    sleep_for_a_bit(20)
 
     ###################################################################################################################################
 
@@ -123,7 +135,7 @@ def spi_convertion_and_crop():
         calibration_end_year, calibration_end_month = get_calibration_date()
 
         spi_cropped_all_bands = spi_all_bands.rio.clip(shapes, spi_data.rio.crs)
-        SPI_all_bands_cropped_tif = os.path.join(downloable_data_SPI_dir, f'SPI_jun_2000_{calibration_end_month}_{calibration_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
+        SPI_all_bands_cropped_tif = os.path.join(downloable_data_SPI_dir, f'SPI_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
         spi_cropped_all_bands.rio.to_raster(SPI_all_bands_cropped_tif)
 
         spi_cropped_last_band = spi_last_band.rio.clip(shapes, spi_data.rio.crs)

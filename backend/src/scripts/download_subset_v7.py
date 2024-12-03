@@ -357,7 +357,7 @@ def download_subset(begTime, endTime, reset_ARG_late):
     ## Manejo de errores: En caso de que ocurra algunos de los errores capturados, se setea la bandera "error_found" como "True", se 
     #  setea el mensaje de dicho error en "error_message" y se lo imprime.
     #  Los errores conocidos son:
-    #  - En caso de que el valor de "downloaded_files" sea 0, se indica que no se descargaron datos, ya sea por ejemplo, porque no estan 
+    #  - En caso de que el valor de "results_length" sea 0, se indica que no se descargaron datos, ya sea por ejemplo, porque no estan 
     #    disponibles en el sitio GES DISC. 
     #  - HTTPError: Error en la descarga de archivos IMERG por error de autenticacion.
     #  - KeyError: Error en la solicitud a la API, por mal seteo de parametros en el json de solicitud, o el sitio GES DISC esta roto 
@@ -368,11 +368,11 @@ def download_subset(begTime, endTime, reset_ARG_late):
     #  - UrllibTimeoutError, RequestsTimeoutError: Errores de tiempo de espera de respuesta excedido a la hora de consultar o enviar 
     #    el json de solicitud del subset a la API de la NASA. 
 
-        if downloaded_files == 0:
+        if results_length == 0:
             error_found = True
             error_message = (
                 f"No se descargaron datos.\n"
-                f"- Descripción: No se descargaron datos para el rango de fechas solicitado, debido a que se obtuvieron {results_length} resultados en la solicitud del subset.\n"
+                f"- Descripción: No se efectuo la descarga de datos, para el rango de fechas solicitado, debido a que se obtuvieron {results_length} resultados en la solicitud del subset.\n"
                 f"- Verificar disponibilidad de datos IMERG en:\n"
                 f"https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDL_07/summary?keywords=imerg\n"
             )
@@ -427,8 +427,8 @@ def download_subset(begTime, endTime, reset_ARG_late):
 
 
 if __name__ == '__main__':
-    begTime = '2024-05-01'
-    endTime = '2024-05-02'
+    begTime = '2024-11-05'
+    endTime = '2024-11-05'
     reset_ARG_late = False
 
     download_subset(begTime, endTime, reset_ARG_late)

@@ -16,6 +16,11 @@ try:
 except ModuleNotFoundError:
     from src.scripts.get_dates_v7 import get_calibration_date
 
+try:
+    from sleep_for_a_bit_v7 import sleep_for_a_bit 
+except ModuleNotFoundError:
+    from src.scripts.sleep_for_a_bit_v7 import sleep_for_a_bit
+
 ###################################################################################################################################
 
 ## Funcion ptm_convertion_and_crop: Sirve para convertir el archivo de Precipitación Total Mensual (PTM) de formato netCDF a GeoTiff, 
@@ -51,32 +56,39 @@ def ptm_convertion_and_crop():
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
+    sleep_for_a_bit(20)
 
     downloable_data_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'downloable_data'))
 
     if not os.path.exists(downloable_data_dir):
         os.makedirs(downloable_data_dir)
-        
+    sleep_for_a_bit(20)
+
     downloable_data_PTM_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'downloable_data', 'PTM'))
 
     if os.path.exists(downloable_data_PTM_dir):
         shutil.rmtree(downloable_data_PTM_dir)
+        sleep_for_a_bit(20)
         os.makedirs(downloable_data_PTM_dir)
     else:
         os.makedirs(downloable_data_PTM_dir)
+    sleep_for_a_bit(20)
 
     geoserver_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'geoserver'))
 
     if not os.path.exists(geoserver_dir):
         os.makedirs(geoserver_dir)
-    
+    sleep_for_a_bit(20)
+
     geoserver_PTM_dir = os.path.join(geoserver_dir, 'PTM')
 
     if os.path.exists(geoserver_PTM_dir):
         shutil.rmtree(geoserver_PTM_dir)
+        sleep_for_a_bit(20)
         os.makedirs(geoserver_PTM_dir)
     else:
-        os.makedirs(geoserver_PTM_dir)
+        os.makedirs(geoserver_PTM_dir)  
+    sleep_for_a_bit(20)
 
     ###################################################################################################################################
 
@@ -123,7 +135,7 @@ def ptm_convertion_and_crop():
     
 
     pr_cropped_all_bands = pr_all_bands.rio.clip(shapes, pr.rio.crs)
-    PTM_all_bands_cropped_tif = os.path.join(downloable_data_PTM_dir, f'PTM_jun_2000_{calibration_end_month}_{calibration_end_year}_all_bands_ARG_cropped.tif')
+    PTM_all_bands_cropped_tif = os.path.join(downloable_data_PTM_dir, f'PTM_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_all_bands_ARG_cropped.tif')
     pr_cropped_all_bands.rio.to_raster(PTM_all_bands_cropped_tif)
 
 

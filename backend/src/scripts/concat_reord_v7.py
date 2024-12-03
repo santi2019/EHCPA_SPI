@@ -6,6 +6,11 @@ import math
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
+try:
+    from sleep_for_a_bit_v7 import sleep_for_a_bit 
+except ModuleNotFoundError:
+    from src.scripts.sleep_for_a_bit_v7 import sleep_for_a_bit
+
 ###################################################################################################################################
 
 ## Funcion concat_reord: Sirve para realizar la concatenación, reordenamiento y corrección de los archivos de precipitación mensual
@@ -19,7 +24,7 @@ def concat_reord():
     #   - input: Carpeta donde se guardan todos los archivos utilizados para el procesamiento.
     #   - concat_reord_dir: Carpeta donde se van a guardar los archivos procesados IMERG_concat_chunk_N, IMER_concat, 
     #     IMER_reord e IMERG_reord_lat_fix.  
-    #   - PTM_dir: Carpeta donde se van a guardar todos los resultados relkacionados con la precipitacion total mensual.
+    #   - PTM_dir: Carpeta donde se van a guardar todos los resultados reldacionados con la precipitacion total mensual.
     #
     #   - Si la carpeta input no existe, se la crea.
     #   - Para las carpetas concat_reord y PTM, en caso de que estas existan, al momento de ejecutar el proceso, 
@@ -32,23 +37,27 @@ def concat_reord():
 
     if not os.path.exists(input_dir):
         os.makedirs(input_dir)
+    sleep_for_a_bit(20)
 
     concat_reord_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'input', 'concat_reord'))
 
     if os.path.exists(concat_reord_dir):
         shutil.rmtree(concat_reord_dir)
+        sleep_for_a_bit(20)
         os.makedirs(concat_reord_dir)
     else:
         os.makedirs(concat_reord_dir)
+    sleep_for_a_bit(20)
 
     PTM_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'input', 'PTM'))
 
     if os.path.exists(PTM_dir):
         shutil.rmtree(PTM_dir)
+        sleep_for_a_bit(20)
         os.makedirs(PTM_dir)
     else:
         os.makedirs(PTM_dir)
-
+    sleep_for_a_bit(20)
 
     files = [f for f in os.listdir(IMERG_late_month_dir) if f.endswith('.nc4')]
 
