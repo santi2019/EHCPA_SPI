@@ -1064,32 +1064,37 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
             if (PTMResult !== null) {
                 copyText += `PTM [mm]: ${PTMResult.toFixed(1)}\n`;
             } else {
-                copyText += `PTM [mm]: S/D\n`;  
+                copyText += `PTM [mm]: S/D\n`;
             }
         }
     
         Object.keys(SPIResults).forEach((key) => {
-            if (SPIlayersSwitches[key]) { 
+            if (SPIlayersSwitches[key]) {
                 if (SPIResults[key] !== null) {
                     copyText += `SPI Escala ${key.replace('SPI_', '')}: ${SPIResults[key].toFixed(1)}\n`;
                 } else {
-                    copyText += `SPI Escala ${key.replace('SPI_', '')}: S/D\n`;  
+                    copyText += `SPI Escala ${key.replace('SPI_', '')}: S/D\n`;
                 }
             }
         });
     
-        if (copyText) {
-            navigator.clipboard.writeText(copyText)
-                .then(() => {
-                    setIsCopied(true);
-                    setTimeout(() => {
-                        setIsCopied(false);
-                    }, 2500);
-                })
-                .catch((err) => {
-                    console.error('Error al copiar los datos: ', err);
-                });
+        const textarea = document.createElement('textarea');
+        textarea.value = copyText;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+    
+        try {
+            document.execCommand('copy');
+            setIsCopied(true); 
+            setTimeout(() => setIsCopied(false), 2500); 
+        } catch (err) {
+            console.error('Error al copiar:', err);
         }
+    
+        document.body.removeChild(textarea);
     };
 
     /*******************************************************************************************************************************************************/
