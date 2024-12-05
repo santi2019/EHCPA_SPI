@@ -120,6 +120,9 @@ def home():
 #      intentar abrirlo o visualizarlo. Ademas, especificamos el nombre del archivo que se vera al descargarlo. Y mediante  
 #      "mimetype='application/zip'" le indicamos al navegador que el contenido es un archivo ZIP, lo que ayuda al mismo a manejar la 
 #      descarga correctamente.
+#  13. Respecto al funcionamiento del try y el finally, se guarda la configuración actual del idioma que es Español, luego dentro del 
+#      bloque try se configura temporalmente el idioma a 'C' (neutral) para evitar conflictos, y luego en el finally se restaura el idioma 
+#      original para no afectar a la funcion get_dates.
 
 @app.route('/download/<id_data>', methods=['GET'])
 def download_file(id_data):
@@ -129,9 +132,9 @@ def download_file(id_data):
     try:
         locale.setlocale(locale.LC_TIME, 'C')
 
-        # downloable_data_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'downloable_data'))
-        PTM_dir = r'C:\\Users\\1802890\\EHCPA_SPI\\backend\\src\\output\\downloable_data\\PTM\\' #os.path.join(downloable_data_dir, 'PTM')
-        SPI_dir = r'C:\\Users\\1802890\\EHCPA_SPI\\backend\\src\\output\\downloable_data\\SPI\\' #os.path.join(downloable_data_dir, 'SPI')
+        downloable_data_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'downloable_data'))
+        PTM_dir = os.path.join(downloable_data_dir, 'PTM')
+        SPI_dir = os.path.join(downloable_data_dir, 'SPI')
 
         spi_scales = ['1', '2', '3', '6', '9', '12', '24', '36', '48', '60', '72']
 
