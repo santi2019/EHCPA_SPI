@@ -50,7 +50,7 @@ cors = CORS(app, origins='*')   # origins=['https://example-front.com']
 
 scheduler = BackgroundScheduler(daemon=True)
 scheduler.add_job(ehcpa_process, 'cron', hour=3, misfire_grace_time=3600)
-#scheduler.add_job(ehcpa_process, 'cron', hour='22,23', misfire_grace_time=3600)
+#scheduler.add_job(ehcpa_process, 'cron', hour='22,23', minute='30', misfire_grace_time=3600)
 scheduler.add_job(remote_download_process, 'cron', minute='0,30', hour='20-23,0-2', misfire_grace_time=3600)
 scheduler.start()
 
@@ -127,65 +127,59 @@ def home():
 @app.route('/download/<id_data>', methods=['GET'])
 def download_file(id_data):
 
-    original_locale = locale.getlocale(locale.LC_TIME)
+    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 
-    try:
-        locale.setlocale(locale.LC_TIME, 'C')
+    downloable_data_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'downloable_data'))
+    PTM_dir = os.path.join(downloable_data_dir, 'PTM')
+    SPI_dir = os.path.join(downloable_data_dir, 'SPI')
 
-        downloable_data_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'downloable_data'))
-        PTM_dir = os.path.join(downloable_data_dir, 'PTM')
-        SPI_dir = os.path.join(downloable_data_dir, 'SPI')
+    spi_scales = ['1', '2', '3', '6', '9', '12', '24', '36', '48', '60', '72']
 
-        spi_scales = ['1', '2', '3', '6', '9', '12', '24', '36', '48', '60', '72']
+    calibration_end_year, calibration_end_month = get_calibration_date()
 
-        calibration_end_year, calibration_end_month = get_calibration_date()
+    ids = id_data.split(',')
+    files_to_zip = []
+    not_found_files = []
 
-        ids = id_data.split(',')
-        files_to_zip = []
-        not_found_files = []
-
-        for data_id in ids:
-            if data_id == "PTM":
-                file_path = os.path.join(PTM_dir, f'PTM_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_all_bands_ARG_cropped.tif')
+    for data_id in ids:
+        if data_id == "PTM":
+            file_path = os.path.join(PTM_dir, f'PTM_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_all_bands_ARG_cropped.tif')
+            print(file_path)
+        elif data_id.startswith("SPI_"):
+            scale = data_id.split("_")[1]
+            if scale in spi_scales:
+                file_path = os.path.join(SPI_dir, f'SPI_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
                 print(file_path)
-            elif data_id.startswith("SPI_"):
-                scale = data_id.split("_")[1]
-                if scale in spi_scales:
-                    file_path = os.path.join(SPI_dir, f'SPI_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
-                    print(file_path)
-                else:
-                    return jsonify(message=f'La escala {scale} no es correcta.'), 400
             else:
-                return jsonify(message=f'El identificador {data_id} no es correcto.'), 400
+                return jsonify(message=f'La escala {scale} no es correcta.'), 400
+        else:
+            return jsonify(message=f'El identificador {data_id} no es correcto.'), 400
 
-            if os.path.exists(file_path):
-                files_to_zip.append(file_path)
-            else:
-                not_found_files.append(data_id)
+        if os.path.exists(file_path):
+            files_to_zip.append(file_path)
+        else:
+            not_found_files.append(data_id)
 
-        if not_found_files:
-            if len(not_found_files) == 1:
-                return jsonify(message=f'El archivo {not_found_files[0]} no se encuentra disponible para su descarga en este momento.'), 404
-            else:
-                return jsonify(message=f'Los siguientes archivos no están disponibles para su descarga en este momento: {", ".join(not_found_files)}'), 404
+    if not_found_files:
+        if len(not_found_files) == 1:
+            return jsonify(message=f'El archivo {not_found_files[0]} no se encuentra disponible para su descarga en este momento.'), 404
+        else:
+            return jsonify(message=f'Los siguientes archivos no están disponibles para su descarga en este momento: {", ".join(not_found_files)}'), 404
 
-        # Crear un directorio temporal para aislamiento
-        with TemporaryDirectory() as temp_dir:
-            zip_path = os.path.join(temp_dir, 'EHCPA_Data.zip')
+    # Crear un directorio temporal para aislamiento
+    with TemporaryDirectory() as temp_dir:
+        zip_path = os.path.join(temp_dir, 'EHCPA_Data.zip')
 
-            # Crear el archivo ZIP dentro del directorio temporal
-            with zipfile.ZipFile(zip_path, 'w') as zip_file:
-                for file_path in files_to_zip:
-                    zip_file.write(file_path, os.path.basename(file_path))
+        # Crear el archivo ZIP dentro del directorio temporal
+        with zipfile.ZipFile(zip_path, 'w') as zip_file:
+            for file_path in files_to_zip:
+                zip_file.write(file_path, os.path.basename(file_path))
 
-            # Leer el ZIP y enviarlo como respuesta
-            with open(zip_path, 'rb') as zip_file:
-                zip_data = zip_file.read()
+        # Leer el ZIP y enviarlo como respuesta
+        with open(zip_path, 'rb') as zip_file:
+            zip_data = zip_file.read()
 
-        return send_file(BytesIO(zip_data), as_attachment=True, download_name='EHCPA_Data.zip', mimetype='application/zip')
-
-    finally:
-        locale.setlocale(locale.LC_TIME, original_locale)    
+    return send_file(BytesIO(zip_data), as_attachment=True, download_name='EHCPA_Data.zip', mimetype='application/zip')
 
 ###################################################################################################################################
 
