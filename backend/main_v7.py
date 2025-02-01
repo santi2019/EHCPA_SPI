@@ -107,21 +107,21 @@ def ehcpa_process():
 
             ARG_late_last_date = get_ARG_late_last_date()
 
-            sleep_for_a_bit(45)
+            sleep_for_a_bit(60)
             p_acu_mensual()
-            sleep_for_a_bit(45)
+            sleep_for_a_bit(60)
             #automatic_s3_uploader()
-            sleep_for_a_bit(45)
+            sleep_for_a_bit(60)
             concat_reord()
-            sleep_for_a_bit(45)
+            sleep_for_a_bit(60)
             ptm_convertion_and_crop()
-            sleep_for_a_bit(45)
+            sleep_for_a_bit(60)
             spi_process()
-            sleep_for_a_bit(45)
+            sleep_for_a_bit(60)
             spi_convertion_and_crop()
-            sleep_for_a_bit(45)
+            sleep_for_a_bit(60)
             geoserver_upload()
-            sleep_for_a_bit(45)
+            sleep_for_a_bit(60)
             
             
             subject = "EHCPA - Proceso exitoso"

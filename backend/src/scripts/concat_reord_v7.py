@@ -47,17 +47,17 @@ def concat_reord():
         os.makedirs(concat_reord_dir)
     else:
         os.makedirs(concat_reord_dir)
-    sleep_for_a_bit(20)
+    sleep_for_a_bit(120)
 
     PTM_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'input', 'PTM'))
 
     if os.path.exists(PTM_dir):
         shutil.rmtree(PTM_dir)
-        sleep_for_a_bit(20)
+        sleep_for_a_bit(45)
         os.makedirs(PTM_dir)
     else:
         os.makedirs(PTM_dir)
-    sleep_for_a_bit(20)
+    sleep_for_a_bit(45)
 
     files = [f for f in os.listdir(IMERG_late_month_dir) if f.endswith('.nc4')]
 

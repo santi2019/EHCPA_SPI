@@ -54,7 +54,7 @@ def spi_process():
             file_path = os.path.join(SPI_gamma_reord_dir, file)
             try:
                 with open(file_path, 'rb') as f:
-                    pass
+                    f.read()
 
                 # Renombrar el archivo para evitar bloqueos temporales
                 temp_path = file_path + ".temp"
@@ -63,7 +63,7 @@ def spi_process():
                 # Eliminar el archivo renombrado
                 os.remove(temp_path)
                 print(f"Archivo eliminado: {file_path}")
-                sleep_for_a_bit(35)
+                sleep_for_a_bit(100)
             except Exception as e:
                 print(f"No se pudo eliminar el archivo {file_path}: {e}")
         shutil.rmtree(SPI_gamma_reord_dir)  # Elimina el directorio vacío

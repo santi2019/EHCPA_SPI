@@ -76,10 +76,10 @@ def geoserver_upload():
 
     print(f"Creando coveragestore para la capa: {PTM_layer_name}")
     geo.create_coveragestore(layer_name=PTM_layer_name, path=PTM_tif_file, workspace=workspace_name)
-    sleep_for_a_bit(40)
+    sleep_for_a_bit(60)
     print(f"Publicando estilo para la capa: {PTM_layer_name}")
     geo.publish_style(layer_name=PTM_layer_name, style_name=PTM_style_name, workspace=workspace_name)
-    sleep_for_a_bit(40)
+    sleep_for_a_bit(60)
 
 
     spi_scales = ['1', '2', '3', '6', '9', '12', '24', '36', '48', '60', '72']
@@ -93,11 +93,11 @@ def geoserver_upload():
         
         print(f"Creando coveragestore para la capa: {SPI_layer_name}")
         geo.create_coveragestore(layer_name=SPI_layer_name, path=SPI_tif_file, workspace=workspace_name)
-        sleep_for_a_bit(40)
+        sleep_for_a_bit(60)
 
         print(f"Publicando estilo para la capa: {SPI_layer_name}")
         geo.publish_style(layer_name=SPI_layer_name, style_name=SPI_style_name, workspace=workspace_name)
-        sleep_for_a_bit(40)
+        sleep_for_a_bit(60)
     
 
 
