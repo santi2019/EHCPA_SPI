@@ -143,12 +143,14 @@ def download_file(id_data):
 
     for data_id in ids:
         if data_id == "PTM":
-            file_path = os.path.join(PTM_dir, f'PTM_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_all_bands_ARG_cropped.tif')
+            #file_path = os.path.join(PTM_dir, f'PTM_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_all_bands_ARG_cropped.tif')
+            file_path = os.path.join(PTM_dir, f'PTM_jun_2000_ene_2025_all_bands_ARG_cropped.tif')
             print(file_path)
         elif data_id.startswith("SPI_"):
             scale = data_id.split("_")[1]
             if scale in spi_scales:
-                file_path = os.path.join(SPI_dir, f'SPI_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
+                #file_path = os.path.join(SPI_dir, f'SPI_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
+                file_path = os.path.join(SPI_dir, f'SPI_jun_2000_ene_2025_scale_{scale}_all_bands_ARG_cropped.tif')
                 print(file_path)
             else:
                 return jsonify(message=f'La escala {scale} no es correcta.'), 400
@@ -223,7 +225,8 @@ def get_dates():
         last_band_day = last_band_month = last_band_year = 'No Disponible'
 
     calibration_end_year, calibration_end_month = get_calibration_date()
-    calibration_date_str = f"{calibration_end_month.rstrip('.')}_{calibration_end_year}"
+    #calibration_date_str = f"{calibration_end_month.rstrip('.')}_{calibration_end_year}"
+    calibration_date_str = "ene_2025"
 
     response = {
         'today_day': today_day,
