@@ -39,14 +39,14 @@ const ModalPrecipitation = ({
 
   const layers = [
     { name: 'Precip. Total Mensual [mm]', key: 'PTM' },
-    { name: 'PMP 24h [mm]', key: 'PMP_24h' },
-    { name: 'PMP 1 [mm]', key: 'PMP_1' },
-    { name: 'PMD 2 [mm]', key: 'PMD_2' },
-    { name: 'PMD 5 [mm]', key: 'PMD_5' },
-    { name: 'PMD 10 [mm]', key: 'PMD_10' },
-    { name: 'PMD 25 [mm]', key: 'PMD_25' },
-    { name: 'PMD 50 [mm]', key: 'PMD_50' },
-    { name: 'PMD 100 [mm]', key: 'PMD_100' }
+    { name: 'Precip. Máxima Probable 24 hrs [mm]', key: 'PMP_24h' },
+    { name: 'Precip. Máxima Probable 1 Dia [mm]', key: 'PMP_1' },
+    { name: 'Precip. Máxima Diaria 2 Años [mm]', key: 'PMD_2' },
+    { name: 'Precip. Máxima Diaria 5 Años [mm]', key: 'PMD_5' },
+    { name: 'Precip. Máxima Diaria 10 Años [mm]', key: 'PMD_10' },
+    { name: 'Precip. Máxima Diaria 25 Años [mm]', key: 'PMD_25' },
+    { name: 'Precip. Máxima Diaria 50 Años [mm]', key: 'PMD_50' },
+    { name: 'Precip. Máxima Diaria 100 Años [mm]', key: 'PMD_100' }
   ];
 
   /*******************************************************************************************************************************************************/

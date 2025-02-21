@@ -72,7 +72,8 @@ const DraggableModal = ({
     */
 
     const isValuesContainerEmpty = !(
-        PrecipitationlayersSwitches.PTM && (PrecipitationResults !== null || notFoundPrecipitationResults) ||
+        Object.keys(PrecipitationResults).some(key => PrecipitationlayersSwitches[key] && (PrecipitationResults[key] !== null || notFoundPrecipitationResults[key]))
+        ||
         Object.keys(SPIResults).some(key => SPIlayersSwitches[key] && (SPIResults[key] !== null || notFoundSPIResults[key]))
     );
   
@@ -126,7 +127,7 @@ const DraggableModal = ({
                         {Object.keys(PrecipitationResults).map((key) => (
                             PrecipitationlayersSwitches[key] && (PrecipitationResults[key] !== null || notFoundPrecipitationResults[key]) && (
                                 <li key={key} className="lidraggModalValues">
-                                    <span>{`${key} [mm]: `}</span>
+                                    <span>{`${key.replace('_', ' ').replace('24h', '24 hrs')} [mm]: `}</span>
                                     {PrecipitationResults[key] !== null ? (
                                         `${PrecipitationResults[key].toFixed(1)}`
                                     ) : (

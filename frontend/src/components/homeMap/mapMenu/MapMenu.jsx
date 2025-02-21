@@ -106,8 +106,6 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
         PMD_50: "",
         PMD_100: "",
     });
-    const [PTMResult, setPTMResult] = useState(null);
-    const [notFoundPTMResults, setNotFoundPTMResults] = useState("");
     const [SPIResults, setSPIResults] = useState({
         SPI_1: null,
         SPI_2: null,
@@ -467,7 +465,7 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
     
                     if (response.data.features && response.data.features.length > 0) {
                         const value = response.data.features[0].properties.GRAY_INDEX;
-                        if (value == -9999.900390625 || value == -3.4028234663852886e+38) {
+                        if (value == -9999.900390625 || value == -3.4028234663852886e+38 || value == -99999.0) {
                             setPrecipitationResults((prevState) => ({
                                 ...prevState,
                                 [layerName]: null,
@@ -1161,13 +1159,15 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
     const handleCopyValues = () => {
         let copyText = `Latitud: ${coordinatesResult.lat.toFixed(3)}, Longitud: ${coordinatesResult.lng.toFixed(3)}\n`;
     
-        if (PTMlayerSwitch.PTM) {
-            if (PTMResult !== null) {
-                copyText += `PTM [mm]: ${PTMResult.toFixed(1)}\n`;
-            } else {
-                copyText += `PTM [mm]: S/D\n`;
+        Object.keys(PrecipitationResults).forEach((key) => {
+            if (PrecipitationlayersSwitches[key]) {
+                if (PrecipitationResults[key] !== null) {
+                    copyText += `${key.replace('_', ' ').replace('24h', '24 hrs')} [mm]: ${PrecipitationResults[key].toFixed(1)}\n`;
+                } else {
+                    copyText += `${key.replace('_', ' ').replace('24h', '24 hrs')} [mm]: S/D\n`;
+                }
             }
-        }
+        });
     
         Object.keys(SPIResults).forEach((key) => {
             if (SPIlayersSwitches[key]) {
