@@ -132,8 +132,13 @@ def download_file(id_data):
     downloable_data_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'downloable_data'))
     PTM_dir = os.path.join(downloable_data_dir, 'PTM')
     SPI_dir = os.path.join(downloable_data_dir, 'SPI')
+    PMD_dir = os.path.join(downloable_data_dir, 'PMD')
 
     spi_scales = ['1', '2', '3', '6', '9', '12', '24', '36', '48', '60', '72']
+
+    pmp_scales = ['24h', '1']
+
+    pmd_scales = ['2', '5', '10', '25', '50', '100']
 
     calibration_end_year, calibration_end_month = get_calibration_date()
 
@@ -146,6 +151,20 @@ def download_file(id_data):
             #file_path = os.path.join(PTM_dir, f'PTM_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_all_bands_ARG_cropped.tif')
             file_path = os.path.join(PTM_dir, f'PTM_jun_2000_ene_2025_all_bands_ARG_cropped.tif')
             print(file_path)
+        elif data_id.startswith("PMP_"):
+            scale = data_id.split("_")[1]
+            if scale in pmp_scales:
+                file_path = os.path.join(PMD_dir, f'PMP_{scale}_ARG_cropped.tif')
+                print(file_path)
+            else:
+                return jsonify(message=f'La escala {scale} no es correcta.'), 400
+        elif data_id.startswith("PMD_"):
+            scale = data_id.split("_")[1]
+            if scale in pmd_scales:
+                file_path = os.path.join(PMD_dir, f'PMD_{scale}_ARG_cropped.tif')
+                print(file_path)
+            else:
+                return jsonify(message=f'La escala {scale} no es correcta.'), 400
         elif data_id.startswith("SPI_"):
             scale = data_id.split("_")[1]
             if scale in spi_scales:

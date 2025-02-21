@@ -137,7 +137,7 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
     const [isDraggModalVisible, setIsDraggModalVisible] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isPrecipitationOpen, setIsPrecipitationOpen] = useState(false);
-    const [isPrecipitationNavbarSwitchChecked, setIsPrecipitationNavbarSwitchChecked] = useState(true);
+    const [isPrecipitationNavbarSwitchChecked, setIsPrecipitationNavbarSwitchChecked] = useState(false);
     const [PrecipitationlayersSwitches, setPrecipitationlayersSwitches] = useState({
         PTM: true,
         PMP_24h: false,
@@ -148,9 +148,6 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
         PMD_25: false,
         PMD_50: false,
         PMD_100: false,
-    });
-    const [PTMlayerSwitch, setPTMLayerSwitch] = useState({
-        PTM: true
     });
     const [isSPINavbarSwitchChecked, setIsSPINavbarSwitchChecked] = useState(false);
     const [SPIlayersSwitches, setSPILayersSwitches] = useState({
@@ -247,10 +244,12 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
         setIsMouseOverComponent(true);
 
         const selectedLayers = [];
-        
-        if (PTMlayerSwitch.PTM) {
-            selectedLayers.push('PTM');
-        }
+
+        Object.keys(PrecipitationlayersSwitches).forEach((key) => {
+            if (PrecipitationlayersSwitches[key]) {
+                selectedLayers.push(key);  
+            }
+        });
         
         Object.keys(SPIlayersSwitches).forEach((key) => {
             if (SPIlayersSwitches[key]) {
@@ -525,6 +524,7 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
         }, [layerOpacity[layerName]]);
     };
     
+    handlePrecipitationLayers('PTM', 'EHCPA:PTM_Raster');
     handlePrecipitationLayers('PMP_24h', 'EHCPA:PMP_24h_Raster');
     handlePrecipitationLayers('PMP_1', 'EHCPA:PMP_1_Raster');
     handlePrecipitationLayers('PMD_2', 'EHCPA:PMD_2_Raster');
@@ -533,8 +533,6 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
     handlePrecipitationLayers('PMD_25', 'EHCPA:PMD_25_Raster');
     handlePrecipitationLayers('PMD_50', 'EHCPA:PMD_50_Raster');
     handlePrecipitationLayers('PMD_100', 'EHCPA:PMD_100_Raster');
-    handlePrecipitationLayers('PTM', 'EHCPA:PTM_Raster');
-
 
     /*******************************************************************************************************************************************************/
 
