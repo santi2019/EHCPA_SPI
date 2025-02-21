@@ -84,6 +84,28 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
 
     const elementRef = useRef(null);
     const map = useMap();
+    const [PrecipitationResults, setPrecipitationResults] = useState({
+        PTM: null,
+        PMP_24h: null,
+        PMP_1: null,
+        PMP_2: null,
+        PMP_5: null,
+        PMP_10: null,
+        PMP_25: null,
+        PMP_50: null,
+        SPI_100: null,
+    });
+    const [notFoundPrecipitationResults, setNotFoundPrecipitationResults] = useState({
+        PTM: "",
+        PMP_24h: "",
+        PMP_1: "",
+        PMD_2: "",
+        PMD_5: "",
+        PMD_10: "",
+        PMD_25: "",
+        PMD_50: "",
+        PMD_100: "",
+    });
     const [PTMResult, setPTMResult] = useState(null);
     const [notFoundPTMResults, setNotFoundPTMResults] = useState("");
     const [SPIResults, setSPIResults] = useState({
@@ -118,6 +140,17 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isPrecipitationOpen, setIsPrecipitationOpen] = useState(false);
     const [isPrecipitationNavbarSwitchChecked, setIsPrecipitationNavbarSwitchChecked] = useState(true);
+    const [PrecipitationlayersSwitches, setPrecipitationlayersSwitches] = useState({
+        PTM: true,
+        PMP_24h: false,
+        PMP_1: false,
+        PMD_2: false,
+        PMD_5: false,
+        PMD_10: false,
+        PMD_25: false,
+        PMD_50: false,
+        PMD_100: false,
+    });
     const [PTMlayerSwitch, setPTMLayerSwitch] = useState({
         PTM: true
     });
@@ -138,6 +171,14 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
     const [isSPIOpen, setIsSPIOpen] = useState(false);
     const [layerOpacity, setLayerOpacity] = useState({
         PTM: 1,
+        PMP_24h: 1,
+        PMP_1: 1,
+        PMD_2: 1,
+        PMD_5: 1,
+        PMD_10: 1,
+        PMD_25: 1,
+        PMD_50: 1,
+        PMD_100: 1,
         SPI_1: 1,
         SPI_2: 1,
         SPI_3: 1,
@@ -386,13 +427,12 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
      *    cuando alguno de estos valores cambie, manteniendo el estado de la capa actualizado.
     */
 
-    const handlePTMLayer = (layerName, geoserverLayer) => {
-
+    const handlePrecipitationLayers = (layerName, geoserverLayer) => {
         useEffect(() => {
             if (!layers.current[layerName]) {
                 const layer = L.Geoserver.wms(import.meta.env.VITE_GEOSERVER_DATA_URL, {
                     layers: geoserverLayer,
-                    opacity: layerOpacity[layerName], 
+                    opacity: layerOpacity[layerName],
                     format: 'image/png',
                     zIndex: 800,
                 });
@@ -402,7 +442,7 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
             const layer = layers.current[layerName];
     
             const updateLayer = () => {
-                if (PTMlayerSwitch[layerName]) {
+                if (PrecipitationlayersSwitches[layerName]) {
                     if (!map.hasLayer(layer)) {
                         map.addLayer(layer);
                     }
@@ -414,67 +454,89 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
             };
     
             const handleMapClick = async (e) => {
-            
-                if (isMouseOverRef.current) {
-                    return;  
-                }
-
-                if (!PTMlayerSwitch[layerName]) {
-                    return; 
-                }
-
+                if (isMouseOverRef.current) return;
+                if (!PrecipitationlayersSwitches[layerName]) return;
+    
                 const { lat, lng } = e.latlng;
                 setCoordinatesResult({ lat, lng });
-
+    
                 try {
-                    
-                    const url = `${import.meta.env.VITE_GEOSERVER_DATA_URL}?service=WMS&version=1.1.0&request=GetFeatureInfo&layers=EHCPA:PTM_Raster&query_layers=EHCPA:PTM_Raster&info_format=application/json&bbox=${map.getBounds().toBBoxString()}&width=${map.getSize().x}&height=${map.getSize().y}&srs=EPSG:4326&x=${Math.floor(e.containerPoint.x)}&y=${Math.floor(e.containerPoint.y)}`;
+                    const url = `${import.meta.env.VITE_GEOSERVER_DATA_URL}?service=WMS&version=1.1.0&request=GetFeatureInfo&layers=${geoserverLayer}&query_layers=${geoserverLayer}&info_format=application/json&bbox=${map.getBounds().toBBoxString()}&width=${map.getSize().x}&height=${map.getSize().y}&srs=EPSG:4326&x=${Math.floor(e.containerPoint.x)}&y=${Math.floor(e.containerPoint.y)}`;
     
                     const response = await axios.get(url);
     
                     if (response.data.features && response.data.features.length > 0) {
-                        const value = response.data.features[0].properties.GRAY_INDEX; 
-                        if(value ==  -9999.900390625){
-                            setPTMResult(null);
-                            setNotFoundPTMResults("S/D");
-                        }else{
-                            setPTMResult(value);
-                            setNotFoundPTMResults("");
+                        const value = response.data.features[0].properties.GRAY_INDEX;
+                        if (value == -9999.900390625 || value == -3.4028234663852886e+38) {
+                            setPrecipitationResults((prevState) => ({
+                                ...prevState,
+                                [layerName]: null,
+                            }));
+                            setNotFoundPrecipitationResults((prevState) => ({
+                                ...prevState,
+                                [layerName]: "S/D",
+                            }));
+                        } else {
+                            setPrecipitationResults((prevState) => ({
+                                ...prevState,
+                                [layerName]: value,
+                            }));
+                            setNotFoundPrecipitationResults((prevState) => ({
+                                ...prevState,
+                                [layerName]: "",
+                            }));
                         }
                     } else {
-                        setPTMResult(null);
-                        setNotFoundPTMResults("S/D");
+                        setPrecipitationResults((prevState) => ({
+                            ...prevState,
+                            [layerName]: null,
+                        }));
+                        setNotFoundPrecipitationResults((prevState) => ({
+                            ...prevState,
+                            [layerName]: "S/D",
+                        }));
                     }
                 } catch (error) {
-                    setPTMResult(null);
-                    setNotFoundPTMResults(`Error: ${error.message}`);
+                    setPrecipitationResults((prevState) => ({
+                        ...prevState,
+                        [layerName]: null,
+                    }));
+                    setNotFoundPrecipitationResults((prevState) => ({
+                        ...prevState,
+                        [layerName]: `Error en ${layerName}: ${error.message}`,
+                    }));
                 }
             };
     
             map.on('click', handleMapClick);
-    
             updateLayer();
     
             return () => {
                 if (map.hasLayer(layer)) {
                     map.removeLayer(layer);
                 }
-            
                 map.off('click', handleMapClick);
             };
-        }, [map, PTMlayerSwitch[layerName]]);
+        }, [map, PrecipitationlayersSwitches[layerName]]);
     
-        
         useEffect(() => {
             const layer = layers.current[layerName];
             if (map.hasLayer(layer)) {
                 layer.setOpacity(layerOpacity[layerName]);
             }
         }, [layerOpacity[layerName]]);
-
     };
     
-    handlePTMLayer('PTM', 'EHCPA:PTM_Raster');
+    handlePrecipitationLayers('PMP_24h', 'EHCPA:PMP_24h_Raster');
+    handlePrecipitationLayers('PMP_1', 'EHCPA:PMP_1_Raster');
+    handlePrecipitationLayers('PMD_2', 'EHCPA:PMD_2_Raster');
+    handlePrecipitationLayers('PMD_5', 'EHCPA:PMD_5_Raster');
+    handlePrecipitationLayers('PMD_10', 'EHCPA:PMD_10_Raster');
+    handlePrecipitationLayers('PMD_25', 'EHCPA:PMD_25_Raster');
+    handlePrecipitationLayers('PMD_50', 'EHCPA:PMD_50_Raster');
+    handlePrecipitationLayers('PMD_100', 'EHCPA:PMD_100_Raster');
+    handlePrecipitationLayers('PTM', 'EHCPA:PTM_Raster');
+
 
     /*******************************************************************************************************************************************************/
 
@@ -671,15 +733,45 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
 
     const handlePrecipitationNavbarSwitchChange = (checked) => {
         setIsPrecipitationNavbarSwitchChecked(checked);
-        setPTMLayerSwitch({
-            PTM: checked
+        setPrecipitationlayersSwitches({
+            PTM: checked,
+            PMP_24h: checked,
+            PMP_1: checked,
+            PMD_2: checked,
+            PMD_5: checked,
+            PMD_10: checked,
+            PMD_25: checked,
+            PMD_50: checked,
+            PMD_100: checked,
         });
 
         if (!checked) {
-            setPTMResult(null);
-            setNotFoundPTMResults("");
+            
+            const layers = [
+                'PTM', 'PMP_24h', 'PMP_1', 'PMD_2', 'PMD_5', 'PMD_10',
+                'PMD_25', 'PMD_50', 'PMD_100'
+            ];
+
+            setPrecipitationResults((prevState) => {
+                const updatedResults = { ...prevState };
+                layers.forEach((layer) => {
+                    updatedResults[layer] = null;
+                });
+                return updatedResults;
+            });
+
+            setNotFoundPrecipitationResults((prevState) => {
+                const updatedNotFoundResults = { ...prevState };
+                layers.forEach((layer) => {
+                    updatedNotFoundResults[layer] = "";
+                });
+                return updatedNotFoundResults;
+            });
         }
+
     };
+
+
 
     /*******************************************************************************************************************************************************/
 
@@ -700,17 +792,26 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
      *    3.2. "setNotFoundPTMResults" se actualiza a una cadena vacía, limpiando cualquier mensaje de datos no encontrados de PTM.
     */
 
-    const handlePTMLayerSwitchChange = (layer, checked) => {
-        setPTMLayerSwitch((prevState) => ({
+    const handlePrecipitationLayerSwitchChange = (layer, checked) => {
+        setPrecipitationlayersSwitches((prevState) => ({
             ...prevState,
             [layer]: checked
         }));
 
         if (!checked) {
-            setPTMResult(null);
-            setNotFoundPTMResults("");
+            setPrecipitationResults((prevState) => ({
+                ...prevState,
+                [layer]: null,
+            }));
+
+            setNotFoundPrecipitationResults((prevState) => ({
+                ...prevState,
+                [layer]: "",
+            }));
         }
     };
+
+    
 
     /*******************************************************************************************************************************************************/
 
@@ -1122,12 +1223,12 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
                 closePrecipitationContainer={closePrecipitationContainer}
                 closeSPIContainer={closeSPIContainer}
                 handlePrecipitationNavbarSwitchChange={handlePrecipitationNavbarSwitchChange}
-                handlePTMLayerSwitchChange={handlePTMLayerSwitchChange}
+                handlePrecipitationLayerSwitchChange={handlePrecipitationLayerSwitchChange}
                 handleSPINavbarSwitchChange={handleSPINavbarSwitchChange}
                 handleSPILayerSwitchChange={handleSPILayerSwitchChange}
                 layerOpacity={layerOpacity}
                 SPIlayersSwitches={SPIlayersSwitches}
-                PTMlayerSwitch={PTMlayerSwitch}
+                PrecipitationlayersSwitches={PrecipitationlayersSwitches}
                 isPrecipitationNavbarSwitchChecked={isPrecipitationNavbarSwitchChecked}
                 isSPINavbarSwitchChecked={isSPINavbarSwitchChecked}
                 handleOpacityChange={handleOpacityChange}
@@ -1158,9 +1259,9 @@ const MapMenu = ({setIsMouseOverComponent, isMouseOverComponent}) => {
                 coordinatesResult={coordinatesResult}
                 isCopied={isCopied}
                 handleCopyValues={handleCopyValues}
-                PTMResult={PTMResult}
-                notFoundPTMResults={notFoundPTMResults}
-                PTMlayerSwitch={PTMlayerSwitch}
+                PrecipitationResults={PrecipitationResults}
+                notFoundPrecipitationResults={notFoundPrecipitationResults}
+                PrecipitationlayersSwitches={PrecipitationlayersSwitches}
                 SPIResults={SPIResults}
                 SPIlayersSwitches={SPIlayersSwitches}
                 notFoundSPIResults={notFoundSPIResults}

@@ -34,9 +34,9 @@ const DraggableModal = ({
   coordinatesResult,
   isCopied,
   handleCopyValues,
-  PTMResult,
-  notFoundPTMResults,
-  PTMlayerSwitch,
+  PrecipitationResults,
+  notFoundPrecipitationResults,
+  PrecipitationlayersSwitches,
   SPIResults,
   SPIlayersSwitches,
   notFoundSPIResults
@@ -47,7 +47,7 @@ const DraggableModal = ({
      *   elementos "li" en caso de que el scroll-bar no este presente.
     */
    
-    const valuesContainerRef = useNoScroll([PTMResult, SPIResults, notFoundPTMResults, notFoundSPIResults]); 
+    const valuesContainerRef = useNoScroll([PrecipitationResults, SPIResults, notFoundPrecipitationResults, notFoundSPIResults]); 
 
     /*******************************************************************************************************************************************************/
     
@@ -72,7 +72,7 @@ const DraggableModal = ({
     */
 
     const isValuesContainerEmpty = !(
-        PTMlayerSwitch.PTM && (PTMResult !== null || notFoundPTMResults) ||
+        PrecipitationlayersSwitches.PTM && (PrecipitationResults !== null || notFoundPrecipitationResults) ||
         Object.keys(SPIResults).some(key => SPIlayersSwitches[key] && (SPIResults[key] !== null || notFoundSPIResults[key]))
     );
   
@@ -123,16 +123,19 @@ const DraggableModal = ({
                 <ul className="draggModalValuesItems">
                     {coordinatesResult.lat && coordinatesResult.lng && (
                         <>
-                        {PTMlayerSwitch.PTM && (PTMResult !== null || notFoundPTMResults) && (
-                            <li className="lidraggModalValues">
-                                <span>PTM [mm]: </span>
-                                {PTMResult !== null ? (
-                                    `${PTMResult.toFixed(1)}`
-                                ) : (
-                                    notFoundPTMResults
-                                )}
-                            </li>
-                        )}
+                        {Object.keys(PrecipitationResults).map((key) => (
+                            PrecipitationlayersSwitches[key] && (PrecipitationResults[key] !== null || notFoundPrecipitationResults[key]) && (
+                                <li key={key} className="lidraggModalValues">
+                                    <span>{`${key} [mm]: `}</span>
+                                    {PrecipitationResults[key] !== null ? (
+                                        `${PrecipitationResults[key].toFixed(1)}`
+                                    ) : (
+                                        notFoundPrecipitationResults[key]
+                                    )}
+                                </li>
+                            )
+                        ))}
+
                         {Object.keys(SPIResults).map((key) => (
                             SPIlayersSwitches[key] && (SPIResults[key] !== null || notFoundSPIResults[key]) && (
                                 <li key={key} className="lidraggModalValues">
