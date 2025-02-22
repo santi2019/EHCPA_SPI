@@ -239,7 +239,7 @@ const HomeMap = () => {
                 doubleClickZoom={false}>
                 <TileLayer
                     attribution={import.meta.env.VITE_OSM_ATTRIBUTION}
-                    url={import.meta.env.VITE_OSM_MAP_URL}
+                    url={import.meta.env.VITE_ARGEN_MAP_URL}
                 />
                 <MapMenu setIsMouseOverComponent={setIsMouseOverComponent} isMouseOverComponent={isMouseOverComponent}/>
                 <MapReferenceLayers setIsMouseOverComponent={setIsMouseOverComponent}/>

@@ -124,18 +124,24 @@ const DraggableModal = ({
                 <ul className="draggModalValuesItems">
                     {coordinatesResult.lat && coordinatesResult.lng && (
                         <>
-                        {Object.keys(PrecipitationResults).map((key) => (
-                            PrecipitationlayersSwitches[key] && (PrecipitationResults[key] !== null || notFoundPrecipitationResults[key]) && (
-                                <li key={key} className="lidraggModalValues">
-                                    <span>{`${key.replace('_', ' ').replace('24h', '24 hrs')} [mm]: `}</span>
-                                    {PrecipitationResults[key] !== null ? (
-                                        `${PrecipitationResults[key].toFixed(1)}`
-                                    ) : (
-                                        notFoundPrecipitationResults[key]
-                                    )}
-                                </li>
-                            )
-                        ))}
+                        {Object.keys(PrecipitationResults)
+    .sort((a, b) => {
+        const order = ["PMP_24h", "PMP_1", "PMD_2", "PMD_5", "PMD_10", "PMD_25", "PMD_50", "PMD_100"];
+        return order.indexOf(a) - order.indexOf(b);
+    })
+    .map((key) => (
+        PrecipitationlayersSwitches[key] && (PrecipitationResults[key] !== null || notFoundPrecipitationResults[key]) && (
+            <li key={key} className="lidraggModalValues">
+                <span>{`${key.replace('_', ' ').replace('24h', '24 hrs')} [mm]: `}</span>
+                {PrecipitationResults[key] !== null ? (
+                    `${PrecipitationResults[key].toFixed(1)}`
+                ) : (
+                    notFoundPrecipitationResults[key]
+                )}
+            </li>
+        )
+    ))}
+
 
                         {Object.keys(SPIResults).map((key) => (
                             SPIlayersSwitches[key] && (SPIResults[key] !== null || notFoundSPIResults[key]) && (
