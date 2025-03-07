@@ -157,6 +157,33 @@ const InfoMap = ({
                             </div>
                         </div>                    
                     </div>
+                    <div className="mapPMPContainer">
+                        <div className="mapPMPTitleContainer">
+                            <h2 className="mapPMPTitle">VLEP (Valor Límite Estimado de Precipitación) o PMP (Precipitación Máxima Probable)</h2>
+                        </div>
+                        <div className="mapPMP">
+                            <p>
+                                El VLEP, conocido también como PMP (Precipitación Máxima Probable), representa la mayor cantidad de precipitación que se puede estimar analíticamente para una duración dada, 
+                                basada en las condiciones meteorológicas de una región específica. Este valor es fundamental para el diseño de estructuras críticas como presas, donde la seguridad ante eventos 
+                                extremos es primordial. La metodología empleada en el estudio para calcular la PMP se basa en el método estadístico de Hershfield, adaptado para el contexto local. Esta estimación 
+                                incluye el cálculo de factores de frecuencia y la generación de series sintéticas, permitiendo una representación más precisa de los eventos de precipitación extrema.
+                            </p>
+                        </div>                    
+                    </div>
+                    <div className="mapPMDContainer">
+                        <div className="mapPMDTitleContainer">
+                            <h2 className="mapPMDTitle">PMD (Precipitación Máxima Diaria) con Recurrencia Asociada</h2>
+                        </div>
+                        <div className="mapPMD">
+                            <p>
+                                La PMD (Precipitación Máxima Diaria) con recurrencia asociada se refiere a la máxima cantidad de precipitación que se espera que ocurra en un solo día dentro de un periodo 
+                                específico de retorno, como 2, 5, 10, 25, 50 o 100 años. En el contexto del diseño hidrológico, estas estimaciones se utilizan para dimensionar infraestructuras hidráulicas, 
+                                ya que permiten evaluar el riesgo de eventos extremos de precipitación. En el estudio, la estimación de la PMD se realiza mediante el análisis de frecuencia de series 
+                                temporales de datos pluviométricos, ajustando funciones de distribución de probabilidad como la Lognormal. Esta información se mapea utilizando técnicas de interpolación 
+                                espacial, proporcionando un recurso esencial para zonas sin información hidrológica detallada.
+                            </p>
+                        </div>                    
+                    </div>
                     <div className="mapDownloadContainer">
                         <div className="mapDownloadTitleContainer">
                             <h2 className="mapDownloadTitle">Descarga de Datos</h2>
