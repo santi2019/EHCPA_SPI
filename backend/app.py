@@ -8,7 +8,7 @@ from flask import Flask, send_file, render_template, jsonify, request
 from flask_cors import CORS
 from apscheduler.schedulers.background import BackgroundScheduler
 from main_v7 import ehcpa_process, remote_download_process
-from src.scripts.get_dates_v7 import get_today_date, get_calibration_date, get_ARG_late_last_date
+from src.scripts.get_dates_v7 import get_today_date, get_calibration_date, get_ARG_late_last_date, get_data_download_dates
 from tempfile import TemporaryDirectory
 
 ###################################################################################################################################
@@ -132,10 +132,15 @@ def download_file(id_data):
     downloable_data_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'downloable_data'))
     PTM_dir = os.path.join(downloable_data_dir, 'PTM')
     SPI_dir = os.path.join(downloable_data_dir, 'SPI')
+    PMD_dir = os.path.join(downloable_data_dir, 'PMD')
 
     spi_scales = ['1', '2', '3', '6', '9', '12', '24', '36', '48', '60', '72']
 
-    calibration_end_year, calibration_end_month = get_calibration_date()
+    pmp_scales = ['24h', '1']
+
+    pmd_scales = ['2', '5', '10', '25', '50', '100']
+
+    download_end_month, download_end_year = get_data_download_dates()
 
     ids = id_data.split(',')
     files_to_zip = []
@@ -143,14 +148,26 @@ def download_file(id_data):
 
     for data_id in ids:
         if data_id == "PTM":
-            #file_path = os.path.join(PTM_dir, f'PTM_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_all_bands_ARG_cropped.tif')
-            file_path = os.path.join(PTM_dir, f'PTM_jun_2000_ene_2025_all_bands_ARG_cropped.tif')
+            file_path = os.path.join(PTM_dir, f'PTM_jun_2000_{download_end_month.rstrip(".")}_{download_end_year}_all_bands_ARG_cropped.tif')
             print(file_path)
+        elif data_id.startswith("PMP_"):
+            scale = data_id.split("_")[1]
+            if scale in pmp_scales:
+                file_path = os.path.join(PMD_dir, f'PMP_{scale}_ARG_cropped.tif')
+                print(file_path)
+            else:
+                return jsonify(message=f'La escala {scale} no es correcta.'), 400
+        elif data_id.startswith("PMD_"):
+            scale = data_id.split("_")[1]
+            if scale in pmd_scales:
+                file_path = os.path.join(PMD_dir, f'PMD_{scale}_ARG_cropped.tif')
+                print(file_path)
+            else:
+                return jsonify(message=f'La escala {scale} no es correcta.'), 400
         elif data_id.startswith("SPI_"):
             scale = data_id.split("_")[1]
             if scale in spi_scales:
-                #file_path = os.path.join(SPI_dir, f'SPI_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
-                file_path = os.path.join(SPI_dir, f'SPI_jun_2000_ene_2025_scale_{scale}_all_bands_ARG_cropped.tif')
+                file_path = os.path.join(SPI_dir, f'SPI_jun_2000_{download_end_month.rstrip(".")}_{download_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
                 print(file_path)
             else:
                 return jsonify(message=f'La escala {scale} no es correcta.'), 400
@@ -224,9 +241,8 @@ def get_dates():
     else:
         last_band_day = last_band_month = last_band_year = 'No Disponible'
 
-    calibration_end_year, calibration_end_month = get_calibration_date()
-    #calibration_date_str = f"{calibration_end_month.rstrip('.')}_{calibration_end_year}"
-    calibration_date_str = "ene_2025"
+    download_end_month, download_end_year = get_data_download_dates()
+    calibration_date_str = f"{download_end_month.rstrip('.')}_{download_end_year}"
 
     response = {
         'today_day': today_day,
