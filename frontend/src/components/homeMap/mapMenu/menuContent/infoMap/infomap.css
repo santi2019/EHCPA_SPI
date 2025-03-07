@@ -116,20 +116,23 @@
 }
 
 .mapNameContainer, .mapDescriptionContainer, .mapPTMContainer, .mapSPIContainer, 
-.mapViewContainer, .mapDownloadContainer, .mapContactContainer{
+.mapPMPContainer, .mapPMDContainer, .mapViewContainer, .mapDownloadContainer, 
+.mapContactContainer{
     display: flex;
     flex-direction: column;
     border-right: 1px groove #babdc5;
 }
 
 .mapDescriptionTitleContainer, .mapPTMTitleContainer, .mapSPITitleContainer, 
-.mapViewTitleContainer, .mapDownloadTitleContainer, .mapContactTitleContainer{
+.mapPMPTitleContainer, .mapPMDTitleContainer, .mapViewTitleContainer, 
+.mapDownloadTitleContainer, .mapContactTitleContainer{
     border-bottom: 1px groove #babdc5;
     padding: 0px 12px;
 }
 
 .mapDescriptionTitle, .mapPTMTitle, .mapSPITitle, 
-.mapViewTitle, .mapDownloadTitle, .mapContactTitle{
+.mapPMPTitle, .mapPMDTitle, .mapViewTitle, .mapDownloadTitle, 
+.mapContactTitle{
     color: #3f74b1;
     cursor: text;
     user-select: text;
@@ -149,8 +152,9 @@
 
 }
 
-.mapDescription, .mapPTM, .mapSPI, 
-.mapView, .mapDownload, .mapContact{
+.mapDescription, .mapPTM, .mapSPI,
+.mapPMP, .mapPMD, .mapView, .mapDownload, 
+.mapContact{
     color: #000000;
     cursor: text;
     user-select: text;
@@ -167,7 +171,8 @@
 }
 
 .mapDescription p, .mapPTM p, .mapSPI p, 
-.mapView p, .mapDownload p, .mapContact p{
+.mapPMP p, .mapPMD p, .mapView p, .mapDownload p, 
+.mapContact p{
     margin: 0;
 }
 

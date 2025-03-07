@@ -27,8 +27,8 @@ const ModalPrecipitation = ({
     closePrecipitationContainer,
     isPrecipitationNavbarSwitchChecked,
     handlePrecipitationNavbarSwitchChange,
-    PTMlayerSwitch,
-    handlePTMLayerSwitchChange,
+    PrecipitationlayersSwitches,
+    handlePrecipitationLayerSwitchChange,
     layerOpacity,
     handleOpacityChange,
 }) => {
@@ -38,7 +38,15 @@ const ModalPrecipitation = ({
   */
 
   const layers = [
-    { name: 'Precip. Total Mensual [mm]', key: 'PTM' }
+    { name: 'Precip. Total Mensual [mm]', key: 'PTM' },
+    { name: 'Precip. Máxima Probable 24 hrs [mm]', key: 'PMP_24h' },
+    { name: 'Precip. Máxima Probable 1 Dia [mm]', key: 'PMP_1' },
+    { name: 'Precip. Máxima Diaria 2 Años [mm]', key: 'PMD_2' },
+    { name: 'Precip. Máxima Diaria 5 Años [mm]', key: 'PMD_5' },
+    { name: 'Precip. Máxima Diaria 10 Años [mm]', key: 'PMD_10' },
+    { name: 'Precip. Máxima Diaria 25 Años [mm]', key: 'PMD_25' },
+    { name: 'Precip. Máxima Diaria 50 Años [mm]', key: 'PMD_50' },
+    { name: 'Precip. Máxima Diaria 100 Años [mm]', key: 'PMD_100' }
   ];
 
   /*******************************************************************************************************************************************************/
@@ -69,7 +77,7 @@ const ModalPrecipitation = ({
                 {layers.map(layer => (
                     <li key={layer.key} data-layer={layer.key}>
                         <div className="precipitationSwitchText">
-                            <Switch checked={PTMlayerSwitch[layer.key]} onChange={(checked) => handlePTMLayerSwitchChange(layer.key, checked)}/>
+                            <Switch checked={PrecipitationlayersSwitches[layer.key]} onChange={(checked) => handlePrecipitationLayerSwitchChange(layer.key, checked)}/>
                             <span className="precipitationLayerName">{layer.name}</span>
                         </div>
                         <div className="precipitationLayersRange">

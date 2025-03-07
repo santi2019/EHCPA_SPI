@@ -1,5 +1,6 @@
 import os
 import shutil
+import locale
 import platform
 import xarray as xr
 import rioxarray
@@ -131,6 +132,8 @@ def spi_convertion_and_crop():
 
         with fiona.open(shp_file, "r") as shapefile:
             shapes = [feature["geometry"] for feature in shapefile]
+        
+        locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 
         calibration_end_year, calibration_end_month = get_calibration_date()
 

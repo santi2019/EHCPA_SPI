@@ -138,9 +138,34 @@ def get_calibration_date():
     return calibration_end_year, calibration_end_month
 
 
-
-
-
+def get_data_download_dates():
+    # Definir el directorio donde se almacenan los archivos
+    imerg_late_month_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'IMERG_late_month'))
+    
+    # Listar los archivos en el directorio
+    files = [f for f in os.listdir(imerg_late_month_dir) if os.path.isfile(os.path.join(imerg_late_month_dir, f))]
+    
+    # Definir el patrón de búsqueda de archivos con el formato IMERG_monthly_accumulated_precip_YYYY_MM.nc4
+    pattern = r'IMERG_monthly_accumulated_precip_(\d{4})_(\d{2})\.nc4'
+    
+    # Filtrar archivos que cumplan con el patrón
+    dated_files = [f for f in files if re.search(pattern, f)]
+    
+    if dated_files:
+        # Ordenar los archivos para obtener el más reciente
+        latest_file = sorted(dated_files)[-1]
+        
+        # Extraer el año y el mes del nombre del archivo
+        match = re.search(pattern, latest_file)
+        if match:
+            year = match.group(1)
+            month_num = int(match.group(2))
+            month_str = datetime(1900, month_num, 1).strftime('%b').lower()
+            
+            return month_str, year
+    
+    return "No disponible", "No disponible"
+    
 
 
 if __name__ == "__main__":
@@ -158,3 +183,7 @@ if __name__ == "__main__":
 
    calibration_end_year, calibration_end_month = get_calibration_date()
    print(f"Periodo de calibracion: {calibration_end_month}_{calibration_end_year}")
+
+   month, year = get_data_download_dates()
+   print(f"Último mes procesado: {month}")
+   print(f"Último año procesado: {year}")

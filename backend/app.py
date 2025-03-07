@@ -8,7 +8,7 @@ from flask import Flask, send_file, render_template, jsonify, request
 from flask_cors import CORS
 from apscheduler.schedulers.background import BackgroundScheduler
 from main_v7 import ehcpa_process, remote_download_process
-from src.scripts.get_dates_v7 import get_today_date, get_calibration_date, get_ARG_late_last_date
+from src.scripts.get_dates_v7 import get_today_date, get_calibration_date, get_ARG_late_last_date, get_data_download_dates
 from tempfile import TemporaryDirectory
 
 ###################################################################################################################################
@@ -50,7 +50,7 @@ cors = CORS(app, origins='*')   # origins=['https://example-front.com']
 
 scheduler = BackgroundScheduler(daemon=True)
 scheduler.add_job(ehcpa_process, 'cron', hour=3, misfire_grace_time=3600)
-#scheduler.add_job(ehcpa_process, 'cron', hour='22,23', misfire_grace_time=3600)
+#scheduler.add_job(ehcpa_process, 'cron', hour='11,13,15,17,19,21', misfire_grace_time=3600)
 scheduler.add_job(remote_download_process, 'cron', minute='0,30', hour='20-23,0-2', misfire_grace_time=3600)
 scheduler.start()
 
@@ -127,65 +127,78 @@ def home():
 @app.route('/download/<id_data>', methods=['GET'])
 def download_file(id_data):
 
-    original_locale = locale.getlocale(locale.LC_TIME)
+    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 
-    try:
-        locale.setlocale(locale.LC_TIME, 'C')
+    downloable_data_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'downloable_data'))
+    PTM_dir = os.path.join(downloable_data_dir, 'PTM')
+    SPI_dir = os.path.join(downloable_data_dir, 'SPI')
+    PMD_dir = os.path.join(downloable_data_dir, 'PMD')
 
-        downloable_data_dir = os.path.expanduser(os.path.join('~', 'EHCPA_SPI', 'backend', 'src', 'output', 'downloable_data'))
-        PTM_dir = os.path.join(downloable_data_dir, 'PTM')
-        SPI_dir = os.path.join(downloable_data_dir, 'SPI')
+    spi_scales = ['1', '2', '3', '6', '9', '12', '24', '36', '48', '60', '72']
 
-        spi_scales = ['1', '2', '3', '6', '9', '12', '24', '36', '48', '60', '72']
+    pmp_scales = ['24h', '1']
 
-        calibration_end_year, calibration_end_month = get_calibration_date()
+    pmd_scales = ['2', '5', '10', '25', '50', '100']
 
-        ids = id_data.split(',')
-        files_to_zip = []
-        not_found_files = []
+    download_end_month, download_end_year = get_data_download_dates()
 
-        for data_id in ids:
-            if data_id == "PTM":
-                file_path = os.path.join(PTM_dir, f'PTM_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_all_bands_ARG_cropped.tif')
+    ids = id_data.split(',')
+    files_to_zip = []
+    not_found_files = []
+
+    for data_id in ids:
+        if data_id == "PTM":
+            file_path = os.path.join(PTM_dir, f'PTM_jun_2000_{download_end_month.rstrip(".")}_{download_end_year}_all_bands_ARG_cropped.tif')
+            print(file_path)
+        elif data_id.startswith("PMP_"):
+            scale = data_id.split("_")[1]
+            if scale in pmp_scales:
+                file_path = os.path.join(PMD_dir, f'PMP_{scale}_ARG_cropped.tif')
                 print(file_path)
-            elif data_id.startswith("SPI_"):
-                scale = data_id.split("_")[1]
-                if scale in spi_scales:
-                    file_path = os.path.join(SPI_dir, f'SPI_jun_2000_{calibration_end_month.rstrip(".")}_{calibration_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
-                    print(file_path)
-                else:
-                    return jsonify(message=f'La escala {scale} no es correcta.'), 400
             else:
-                return jsonify(message=f'El identificador {data_id} no es correcto.'), 400
-
-            if os.path.exists(file_path):
-                files_to_zip.append(file_path)
+                return jsonify(message=f'La escala {scale} no es correcta.'), 400
+        elif data_id.startswith("PMD_"):
+            scale = data_id.split("_")[1]
+            if scale in pmd_scales:
+                file_path = os.path.join(PMD_dir, f'PMD_{scale}_ARG_cropped.tif')
+                print(file_path)
             else:
-                not_found_files.append(data_id)
-
-        if not_found_files:
-            if len(not_found_files) == 1:
-                return jsonify(message=f'El archivo {not_found_files[0]} no se encuentra disponible para su descarga en este momento.'), 404
+                return jsonify(message=f'La escala {scale} no es correcta.'), 400
+        elif data_id.startswith("SPI_"):
+            scale = data_id.split("_")[1]
+            if scale in spi_scales:
+                file_path = os.path.join(SPI_dir, f'SPI_jun_2000_{download_end_month.rstrip(".")}_{download_end_year}_scale_{scale}_all_bands_ARG_cropped.tif')
+                print(file_path)
             else:
-                return jsonify(message=f'Los siguientes archivos no están disponibles para su descarga en este momento: {", ".join(not_found_files)}'), 404
+                return jsonify(message=f'La escala {scale} no es correcta.'), 400
+        else:
+            return jsonify(message=f'El identificador {data_id} no es correcto.'), 400
 
-        # Crear un directorio temporal para aislamiento
-        with TemporaryDirectory() as temp_dir:
-            zip_path = os.path.join(temp_dir, 'EHCPA_Data.zip')
+        if os.path.exists(file_path):
+            files_to_zip.append(file_path)
+        else:
+            not_found_files.append(data_id)
 
-            # Crear el archivo ZIP dentro del directorio temporal
-            with zipfile.ZipFile(zip_path, 'w') as zip_file:
-                for file_path in files_to_zip:
-                    zip_file.write(file_path, os.path.basename(file_path))
+    if not_found_files:
+        if len(not_found_files) == 1:
+            return jsonify(message=f'El archivo {not_found_files[0]} no se encuentra disponible para su descarga en este momento.'), 404
+        else:
+            return jsonify(message=f'Los siguientes archivos no están disponibles para su descarga en este momento: {", ".join(not_found_files)}'), 404
 
-            # Leer el ZIP y enviarlo como respuesta
-            with open(zip_path, 'rb') as zip_file:
-                zip_data = zip_file.read()
+    # Crear un directorio temporal para aislamiento
+    with TemporaryDirectory() as temp_dir:
+        zip_path = os.path.join(temp_dir, 'EHCPA_Data.zip')
 
-        return send_file(BytesIO(zip_data), as_attachment=True, download_name='EHCPA_Data.zip', mimetype='application/zip')
+        # Crear el archivo ZIP dentro del directorio temporal
+        with zipfile.ZipFile(zip_path, 'w') as zip_file:
+            for file_path in files_to_zip:
+                zip_file.write(file_path, os.path.basename(file_path))
 
-    finally:
-        locale.setlocale(locale.LC_TIME, original_locale)    
+        # Leer el ZIP y enviarlo como respuesta
+        with open(zip_path, 'rb') as zip_file:
+            zip_data = zip_file.read()
+
+    return send_file(BytesIO(zip_data), as_attachment=True, download_name='EHCPA_Data.zip', mimetype='application/zip')
 
 ###################################################################################################################################
 
@@ -228,8 +241,8 @@ def get_dates():
     else:
         last_band_day = last_band_month = last_band_year = 'No Disponible'
 
-    calibration_end_year, calibration_end_month = get_calibration_date()
-    calibration_date_str = f"{calibration_end_month.rstrip('.')}_{calibration_end_year}"
+    download_end_month, download_end_year = get_data_download_dates()
+    calibration_date_str = f"{download_end_month.rstrip('.')}_{download_end_year}"
 
     response = {
         'today_day': today_day,

@@ -34,12 +34,12 @@ const MenuContent = ({
     closePrecipitationContainer,
     closeSPIContainer,
     handlePrecipitationNavbarSwitchChange,
-    handlePTMLayerSwitchChange,
+    handlePrecipitationLayerSwitchChange,
     handleSPINavbarSwitchChange,
     handleSPILayerSwitchChange,
     layerOpacity,
     SPIlayersSwitches,
-    PTMlayerSwitch,
+    PrecipitationlayersSwitches,
     isPrecipitationNavbarSwitchChecked,
     isSPINavbarSwitchChecked,
     handleOpacityChange,
@@ -120,8 +120,8 @@ const MenuContent = ({
                     closePrecipitationContainer={closePrecipitationContainer}
                     isPrecipitationNavbarSwitchChecked={isPrecipitationNavbarSwitchChecked}
                     handlePrecipitationNavbarSwitchChange={handlePrecipitationNavbarSwitchChange}
-                    PTMlayerSwitch={PTMlayerSwitch}
-                    handlePTMLayerSwitchChange={handlePTMLayerSwitchChange}
+                    PrecipitationlayersSwitches={PrecipitationlayersSwitches}
+                    handlePrecipitationLayerSwitchChange={handlePrecipitationLayerSwitchChange}
                     layerOpacity={layerOpacity}
                     handleOpacityChange={handleOpacityChange}
             />
