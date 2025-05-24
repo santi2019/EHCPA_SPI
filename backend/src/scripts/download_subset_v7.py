@@ -427,8 +427,20 @@ def download_subset(begTime, endTime, reset_ARG_late):
 
 
 if __name__ == '__main__':
-    begTime = '2025-01-01'
-    endTime = '2025-01-24'
+    
+    print("Ingrese fecha de inicio (begTime):")
+    beg_year = input("Año (YYYY): ")
+    beg_month = input("Mes (MM): ")
+    beg_day = input("Día (DD): ")
+
+    print("\nIngrese fecha de fin (endTime):")
+    end_year = input("Año (YYYY): ")
+    end_month = input("Mes (MM): ")
+    end_day = input("Día (DD): ")
+
+    begTime = f"{beg_year.zfill(4)}-{beg_month.zfill(2)}-{beg_day.zfill(2)}"
+    endTime = f"{end_year.zfill(4)}-{end_month.zfill(2)}-{end_day.zfill(2)}"
+
     reset_ARG_late = False
 
     download_subset(begTime, endTime, reset_ARG_late)
